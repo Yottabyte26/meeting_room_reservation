@@ -140,7 +140,7 @@ const colorPalette = [
   '#4e79a7', '#59a14f', '#f28e2b', '#ff9da7', '#76b7b2', '#499894'
 ];
 // 性别图表颜色
-const genderColors = ['#000000', '#ee6666'];
+const genderColors = ['#41a5ee', '#ee6666'];
 // 用户图表颜色
 const userChartColors = ['#79201e', '#91cc75', '#ee6666'];
 

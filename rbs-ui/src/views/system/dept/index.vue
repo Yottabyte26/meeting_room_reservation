@@ -29,6 +29,10 @@
             <el-button type="warning" plain icon="Download" @click="handleExport"
                v-hasPermi="['system:dept:export']">导出</el-button>
          </el-col>
+         <el-col :span="1.5">
+            <el-button type="info" plain icon="Upload" @click="handleImport"
+               v-hasPermi="['system:user:import']">导入</el-button>
+         </el-col>
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
 
@@ -93,7 +97,7 @@
                   <el-form-item label="部门状态">
                      <el-radio-group v-model="form.status">
                         <el-radio v-for="dict in sys_normal_disable" :key="dict.value" :label="dict.value">{{ dict.label
-                        }}</el-radio>
+                           }}</el-radio>
                      </el-radio-group>
                   </el-form-item>
                </el-col>

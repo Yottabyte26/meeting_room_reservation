@@ -126,7 +126,7 @@
                     <el-form-item label="预定时间段" prop="selectedTime">
                         <el-select v-model="selectedTime" placeholder="请选择时间段" style="width: 200px;"
                             @change="updateStartTime">
-                            <el-option v-for="time in timeSlots" :key="time.value" :label="time.label"
+                            <el-option v-for="time in times" :key="time.value" :label="time.label"
                                 :value="time.value" />
                         </el-select>
                     </el-form-item>
@@ -153,7 +153,6 @@ import { listDept } from "@/api/system/dept";
 import { listRoom } from "@/api/system/room"
 const { proxy } = getCurrentInstance()
 const { sys_reservation_status } = proxy.useDict('sys_reservation_status')
-const user = JSON.parse(localStorage.getItem('userInfo') || '{}')
 const roomList = ref([])
 const reservationList = ref([])
 const open = ref(false)
@@ -191,12 +190,6 @@ const data = reactive({
         reservationTitle: [
             { required: true, message: "预订主题不能为空", trigger: "blur" }
         ],
-        startTime: [
-            { required: true, message: "开始时间不能为空", trigger: "blur" }
-        ],
-        endTime: [
-            { required: true, message: "结束时间不能为空", trigger: "blur" }
-        ],
         purpose: [
             { required: true, message: "预订用途不能为空", trigger: "blur" }
         ],
@@ -216,7 +209,7 @@ const data = reactive({
 
 })
 const recentSevenDays = ref([])
-const timeSlots = ref([
+const times = ref([
     { value: '07:00:00-08:00:00', label: '7:00:00-8:00:00' },
     { value: '08:00:00-09:00:00', label: '8:00:00-09:00:00' },
     { value: '09:00:00-10:00:00', label: '9:00:00-10:00:00' },
@@ -240,36 +233,23 @@ const selectDate = (date) => {
     selectedDate.value = date
 }
 // 生成最近7天日期（包含是否禁用状态）
-const generateRecentDays = () => {
-    const days = []
+const generateSevenDays = () => {
     const today = new Date()
-
-    for (let i = 0; i < 7; i++) {
+    today.setHours(0, 0, 0, 0) // 将今天的时间重置为零点，用于比较
+    return Array.from({ length: 7 }, (_, i) => {
         const date = new Date(today)
         date.setDate(today.getDate() + i)
-
-        const y = date.getFullYear()
-        const m = String(date.getMonth() + 1).padStart(2, '0')
-        const d = String(date.getDate()).padStart(2, '0')
-
-        // 判断是否为过去日期（今天0点之前的日期禁用）
-        const isPast = date < new Date(today.setHours(0, 0, 0, 0))
-
-        days.push({
-            date: `${y}-${m}-${d}`,
+        const formattedDate = date.toISOString().split('T')[0]
+        const isPast = date < today
+        return {
+            date: formattedDate,
             disabled: isPast
-        })
-    }
-
-    return days
+        }
+    })
 }
 
 onMounted(() => {
-    recentSevenDays.value = generateRecentDays()
-    const firstEnabledDay = recentSevenDays.value.find(day => !day.disabled)
-    if (firstEnabledDay) {
-        selectedDate.value = firstEnabledDay.date
-    }
+    recentSevenDays.value = generateSevenDays()
 })
 const loadingDept = ref(false);
 const { queryParams, form, rules, selectedDate, selectedTime, lisQueryParams } = toRefs(data)
@@ -415,16 +395,12 @@ function handleSelectionChange(selection) {
     multiple.value = !selection.length
 }
 
-
 /** 提交按钮 */
 function submitForm() {
     form.value.selectedDate = selectedDate;
     form.value.selectedTime = selectedTime;
     if (selectedDate && selectedTime) {
-        // 拆分时间段为开始时间和结束时间
         const [startTimePart, endTimePart] = selectedTime.value.split('-')
-
-        // 组合完整的开始时间和结束时间
         form.value.startTime = `${selectedDate.value} ${startTimePart}`
         form.value.endTime = `${selectedDate.value} ${endTimePart}`
     }
@@ -433,23 +409,14 @@ function submitForm() {
     proxy.$refs["reservationRef"].validate(valid => {
         if (valid) {
             form.value.status = 0;
-            if (form.value.reservationId != null) {
-                form.value.remark = "";
-                updateReservation(form.value).then(response => {
-                    proxy.$modal.msgSuccess("修改成功")
-                    open.value = false
-                    getListByapplicantName()
-                    // this.form.remark = null;
-                })
-            } else {
-                addReservation(form.value).then(response => {
-                    proxy.$modal.msgSuccess("新增成功")
-                    open.value = false
-                    getListByapplicantName();
-                })
-            }
+            form.value.remark = "";
+            updateReservation(form.value).then(response => {
+                proxy.$modal.msgSuccess("修改成功");
+                open.value = false;
+                getListByapplicantName();
+            });
         }
-    })
+    });
 }
 
 

@@ -26,9 +26,7 @@
       <el-table-column label="会议室类型" align="center" prop="roomType" />
       <el-table-column label="状态" align="center" prop="status">
         <template #default="scope">
-          <el-tag :type="scope.row.status === '0' ? 'primary' : 'danger'" effect="light">
-            {{ formatStatus(scope.row.status) }}
-          </el-tag>
+          <dict-tag :options="sys_room_status" :value="scope.row.status" />
         </template>
       </el-table-column>
       <el-table-column label="会议室描述" align="center" prop="description" />
@@ -90,7 +88,7 @@
           </el-form-item>
           <el-form-item label="预定时间段" prop="selectedTime">
             <el-select v-model="selectedTime" placeholder="请选择时间段" style="width: 200px;" @change="updateStartTime">
-              <el-option v-for="time in timeSlots" :key="time.value" :label="time.label" :value="time.value" />
+              <el-option v-for="time in times" :key="time.value" :label="time.label" :value="time.value" />
             </el-select>
           </el-form-item>
         </el-row>
@@ -111,12 +109,10 @@
 </template>
 
 <script setup name="Room">
-import { listRoom, getRoom, delRoom, addRoom, updateRoom } from "@/api/system/room"
-import { listReservation, getReservation, addReservation, updateReservation } from "@/api/system/reservation.js";
-import dayjs from 'dayjs';
-import { listDept, getDept, delDept, addDept, updateDept, listDeptExcludeChild } from "@/api/system/dept";
+import { listRoom, getRoom } from "@/api/system/room"
+import { listReservation, addReservation, updateReservation } from "@/api/system/reservation.js";
+import { listDept } from "@/api/system/dept";
 const { proxy } = getCurrentInstance()
-const { sys_reservation_status } = proxy.useDict('sys_reservation_status')
 const user = JSON.parse(localStorage.getItem('userInfo') || '{}')
 import { useUserStore } from '@/store/modules/user'
 const roomList = ref([])
@@ -129,13 +125,8 @@ const multiple = ref(true)
 const total = ref(0)
 const title = ref("")
 const userStore = useUserStore()
-const queryParamDept = reactive({
-  deptName: undefined,
-  status: undefined,
-  remark: undefined
-});
 const recentSevenDays = ref([])  // 最近7天日期数据
-const timeSlots = ref([
+const times = ref([
   { value: '07:00:00-08:00:00', label: '07:00:00-08:00:00' },
   { value: '08:00:00-09:00:00', label: '08:00:00-09:00:00' },
   { value: '09:00:00-10:00:00', label: '09:00:00-10:00:00' },
@@ -154,6 +145,7 @@ const timeSlots = ref([
   { value: '22:00:00-23:00:00', label: '22:00:00-23:00:00' },
   { value: '23:00:00-24:00:00', label: '23:00:00-24:00:00' }
 ])
+const { sys_room_status } = proxy.useDict('sys_room_status')
 const deptList = ref([]);
 const loadingDept = ref(false);
 const reservationList = ref([]);
@@ -178,35 +170,17 @@ const data = reactive({
     roomName: [
       { required: true, message: "会议室名称不能为空", trigger: "blur" }
     ],
-    location: [
-      { required: true, message: "会议室位置不能为空", trigger: "blur" }
-    ],
     reservationTitle: [
-      { required: true, message: "会议室主题不能为空", trigger: "blur" }
-    ],
-    capacity: [
-      { required: true, message: "容纳人数不能为空", trigger: "blur" }
-    ],
-    roomType: [
-      { required: true, message: "会议室类型不能为空", trigger: "change" }
-    ],
-    startTime: [
-      { required: true, message: "开始时间不能为空", trigger: "blur" }
-    ],
-    endTime: [
-      { required: true, message: "结束时间不能为空", trigger: "blur" }
+      { required: true, message: "预订主题不能为空", trigger: "blur" }
     ],
     purpose: [
       { required: true, message: "预订用途不能为空", trigger: "blur" }
-    ],
-    participants: [
-      { required: true, message: "参与人员不能为空", trigger: "blur" }
     ],
     applicantName: [
       { required: true, message: "预定人名称不能为空", trigger: "blur" }
     ],
     deptName: [
-      { required: true, message: "预定部门名称不能为空", trigger: "blur" }
+      { required: true, message: "预定部门不能为空", trigger: "blur" }
     ],
     selectedDate: [
       { required: true, message: "预定日期不能为空", trigger: "change" }
@@ -217,32 +191,27 @@ const data = reactive({
   }
 })
 const selectDate = (dateStr) => {
-  // 根据日期字符串找到对应的日期对象
   const selectedDay = recentSevenDays.value.find(day => day.date === dateStr)
   if (!selectedDay || selectedDay.disabled) return
-  selectedDate.value = selectedDay.date // 存储日期字符串
+  selectedDate.value = selectedDay.date
 }
-// 生成最近7天日期（包含是否禁用状态）
-const generateRecentDays = () => {
-  const days = []
+// 生成最近7天日期
+const generateSevenDays = () => {
   const today = new Date()
-  for (let i = 0; i < 7; i++) {
+  today.setHours(0, 0, 0, 0) // 将今天的时间重置为零点，用于比较
+  return Array.from({ length: 7 }, (_, i) => {
     const date = new Date(today)
     date.setDate(today.getDate() + i)
-    const y = date.getFullYear()
-    const m = String(date.getMonth() + 1).padStart(2, '0')
-    const d = String(date.getDate()).padStart(2, '0')
-    // 判断是否为过去日期（今天0点之前的日期禁用）
-    const isPast = date < new Date(today.setHours(0, 0, 0, 0))
-    days.push({
-      date: `${y}-${m}-${d}`,
+    const formattedDate = date.toISOString().split('T')[0]
+    const isPast = date < today
+    return {
+      date: formattedDate,
       disabled: isPast
-    })
-  }
-  return days
+    }
+  })
 }
 onMounted(() => {
-  recentSevenDays.value = generateRecentDays()
+  recentSevenDays.value = generateSevenDays()
 })
 // 加载全部部门
 const loadAllDepts = () => {
@@ -273,21 +242,6 @@ const remoteMethodDept = (query) => {
 
 
 const { queryParams, form, rules, selectedDate, selectedTime } = toRefs(data)
-const remoteMethod = (query) => {
-  if (query) {
-    loading.value = true;
-    listRoom({
-      pageNum: 1,
-      pageSize: 10,
-      roomName: query
-    }).then(response => {
-      roomList.value = response.rows;
-      loading.value = false;
-    });
-  } else {
-    getList();
-  }
-};
 
 /** 查询会议室信息列表 */
 function getList() {
@@ -304,14 +258,11 @@ function getReservationList() {
   })
 }
 /**  格式化会议室状态 */
-function formatStatus(value) {
-  return String(value) === '0' ? '可预定' : '不能预定';
-}
+// function formatStatus(value) {
+//   return String(value) === '0' ? '可预定' : '不能预定';
+// }
 
-/**  格式化是否启用字段 */
-function formatEnable(value) {
-  return String(value) === '1' ? '启用' : '禁用';
-}
+
 
 // 取消按钮
 function cancel() {
@@ -366,7 +317,6 @@ function handleAdd(rows) {
   open.value = true;
   form.value.userId = user.userId;
   form.value.deptId = user.deptId;
-  console.log("@@@@@!!!", userStore.id)
   form.value.roomId = rows.roomId;
   form.value.roomName = rows.roomName;
   form.value.applicantName = userStore.name;
@@ -376,16 +326,7 @@ function handleAdd(rows) {
   title.value = "预定会议室信息"
 }
 
-/** 修改按钮操作 */
-function handleUpdate(row) {
-  reset()
-  const _roomId = row.roomId || ids.value
-  getRoom(_roomId).then(response => {
-    form.value = response.data
-    open.value = true
-    title.value = "修改会议室信息"
-  })
-}
+
 function checkExactMatch(reservationList, form) {
   const currentRoomId = form.roomId;
   const currentStartTime = form.startTime;
@@ -405,15 +346,9 @@ function submitForm() {
   form.value.selectedDate = selectedDate;
   form.value.selectedTime = selectedTime;
   if (selectedDate && selectedTime) {
-    // 拆分时间段为开始时间和结束时间
     const [startTimePart, endTimePart] = selectedTime.value.split('-')
-
-    // 组合完整的开始时间和结束时间
     form.value.startTime = `${selectedDate.value} ${startTimePart}`
     form.value.endTime = `${selectedDate.value} ${endTimePart}`
-
-    console.log('开始时间:', form.value.startTime)
-    console.log('结束时间:', form.value.endTime)
   }
   if (checkExactMatch(reservationList.value, form.value)) {
     proxy.$message.error('该会议室时间已被预约，请选择其他时间');
@@ -421,21 +356,13 @@ function submitForm() {
   }
   proxy.$refs["reservationRef"].validate(valid => {
     if (valid) {
-      if (form.value.reservationId != null) {
-        updateReservation(form.value).then(response => {
-          proxy.$modal.msgSuccess("修改预定成功")
-          open.value = false
-          getList()
-        })
-      } else {
-        addReservation(form.value).then(response => {
-          proxy.$modal.msgSuccess("新增预定成功")
-          open.value = false
-          getList()
-        })
-      }
+      addReservation(form.value).then(response => {
+        proxy.$modal.msgSuccess("新增预定成功");
+        open.value = false;
+        getList();
+      });
     }
-  })
+  });
 }
 
 
