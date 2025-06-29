@@ -97,7 +97,7 @@
                   <el-form-item label="部门状态">
                      <el-radio-group v-model="form.status">
                         <el-radio v-for="dict in sys_normal_disable" :key="dict.value" :label="dict.value">{{ dict.label
-                           }}</el-radio>
+                        }}</el-radio>
                      </el-radio-group>
                   </el-form-item>
                </el-col>
@@ -116,6 +116,31 @@
             </div>
          </template>
       </el-dialog>
+      <!-- 部门导入对话框 -->
+      <el-dialog :title="upload.title" v-model="upload.open" width="400px" append-to-body>
+         <el-upload ref="uploadRef" :limit="1" accept=".xlsx, .xls" :headers="upload.headers"
+            :action="upload.url + '?updateSupport=' + upload.updateSupport" :disabled="upload.isUploading"
+            :on-progress="handleFileUploadProgress" :on-success="handleFileSuccess" :auto-upload="false" drag>
+            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+            <template #tip>
+               <div class="el-upload__tip text-center">
+                  <div class="el-upload__tip">
+                     <el-checkbox v-model="upload.updateSupport" style="vertical-align: middle;" /> 是否更新已经存在的部门数据
+                  </div>
+                  <span>仅允许导入xls、xlsx格式文件。</span>
+                  <el-link type="primary" :underline="false" style="font-size:12px;vertical-align: baseline;"
+                     @click="importTemplate">下载模板</el-link>
+               </div>
+            </template>
+         </el-upload>
+         <template #footer>
+            <div class="dialog-footer">
+               <el-button type="primary" @click="submitFileForm">确 定</el-button>
+               <el-button @click="upload.open = false">取 消</el-button>
+            </div>
+         </template>
+      </el-dialog>
    </div>
 </template>
 
@@ -130,11 +155,26 @@ const open = ref(false);
 const loading = ref(true);
 const showSearch = ref(true);
 const title = ref("");
+import { getToken } from "@/utils/auth";
 const deptOptions = ref([]);
 const isExpandAll = ref(true);
 const refreshTable = ref(true);
 const exportLoading = ref(false);
-
+/*** 部门导入参数 */
+const upload = reactive({
+   // 是否显示弹出层（部门导入）
+   open: false,
+   // 弹出层标题（部门导入）
+   title: "",
+   // 是否禁用上传
+   isUploading: false,
+   // 是否更新已经存在的部门数据
+   updateSupport: 0,
+   // 设置上传的请求头部
+   headers: { Authorization: "Bearer " + getToken() },
+   // 上传的地址
+   url: import.meta.env.VITE_APP_BASE_API + "/system/dept/importData"
+});
 const data = reactive({
    form: {},
    queryParams: {
@@ -151,7 +191,10 @@ const data = reactive({
 });
 
 const { queryParams, form, rules } = toRefs(data);
-
+function handleImport() {
+   upload.title = "部门导入";
+   upload.open = true;
+};
 /** 查询部门列表 */
 function getList() {
    loading.value = true;

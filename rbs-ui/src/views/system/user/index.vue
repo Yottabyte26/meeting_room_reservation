@@ -201,7 +201,7 @@
         <template #tip>
           <div class="el-upload__tip text-center">
             <div class="el-upload__tip">
-              <el-checkbox v-model="upload.updateSupport" />是否更新已经存在的用户数据
+              <el-checkbox v-model="upload.updateSupport" style="vertical-align: middle;" /> 是否更新已经存在的用户数据
             </div>
             <span>仅允许导入xls、xlsx格式文件。</span>
             <el-link type="primary" :underline="false" style="font-size:12px;vertical-align: baseline;"
