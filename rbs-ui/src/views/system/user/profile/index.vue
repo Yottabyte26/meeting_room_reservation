@@ -1,42 +1,34 @@
 <template>
-   <div class="app-container">
+   <div class="app-container main">
       <el-row :gutter="20">
-         <el-col :span="24" :xs="24">
+         <el-col :span="22" :xs="24">
             <el-card class="box-card" :transition="fadeIn">
-               <!-- <template v-slot:header>
-                  <div class="clearfix">
-                     <span>个人信息</span>
-                  </div>
-               </template> -->
                <div class="user-info-layout">
                   <div class="user-avatar-container">
                      <div class="text-center">
                         <userAvatar />
                      </div>
                   </div>
-                  <div class="user-details">
+                  <div class="user-details move-right">
                      <div class="user-name-dept">
                         <span class="user-name">{{ state.user.userName }}</span>
-                        <span v-if="state.user.dept" class="user-dept">
-                           {{ state.user.dept.deptName }}
-                        </span>
                      </div>
+
                      <div class="user-other-info">
                         <div class="user-info-item">
-                           <span>手机号码:</span>
-                           <span>{{ state.user.phonenumber }}</span>
+                           <span v-if="state.user.dept">所属部门：{{ state.user.dept.deptName }}</span>
                         </div>
                         <div class="user-info-item">
-                           <span>用户邮箱:</span>
-                           <span>{{ state.user.email }}</span>
+                           <span>手机号码：{{ state.user.phonenumber }}</span>
                         </div>
                         <div class="user-info-item">
-                           <span>所属角色:</span>
-                           <span>{{ state.roleGroup }}</span>
+                           <span>用户邮箱：{{ state.user.email }}</span>
                         </div>
                         <div class="user-info-item">
-                           <span>创建日期:</span>
-                           <span>{{ state.user.createTime }}</span>
+                           <span>所属角色：{{ state.roleGroup }}</span>
+                        </div>
+                        <div class="user-info-item">
+                           <span>创建日期：{{ state.user.createTime }}</span>
                         </div>
                      </div>
                   </div>
@@ -45,33 +37,31 @@
          </el-col>
       </el-row>
       <!-- 添加间距类名 -->
-      <el-row :gutter="20">
-         <el-col :span="12" :xs="24">
-            <el-card :transition="fadeIn">
+      <el-row :gutter="20" class="footer">
+         <el-col :span="4" :xs="24">
+            <el-card class="heigh-footer">
                <template v-slot:header>
                   <div class="clearfix">
                      <span>设置</span>
                   </div>
                </template>
-               <el-tabs v-model="activeTab">
-                  <el-tab-pane label="基本资料" name="userinfo">
-                  </el-tab-pane>
-                  <el-tab-pane label="修改密码" name="resetPwd">
-                  </el-tab-pane>
-               </el-tabs>
+               <el-menu :default-active="activeTab" class="vertical-menu" @select="handleMenuSelect">
+                  <el-menu-item index="userinfo">基本资料</el-menu-item>
+                  <el-menu-item index="resetPwd">修改密码</el-menu-item>
+               </el-menu>
             </el-card>
          </el-col>
-         <el-col :span="12" :xs="24">
-            <el-card :transition="fadeIn">
+         <el-col :span="18" :xs="24">
+            <el-card class="heigh-footer">
                <template v-slot:header>
                   <div class="clearfix">
                      <span>{{ getHeaderTitle() }}</span>
                   </div>
                </template>
-               <div v-if="activeTab === 'userinfo'">
+               <div v-if="activeTab === 'userinfo'" class="active">
                   <userInfo :user="state.user" />
                </div>
-               <div v-if="activeTab === 'resetPwd'">
+               <div v-if="activeTab === 'resetPwd'" class="active">
                   <resetPwd />
                </div>
             </el-card>
@@ -85,21 +75,15 @@ import userAvatar from "./userAvatar";
 import userInfo from "./userInfo";
 import resetPwd from "./resetPwd";
 import { getUserProfile } from "@/api/system/user";
-// import func from "../../../../../vue-temp/vue-editor-bridge";
-const fadeIn = {
-   enterFromClass: 'opacity-0',
-   enterToClass: 'opacity-100',
-   enterActiveClass: 'transition-opacity duration-300',
-   leaveFromClass: 'opacity-100',
-   leaveToClass: 'opacity-0',
-   leaveActiveClass: 'transition-opacity duration-300'
-}
 const activeTab = ref("userinfo");
 const state = reactive({
    user: {},
    roleGroup: {},
    postGroup: {}
 });
+const handleMenuSelect = (index) => {
+   activeTab.value = index;
+};
 function getHeaderTitle() {
    return this.activeTab === 'userinfo' ? '基本资料' : '修改密码';
 }
@@ -115,6 +99,10 @@ function getUser() {
 getUser();
 </script>
 <style scoped>
+.main {
+   margin: 10px 150px;
+}
+
 .el-row {
    display: flex;
 }
@@ -130,6 +118,7 @@ getUser();
 .user-info-layout {
    display: flex;
    align-items: center;
+   margin-left: 10px;
 }
 
 .user-avatar-container {
@@ -142,8 +131,13 @@ getUser();
 }
 
 .user-name {
-   font-size: 20px;
+   font-size: 23px;
    font-weight: bold;
+}
+
+.user-name-dept {
+   margin-bottom: 6px;
+   margin-top: 10px;
 }
 
 .user-dept {
@@ -160,6 +154,36 @@ getUser();
    display: flex;
    justify-content: space-between;
    border-bottom: none;
-   padding: 5px 0;
+   padding: 7px 0;
+}
+
+.move-right {
+   margin-left: 30px;
+}
+
+.footer {
+   margin-top: 25px;
+}
+
+.vertical-menu .el-menu-item {
+   text-align: center;
+}
+
+.vertical-menu .el-menu-item.is-active::before {
+   content: '';
+   position: absolute;
+   right: -1.5px;
+   top: 0;
+   height: 100%;
+   width: 2px;
+   background-color: #409EFF;
+}
+
+.heigh-footer {
+   height: 370px;
+}
+
+.active {
+   padding-top: 15px;
 }
 </style>
