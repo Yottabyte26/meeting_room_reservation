@@ -45,10 +45,8 @@
           <div class="checkbox" style="font-size: 15px">
             <input type="checkbox" class="check-box" v-model="registerForm.agreeTerms">
             <span style="color: gray">注册即代表您已同意</span>
-            <a class="link-type" href="https://homewh.chaoxing.com/agree/privacyPolicy?appId=900001"
-              target="_blank">《服务协议》</a>及
-            <a class="link-type" href="https://homewh.chaoxing.com/agree/privacyPolicy?appId=900001"
-              target="_blank">《隐私政策》</a>
+            <a class="link-type" href="#" target="_blank">《服务协议》</a>及
+            <a class="link-type" href="#" target="_blank">《隐私政策》</a>
           </div>
           <el-form-item style="width:100%;">
             <el-button :loading="loading" size="medium" type="primary"

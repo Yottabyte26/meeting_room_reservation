@@ -142,7 +142,7 @@ const colorPalette = [
 // 性别图表颜色
 const genderColors = ['#41a5ee', '#ee6666'];
 // 用户图表颜色
-const userChartColors = ['#79201e', '#91cc75', '#ee6666'];
+const userChartColors = ['#fac858', '#91cc75', '#ee6666'];
 
 // 初始化部门统计图表
 const initDeptChart = () => {
