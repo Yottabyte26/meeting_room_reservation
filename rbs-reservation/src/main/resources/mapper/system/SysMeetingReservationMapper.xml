@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.system.mapper.SysMeetingReservationMapper">
+    
+    <resultMap type="SysMeetingReservation" id="SysMeetingReservationResult">
+        <result property="reservationId"    column="reservation_id"    />
+        <result property="roomId"    column="room_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="reservationTitle"    column="reservation_title"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="purpose"    column="purpose"    />
+        <result property="participants"    column="participants"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="applicantName"    column="applicant_name"    />
+        <result property="deptName"    column="dept_name"    />
+    </resultMap>
+
+    <sql id="selectSysMeetingReservationVo">
+        select reservation_id, room_id, user_id, dept_id, reservation_title, start_time, end_time, purpose, participants, status, create_by, create_time, update_by, update_time, remark, applicant_name, dept_name from sys_meeting_reservation
+    </sql>
+
+    <select id="selectSysMeetingReservationList" parameterType="SysMeetingReservation" resultMap="SysMeetingReservationResult">
+        <include refid="selectSysMeetingReservationVo"/>
+        <where>  
+            <if test="roomId != null "> and room_id = #{roomId}</if>
+            <if test="reservationTitle != null  and reservationTitle != ''"> and reservation_title like concat('%', #{reservationTitle}, '%')</if>
+            <if test="startTime != null and endTime != null">
+                and start_time >= #{startTime} and end_time &lt;= #{endTime}
+            </if>
+            <if test="startTime != null and endTime == null">
+                and start_time >= #{startTime}
+            </if>
+            <if test="startTime == null and endTime != null">
+                and end_time &lt;= #{endTime}
+            </if>
+            <if test="purpose != null  and purpose != ''"> and purpose = #{purpose}</if>
+            <if test="participants != null  and participants != ''"> and participants = #{participants}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="applicantName != null  and applicantName != ''"> and applicant_name like concat('%', #{applicantName}, '%')</if>
+            <if test="deptName != null  and deptName != ''"> and dept_name like concat('%', #{deptName}, '%')</if>
+        </where>
+    </select>
+    <select id="selectSysMeetingReservationListByApplicantName" parameterType="String" resultMap="SysMeetingReservationResult">
+        <include refid="selectSysMeetingReservationVo"/>
+        <where>
+            applicant_name = #{applicantName}
+        </where>
+    </select>
+    <select id="selectSysMeetingReservationByReservationId" parameterType="Long" resultMap="SysMeetingReservationResult">
+        <include refid="selectSysMeetingReservationVo"/>
+        where reservation_id = #{reservationId}
+    </select>
+    <!-- 查询当前用户的预订统计 -->
+    <select id="selectUserReservationStats" resultType="java.util.HashMap">
+        SELECT
+            COALESCE(SUM(1), 0) AS total_count,
+            COALESCE(SUM(CASE WHEN status = '0' THEN 1 ELSE 0 END), 0) AS pending_count,
+            COALESCE(SUM(CASE WHEN status = '1' THEN 1 ELSE 0 END), 0) AS approved_count,
+            COALESCE(SUM(CASE WHEN status = '2' THEN 1 ELSE 0 END), 0) AS rejected_count
+        FROM
+            sys_meeting_reservation
+        WHERE
+            user_id = #{userId}
+    </select>
+
+    <!-- 统计所有预订记录 -->
+    <select id="countAllReservations" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM sys_meeting_reservation
+    </select>
+
+    <!-- 统计每个会议室的所有预订次数（移除状态过滤） -->
+    <select id="selectAllRoomReservationStats" resultType="com.rbs.system.domain.vo.RoomReservationVo">
+        SELECT
+            room_id AS roomId,
+            COUNT(*) AS reservationCount
+        FROM
+            sys_meeting_reservation
+        GROUP BY
+            room_id
+    </select>
+
+    <insert id="insertSysMeetingReservation" parameterType="SysMeetingReservation" useGeneratedKeys="true" keyProperty="reservationId">
+        insert into sys_meeting_reservation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roomId != null">room_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="reservationTitle != null and reservationTitle != ''">reservation_title,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="purpose != null and purpose != ''">purpose,</if>
+            <if test="participants != null and participants != ''">participants,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+            <if test="applicantName != null and applicantName != ''">applicant_name,</if>
+            <if test="deptName != null and deptName != ''">dept_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roomId != null">#{roomId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="reservationTitle != null and reservationTitle != ''">#{reservationTitle},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="purpose != null and purpose != ''">#{purpose},</if>
+            <if test="participants != null and participants != ''">#{participants},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="applicantName != null and applicantName != ''">#{applicantName},</if>
+            <if test="deptName != null and deptName != ''">#{deptName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysMeetingReservation" parameterType="SysMeetingReservation">
+        update sys_meeting_reservation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="roomId != null">room_id = #{roomId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="reservationTitle != null and reservationTitle != ''">reservation_title = #{reservationTitle},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="purpose != null and purpose != ''">purpose = #{purpose},</if>
+            <if test="participants != null and participants != ''">participants = #{participants},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="applicantName != null and applicantName != ''">applicant_name = #{applicantName},</if>
+            <if test="deptName != null and deptName != ''">dept_name = #{deptName},</if>
+        </trim>
+        where reservation_id = #{reservationId}
+    </update>
+    <update id="SysMeetingReservationselectSysMeetingReservationListByApplicantName"></update>
+
+    <delete id="deleteSysMeetingReservationByReservationId" parameterType="Long">
+        delete from sys_meeting_reservation where reservation_id = #{reservationId}
+    </delete>
+
+    <delete id="deleteSysMeetingReservationByReservationIds" parameterType="String">
+        delete from sys_meeting_reservation where reservation_id in 
+        <foreach item="reservationId" collection="array" open="(" separator="," close=")">
+            #{reservationId}
+        </foreach>
+    </delete>
+</mapper>

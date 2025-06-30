@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.system.mapper.SysDeptMapper">
+
+	<resultMap type="SysDept" id="SysDeptResult">
+		<id     property="deptId"     column="dept_id"     />
+		<result property="deptName"   column="dept_name"   />
+		<result property="leader"     column="leader"      />
+		<result property="phone"      column="phone"       />
+		<result property="email"      column="email"       />
+		<result property="status"     column="status"      />
+		<result property="delFlag"    column="del_flag"    />
+		<result property="parentName" column="parent_name" />
+		<result property="createBy"   column="create_by"   />
+		<result property="createTime" column="create_time" />
+		<result property="updateBy"   column="update_by"   />
+		<result property="updateTime" column="update_time" />
+		<result property="remark"     column="remark"      />
+	</resultMap>
+
+	<sql id="selectDeptVo">
+		select d.dept_id, d.dept_name,  d.leader, d.phone, d.email, d.status, d.del_flag, d.create_by, d.create_time,  d.remark
+		from sys_dept d
+	</sql>
+
+	<!-- 查询部门简单列表 -->
+	<select id="selectDeptSimpleList" resultType="com.rbs.common.core.domain.entity.SysDept">
+		SELECT
+			dept_id as deptId,
+			dept_name as deptName
+		FROM
+			sys_dept
+		WHERE
+			del_flag = '0'
+		  AND status = '0'
+		ORDER BY
+			dept_id ASC
+	</select>
+
+	<select id="selectDeptList" parameterType="SysDept" resultMap="SysDeptResult">
+		<include refid="selectDeptVo"/>
+		where d.del_flag = '0'
+		<if test="deptId != null and deptId != 0">
+			AND dept_id = #{deptId}
+		</if>
+		<if test="deptName != null and deptName != ''">
+			AND dept_name like concat('%', #{deptName}, '%')
+		</if>
+		<if test="status != null and status != ''">
+			AND status = #{status}
+		</if>
+		<if test="remark != null and remark != ''">
+			AND remark like concat('%', #{remark}, '%')
+		</if>
+	</select>
+
+	<select id="selectDeptListByRoleId" resultType="Long">
+		select d.dept_id
+		from sys_dept d
+				 left join sys_role_dept rd on d.dept_id = rd.dept_id
+		where rd.role_id = #{roleId}
+		order by d.dept_id
+	</select>
+
+	<select id="selectDeptById" parameterType="Long" resultMap="SysDeptResult">
+		select d.dept_id, d.dept_name, d.leader, d.phone, d.email, d.status,
+			   d.del_flag, d.create_by, d.create_time, d.remark
+		from sys_dept d
+		where d.dept_id = #{deptId}
+	</select>
+
+	<select id="checkDeptExistUser" parameterType="Long" resultType="int">
+		select count(1) from sys_user where dept_id = #{deptId} and del_flag = '0'
+	</select>
+
+	<select id="hasChildByDeptId" parameterType="Long" resultType="int">
+		select 0 -- 扁平结构无父子关系，始终返回0
+	</select>
+
+	<select id="selectChildrenDeptById" parameterType="Long" resultMap="SysDeptResult">
+		select * from sys_dept where dept_id = #{deptId} -- 扁平结构无父子关系，仅返回自身
+	</select>
+
+	<select id="selectNormalChildrenDeptById" parameterType="Long" resultType="int">
+		select case when status = '0' and del_flag = '0' then 1 else 0 end
+		from sys_dept where dept_id = #{deptId} -- 扁平结构无父子关系，仅检查自身
+	</select>
+
+	<select id="checkDeptNameUnique" resultMap="SysDeptResult">
+		<include refid="selectDeptVo"/>
+		where dept_name=#{deptName} and del_flag = '0' limit 1
+	</select>
+
+	<insert id="insertDept" parameterType="SysDept">
+		insert into sys_dept(
+		<if test="deptId != null and deptId != 0">dept_id,</if>
+		<if test="deptName != null and deptName != ''">dept_name,</if>
+		<if test="leader != null and leader != ''">leader,</if>
+		<if test="phone != null and phone != ''">phone,</if>
+		<if test="email != null and email != ''">email,</if>
+		<if test="status != null">status,</if>
+		<if test="createBy != null and createBy != ''">create_by,</if>
+		create_time,
+		<if test="remark != null and remark != ''">remark,</if>
+		del_flag
+		)values(
+		<if test="deptId != null and deptId != 0">#{deptId},</if>
+		<if test="deptName != null and deptName != ''">#{deptName},</if>
+		<if test="leader != null and leader != ''">#{leader},</if>
+		<if test="phone != null and phone != ''">#{phone},</if>
+		<if test="email != null and email != ''">#{email},</if>
+		<if test="status != null">#{status},</if>
+		<if test="createBy != null and createBy != ''">#{createBy},</if>
+		sysdate(),
+		<if test="remark != null and remark != ''">#{remark},</if>
+		'0'
+		)
+	</insert>
+
+	<update id="updateDept" parameterType="SysDept">
+		update sys_dept
+		<set>
+			<if test="deptName != null and deptName != ''">dept_name = #{deptName},</if>
+			<if test="leader != null">leader = #{leader},</if>
+			<if test="phone != null">phone = #{phone},</if>
+			<if test="email != null">email = #{email},</if>
+			<if test="status != null and status != ''">status = #{status},</if>
+			<if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+			update_time = sysdate(),
+			<if test="remark != null and remark != ''">remark = #{remark},</if>
+			del_flag = '0'
+		</set>
+		where dept_id = #{deptId}
+	</update>
+
+	<update id="updateDeptChildren" parameterType="java.util.List">
+		-- 扁平结构无需更新子部门的层级关系，空实现
+	</update>
+
+	<update id="updateDeptStatusNormal" parameterType="Long">
+		update sys_dept set status = '0' where dept_id in
+		<foreach collection="array" item="deptId" open="(" separator="," close=")">
+			#{deptId}
+		</foreach>
+	</update>
+
+	<delete id="deleteDeptById" parameterType="Long">
+		update sys_dept set del_flag = '2' where dept_id = #{deptId}
+	</delete>
+
+</mapper>
