@@ -184,7 +184,6 @@ function getList() {
     roomList.value = response.rows
     total.value = response.total
     loading.value = false
-    console.log("!!!!", roomList.value)
   })
 
 }

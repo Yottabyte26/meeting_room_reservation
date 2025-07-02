@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rbs.system.mapper.SysNoticeMapper">
-    
+
     <resultMap type="SysNotice" id="SysNoticeResult">
         <result property="noticeId"       column="notice_id"       />
         <result property="noticeTitle"    column="notice_title"    />
@@ -15,75 +15,115 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"       column="update_by"       />
         <result property="updateTime"     column="update_time"     />
         <result property="remark"         column="remark"          />
+        <result property="receiverType"   column="receiver_type"   />
+        <result property="receiverId"     column="receiver_id"     />
+        <result property="receiverName"   column="receiver_name"   />
     </resultMap>
-    
     <sql id="selectNoticeVo">
-        select notice_id, notice_title, notice_type, cast(notice_content as char) as notice_content, status, create_by, create_time, update_by, update_time, remark 
-		from sys_notice
+        select
+        n.notice_id,
+        n.notice_title,
+        n.notice_type,
+        cast(n.notice_content as char) as notice_content,
+        n.status,
+        n.create_by,
+        n.create_time,
+        n.update_by,
+        n.update_time,
+        n.remark,
+        n.receiver_type,
+        n.receiver_id,
+        n.receiver_name,
+        u.nick_name as receiver_user_name
+        from sys_notice n
+        left join sys_user u on n.receiver_id = u.user_id
     </sql>
-    
+
+    <!-- 根据用户ID查询通知列表 -->
+    <select id="selectNoticeListByUserId" parameterType="Long" resultMap="SysNoticeResult">
+        <include refid="selectNoticeVo"/>
+        where n.status = '0'
+        and (
+        n.receiver_type = 0  <!-- 全部用户可见的公告 -->
+        or (n.receiver_type = 1 and n.receiver_id = #{userId})  <!-- 指定用户的个人通知 -->
+        )
+        order by n.create_time desc
+    </select>
+    <select id="selectNoticeList" parameterType="SysNotice" resultMap="SysNoticeResult">
+        <include refid="selectNoticeVo"/>
+        <where>
+            <if test="noticeTitle != null and noticeTitle != ''">
+                AND notice_title like concat('%', #{noticeTitle}, '%')
+            </if>
+            <if test="noticeType != null and noticeType != ''">
+                AND notice_type = #{noticeType}
+            </if>
+            <if test="createBy != null and createBy != ''">
+                AND create_by like concat('%', #{createBy}, '%')
+            </if>
+            <if test="receiverId != null">
+                AND (
+                notice_type = '2'
+                OR (receiver_id = #{receiverId} AND receiver_type = 1)
+                )
+            </if>
+        </where>
+    </select>
     <select id="selectNoticeById" parameterType="Long" resultMap="SysNoticeResult">
         <include refid="selectNoticeVo"/>
         where notice_id = #{noticeId}
     </select>
-    
-    <select id="selectNoticeList" parameterType="SysNotice" resultMap="SysNoticeResult">
-        <include refid="selectNoticeVo"/>
-        <where>
-			<if test="noticeTitle != null and noticeTitle != ''">
-				AND notice_title like concat('%', #{noticeTitle}, '%')
-			</if>
-			<if test="noticeType != null and noticeType != ''">
-				AND notice_type = #{noticeType}
-			</if>
-			<if test="createBy != null and createBy != ''">
-				AND create_by like concat('%', #{createBy}, '%')
-			</if>
-		</where>
-    </select>
-    
     <insert id="insertNotice" parameterType="SysNotice">
         insert into sys_notice (
-			<if test="noticeTitle != null and noticeTitle != '' ">notice_title, </if>
-			<if test="noticeType != null and noticeType != '' ">notice_type, </if>
-			<if test="noticeContent != null and noticeContent != '' ">notice_content, </if>
-			<if test="status != null and status != '' ">status, </if>
-			<if test="remark != null and remark != ''">remark,</if>
- 			<if test="createBy != null and createBy != ''">create_by,</if>
- 			create_time
- 		)values(
-			<if test="noticeTitle != null and noticeTitle != ''">#{noticeTitle}, </if>
-			<if test="noticeType != null and noticeType != ''">#{noticeType}, </if>
-			<if test="noticeContent != null and noticeContent != ''">#{noticeContent}, </if>
-			<if test="status != null and status != ''">#{status}, </if>
-			<if test="remark != null and remark != ''">#{remark},</if>
- 			<if test="createBy != null and createBy != ''">#{createBy},</if>
- 			sysdate()
-		)
+        <if test="noticeTitle != null and noticeTitle != ''">notice_title, </if>
+        <if test="noticeType != null and noticeType != ''">notice_type, </if>
+        <if test="noticeContent != null and noticeContent != ''">notice_content, </if>
+        <if test="status != null and status != ''">status, </if>
+        <if test="remark != null and remark != ''">remark, </if>
+        <if test="createBy != null and createBy != ''">create_by, </if>
+        <if test="receiverType != null">receiver_type, </if> <!-- 新增：接收类型 -->
+        <if test="receiverId != null">receiver_id, </if> <!-- 新增：接收用户ID -->
+        <if test="receiverName != null and receiverName != ''">receiver_name, </if> <!-- 新增：接收用户姓名 -->
+        create_time
+        ) values (
+        <if test="noticeTitle != null and noticeTitle != ''">#{noticeTitle}, </if>
+        <if test="noticeType != null and noticeType != ''">#{noticeType}, </if>
+        <if test="noticeContent != null and noticeContent != ''">#{noticeContent}, </if>
+        <if test="status != null and status != ''">#{status}, </if>
+        <if test="remark != null and remark != ''">#{remark}, </if>
+        <if test="createBy != null and createBy != ''">#{createBy}, </if>
+        <if test="receiverType != null">#{receiverType}, </if> <!-- 新增：接收类型 -->
+        <if test="receiverId != null">#{receiverId}, </if> <!-- 新增：接收用户ID -->
+        <if test="receiverName != null and receiverName != ''">#{receiverName}, </if> <!-- 新增：接收用户姓名 -->
+        sysdate()
+        )
     </insert>
-	 
+
     <update id="updateNotice" parameterType="SysNotice">
-        update sys_notice 
+        update sys_notice
         <set>
             <if test="noticeTitle != null and noticeTitle != ''">notice_title = #{noticeTitle}, </if>
             <if test="noticeType != null and noticeType != ''">notice_type = #{noticeType}, </if>
             <if test="noticeContent != null">notice_content = #{noticeContent}, </if>
             <if test="status != null and status != ''">status = #{status}, </if>
-            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
- 			update_time = sysdate()
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy}, </if>
+            <if test="receiverType != null">receiver_type = #{receiverType}, </if> <!-- 新增：接收类型 -->
+            <if test="receiverId != null">receiver_id = #{receiverId}, </if> <!-- 新增：接收用户ID -->
+            <if test="receiverName != null and receiverName != ''">receiver_name = #{receiverName}, </if> <!-- 新增：接收用户姓名 -->
+            update_time = sysdate()
         </set>
         where notice_id = #{noticeId}
     </update>
-	
+
     <delete id="deleteNoticeById" parameterType="Long">
         delete from sys_notice where notice_id = #{noticeId}
     </delete>
-    
+
     <delete id="deleteNoticeByIds" parameterType="Long">
-        delete from sys_notice where notice_id in 
+        delete from sys_notice where notice_id in
         <foreach item="noticeId" collection="array" open="(" separator="," close=")">
             #{noticeId}
         </foreach>
     </delete>
-    
+
 </mapper>

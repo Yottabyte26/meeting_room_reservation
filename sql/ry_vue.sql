@@ -11,7 +11,7 @@
  Target Server Version : 80028
  File Encoding         : 65001
 
- Date: 25/06/2025 00:07:45
+ Date: 02/07/2025 19:11:55
 */
 
 SET NAMES utf8mb4;
@@ -361,7 +361,7 @@ CREATE TABLE `sys_config`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`config_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '参数配置表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '参数配置表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_config
@@ -427,7 +427,7 @@ CREATE TABLE `sys_dict_data`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`dict_code`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 34 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '字典数据表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '字典数据表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_dict_data
@@ -484,7 +484,7 @@ CREATE TABLE `sys_dict_type`  (
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`dict_id`) USING BTREE,
   UNIQUE INDEX `dict_type`(`dict_type`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '字典类型表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '字典类型表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_dict_type
@@ -521,7 +521,7 @@ CREATE TABLE `sys_job`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '备注信息',
   PRIMARY KEY (`job_id`, `job_name`, `job_group`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '定时任务调度表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '定时任务调度表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_job
@@ -567,7 +567,7 @@ CREATE TABLE `sys_logininfor`  (
   PRIMARY KEY (`info_id`) USING BTREE,
   INDEX `idx_sys_logininfor_s`(`status`) USING BTREE,
   INDEX `idx_sys_logininfor_lt`(`login_time`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 368 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统访问记录' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 389 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统访问记录' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_logininfor
@@ -843,6 +843,27 @@ INSERT INTO `sys_logininfor` VALUES (367, '123', '127.0.0.1', '内网IP', 'Chrom
 INSERT INTO `sys_logininfor` VALUES (368, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-06-22 11:04:00');
 INSERT INTO `sys_logininfor` VALUES (369, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-06-24 21:00:24');
 INSERT INTO `sys_logininfor` VALUES (370, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-06-24 22:18:30');
+INSERT INTO `sys_logininfor` VALUES (371, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-01 09:39:38');
+INSERT INTO `sys_logininfor` VALUES (372, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2025-07-01 09:42:54');
+INSERT INTO `sys_logininfor` VALUES (373, '123456789', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-01 09:42:59');
+INSERT INTO `sys_logininfor` VALUES (374, '123456789', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2025-07-01 09:43:14');
+INSERT INTO `sys_logininfor` VALUES (375, '123456789', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-01 09:43:20');
+INSERT INTO `sys_logininfor` VALUES (376, '123456789', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2025-07-01 09:43:33');
+INSERT INTO `sys_logininfor` VALUES (377, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-01 09:43:38');
+INSERT INTO `sys_logininfor` VALUES (378, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-01 13:15:21');
+INSERT INTO `sys_logininfor` VALUES (379, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-01 14:51:01');
+INSERT INTO `sys_logininfor` VALUES (380, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-01 15:04:04');
+INSERT INTO `sys_logininfor` VALUES (381, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-01 15:58:52');
+INSERT INTO `sys_logininfor` VALUES (382, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2025-07-01 17:03:34');
+INSERT INTO `sys_logininfor` VALUES (383, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-01 17:03:42');
+INSERT INTO `sys_logininfor` VALUES (384, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2025-07-01 17:08:29');
+INSERT INTO `sys_logininfor` VALUES (385, '123456789', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-01 17:08:33');
+INSERT INTO `sys_logininfor` VALUES (386, '123456789', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2025-07-01 17:22:57');
+INSERT INTO `sys_logininfor` VALUES (387, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-01 17:23:05');
+INSERT INTO `sys_logininfor` VALUES (388, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2025-07-01 17:30:24');
+INSERT INTO `sys_logininfor` VALUES (389, '123456789', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-01 17:30:30');
+INSERT INTO `sys_logininfor` VALUES (390, '123456789', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-02 15:49:27');
+INSERT INTO `sys_logininfor` VALUES (391, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-02 15:52:06');
 
 -- ----------------------------
 -- Table structure for sys_meeting_notification
@@ -897,13 +918,11 @@ CREATE TABLE `sys_meeting_reservation`  (
   INDEX `idx_status`(`status`) USING BTREE,
   INDEX `idx_start_end_time`(`start_time`, `end_time`) USING BTREE,
   CONSTRAINT `fk_reservation_dept` FOREIGN KEY (`dept_id`) REFERENCES `sys_dept` (`dept_id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 96 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '会议室预订表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 104 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '会议室预订表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_meeting_reservation
 -- ----------------------------
-INSERT INTO `sys_meeting_reservation` VALUES (36, 2, 1, 105, '市场策略讨论', '2025-06-26 11:00:00', '2025-06-26 12:00:00', '制定市场策略dsfdfd似懂非懂', '1002,1003', '0', 'admin', '2025-06-11 10:15:00', 'admin', '2025-06-24 21:41:04', '', 'admin', '测试部门');
-INSERT INTO `sys_meeting_reservation` VALUES (37, 3, 1, 106, '测试方案评审', '2025-06-27 08:00:00', '2025-06-27 09:00:00', '评审测试方案', '1003,1004', '1', 'admin', '2025-06-11 10:30:00', 'admin', '2025-06-22 11:16:10', '111', 'admin', '财务部门');
 INSERT INTO `sys_meeting_reservation` VALUES (53, 3, 1, 103, '水电费水电费收到', '2025-06-27 08:00:00', '2025-06-27 09:00:00', '第三方大幅度', NULL, '1', NULL, '2025-06-20 15:22:17', NULL, '2025-06-24 21:27:12', 'yes', 'admin', '研发部门');
 INSERT INTO `sys_meeting_reservation` VALUES (69, 7, 1, NULL, '11111', '2025-06-20 09:00:00', '2025-06-20 10:00:00', '水电费地方', NULL, '1', NULL, '2025-06-20 18:23:38', NULL, '2025-06-21 23:40:14', '似懂非懂', 'admin', '研发部门');
 INSERT INTO `sys_meeting_reservation` VALUES (74, 1, 1, 103, '哭意义', '2025-06-25 07:00:00', '2025-06-25 08:00:00', '意义', NULL, '1', NULL, '2025-06-20 18:40:41', NULL, '2025-06-21 23:51:06', '2323', 'admin', '研发部门');
@@ -911,12 +930,17 @@ INSERT INTO `sys_meeting_reservation` VALUES (80, 1, 1, 104, '第三方代发', 
 INSERT INTO `sys_meeting_reservation` VALUES (81, 3, 106, NULL, '但是发斯蒂芬', '2025-06-22 08:00:00', '2025-06-22 09:00:00', '水电费是的', NULL, '2', NULL, '2025-06-20 22:38:44', NULL, '2025-06-20 23:29:02', '不合格', '123456789', '研发部门');
 INSERT INTO `sys_meeting_reservation` VALUES (82, 4, 106, NULL, '水电费水电费', '2025-06-26 08:00:00', '2025-06-26 09:00:00', '是否第三方都是', NULL, '1', NULL, '2025-06-20 22:40:56', NULL, '2025-06-20 23:28:53', '通过', '123456789', '研发部门');
 INSERT INTO `sys_meeting_reservation` VALUES (83, 5, 1, NULL, 'SaaS浮动', '2025-06-21 08:00:00', '2025-06-21 09:00:00', '是的发顺丰', NULL, '1', NULL, '2025-06-20 23:24:07', NULL, '2025-06-22 10:54:03', '1111', 'admin', '研发部门');
-INSERT INTO `sys_meeting_reservation` VALUES (87, 2, 106, NULL, '二页人与人', '2025-06-23 07:00:00', '2025-06-23 08:00:00', '尔特也', NULL, '0', NULL, '2025-06-21 00:38:31', NULL, NULL, NULL, '123456789', '研发部门');
-INSERT INTO `sys_meeting_reservation` VALUES (88, 5, 106, NULL, '热也有', '2025-06-27 10:00:00', '2025-06-27 11:00:00', '而已忍野忍', NULL, '0', NULL, '2025-06-21 00:38:43', NULL, NULL, NULL, '123456789', '研发部门');
-INSERT INTO `sys_meeting_reservation` VALUES (96, 1, 107, NULL, '123', '2025-06-22 07:00:00', '2025-06-22 08:00:00', '123', NULL, '0', NULL, '2025-06-22 11:02:15', NULL, NULL, NULL, '123', '市场部门');
-INSERT INTO `sys_meeting_reservation` VALUES (97, 5, 1, NULL, '萨法', '2025-06-25 07:00:00', '2025-06-25 08:00:00', '萨法地方', NULL, '0', NULL, '2025-06-24 21:37:04', NULL, NULL, NULL, 'admin', '研发部门');
-INSERT INTO `sys_meeting_reservation` VALUES (98, 1, 1, NULL, '东莞电饭锅', '2025-06-25 08:00:00', '2025-06-25 09:00:00', '电风扇噶', NULL, '0', NULL, '2025-06-24 21:43:57', NULL, NULL, NULL, 'admin', '研发部门');
-INSERT INTO `sys_meeting_reservation` VALUES (99, 3, 1, 103, '回个电话规范', '2025-06-25 07:00:00', '2025-06-25 08:00:00', '哈哈哈哈合格', NULL, '0', NULL, '2025-06-24 22:24:55', NULL, '2025-06-24 22:27:25', '', 'admin', '研发部门');
+INSERT INTO `sys_meeting_reservation` VALUES (87, 2, 106, NULL, '二页人与人', '2025-06-23 07:00:00', '2025-06-23 08:00:00', '尔特也', NULL, '1', NULL, '2025-06-21 00:38:31', NULL, '2025-07-01 16:16:58', '111', '123456789', '研发部门');
+INSERT INTO `sys_meeting_reservation` VALUES (88, 5, 106, NULL, '热也有', '2025-06-27 10:00:00', '2025-06-27 11:00:00', '而已忍野忍', NULL, '1', NULL, '2025-06-21 00:38:43', NULL, '2025-07-01 16:15:25', '可以可以', '123456789', '研发部门');
+INSERT INTO `sys_meeting_reservation` VALUES (96, 1, 107, NULL, '123', '2025-06-22 07:00:00', '2025-06-22 08:00:00', '123', NULL, '1', NULL, '2025-06-22 11:02:15', NULL, '2025-07-01 16:29:56', '1111', '123', '市场部门');
+INSERT INTO `sys_meeting_reservation` VALUES (97, 5, 1, NULL, '萨法', '2025-06-25 07:00:00', '2025-06-25 08:00:00', '萨法地方', NULL, '1', NULL, '2025-06-24 21:37:04', NULL, '2025-07-01 16:19:49', '111', 'admin', '研发部门');
+INSERT INTO `sys_meeting_reservation` VALUES (98, 1, 1, NULL, '东莞电饭锅', '2025-06-25 08:00:00', '2025-06-25 09:00:00', '电风扇噶', NULL, '1', NULL, '2025-06-24 21:43:57', NULL, '2025-07-01 16:22:30', 'huang', 'admin', '研发部门');
+INSERT INTO `sys_meeting_reservation` VALUES (99, 3, 1, 103, '回个电话规范', '2025-06-25 07:00:00', '2025-06-25 08:00:00', '哈哈哈哈合格', NULL, '1', NULL, '2025-06-24 22:24:55', NULL, '2025-07-01 16:29:03', '122', 'admin', '研发部门');
+INSERT INTO `sys_meeting_reservation` VALUES (100, 2, 1, 103, '水电费萨芬', '2025-07-05 07:00:00', '2025-07-05 08:00:00', '啊发发', NULL, '1', NULL, '2025-07-01 16:25:12', NULL, '2025-07-01 17:30:19', '222', 'admin', '研发部门');
+INSERT INTO `sys_meeting_reservation` VALUES (101, 5, 1, 106, '手打范德萨', '2025-07-03 07:00:00', '2025-07-03 08:00:00', '双法防', NULL, '0', NULL, '2025-07-01 16:25:21', NULL, '2025-07-01 16:42:49', '', 'admin', '财务部门');
+INSERT INTO `sys_meeting_reservation` VALUES (102, 1, 1, 104, '阿萨发生', '2025-07-06 09:00:00', '2025-07-06 10:00:00', '撒懂法守法', NULL, '1', NULL, '2025-07-01 16:38:11', NULL, '2025-07-01 16:43:12', '102', 'admin', '市场部门');
+INSERT INTO `sys_meeting_reservation` VALUES (103, 5, 1, NULL, '阿是防辐射', '2025-07-03 08:00:00', '2025-07-03 09:00:00', '啊发发发', NULL, '2', NULL, '2025-07-01 16:38:20', NULL, '2025-07-01 16:47:20', '11111', 'admin', '财务部门');
+INSERT INTO `sys_meeting_reservation` VALUES (104, 2, 1, NULL, '沙发沙发', '2025-07-06 07:00:00', '2025-07-06 08:00:00', '山大', NULL, '1', NULL, '2025-07-01 16:42:35', NULL, '2025-07-01 16:46:15', '1111111', 'admin', '研发部门');
 
 -- ----------------------------
 -- Table structure for sys_meeting_room
@@ -939,7 +963,7 @@ CREATE TABLE `sys_meeting_room`  (
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`room_id`) USING BTREE,
   UNIQUE INDEX `uk_room_code`(`room_code`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '会议室信息表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '会议室信息表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_meeting_room
@@ -979,7 +1003,7 @@ CREATE TABLE `sys_menu`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`menu_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2065 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '菜单权限表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 2064 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '菜单权限表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -1076,6 +1100,12 @@ INSERT INTO `sys_menu` VALUES (2009, '会议室信息修改', 2006, 3, '#', '', 
 INSERT INTO `sys_menu` VALUES (2010, '会议室信息删除', 2006, 4, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'system:room:remove', '#', 'admin', '2025-06-08 19:51:41', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2011, '会议室信息导出', 2006, 5, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'system:room:export', '#', 'admin', '2025-06-08 19:51:41', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2012, '个人中心', 0, 8, 'userProfile', 'system/user/profile/index', '', '', 1, 0, 'C', '0', '0', '', 'people', '', NULL, 'admin', '2025-06-08 20:14:09', '');
+INSERT INTO `sys_menu` VALUES (2019, '我的通知', 0, 9, 'notice', 'system/notice/index', NULL, '', 1, 0, 'C', '0', '0', 'system:notice:list', 'list', 'admin', '2025-06-08 20:45:37', 'admin', '2025-06-20 23:29:37', '通知公告菜单');
+INSERT INTO `sys_menu` VALUES (2020, '我的通知查询', 2019, 1, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'system:notice:query', '#', 'admin', '2025-06-08 20:45:37', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2021, '我的通知新增', 2019, 2, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'system:notice:add', '#', 'admin', '2025-06-08 20:45:37', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2022, '我的通知修改', 2019, 3, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'system:notice:edit', '#', 'admin', '2025-06-08 20:45:37', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2023, '我的通知删除', 2019, 4, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'system:notice:remove', '#', 'admin', '2025-06-08 20:45:37', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2024, '我的通知导出', 2019, 5, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'system:notice:export', '#', 'admin', '2025-06-08 20:45:37', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2038, '会议室审核', 0, 6, 'review', 'system/review/index', NULL, '', 1, 0, 'C', '0', '0', 'system:reservation:list', 'edit', 'admin', '2025-06-11 00:46:29', 'admin', '2025-06-11 01:04:26', '会议室预订菜单');
 INSERT INTO `sys_menu` VALUES (2039, '会议室审核查询', 2038, 1, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'system:reservation:query', '#', 'admin', '2025-06-11 00:46:29', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2040, '会议室审核新增', 2038, 2, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'system:reservation:add', '#', 'admin', '2025-06-11 00:46:29', '', NULL, '');
@@ -1108,7 +1138,7 @@ INSERT INTO `sys_menu` VALUES (2064, '会议室删除', 2046, 8, '', NULL, NULL,
 DROP TABLE IF EXISTS `sys_notice`;
 CREATE TABLE `sys_notice`  (
   `notice_id` int NOT NULL AUTO_INCREMENT COMMENT '公告ID',
-  `notice_title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '公告标题',
+  `notice_title` longblob NOT NULL COMMENT '公告标题',
   `notice_type` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '公告类型（1通知 2公告）',
   `notice_content` longblob NULL COMMENT '公告内容',
   `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '0' COMMENT '公告状态（0正常 1关闭）',
@@ -1117,14 +1147,22 @@ CREATE TABLE `sys_notice`  (
   `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '更新者',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
-  PRIMARY KEY (`notice_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '通知公告表' ROW_FORMAT = DYNAMIC;
+  `receiver_type` tinyint NULL DEFAULT 0 COMMENT '接收类型：0-全部用户，1-指定用户',
+  `receiver_id` bigint NULL DEFAULT NULL COMMENT '接收用户ID',
+  `receiver_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '接收用户姓名',
+  PRIMARY KEY (`notice_id`) USING BTREE,
+  INDEX `fk_notice_receiver_id`(`receiver_id`) USING BTREE,
+  CONSTRAINT `fk_notice_receiver_id` FOREIGN KEY (`receiver_id`) REFERENCES `sys_user` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '通知公告表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_notice
 -- ----------------------------
-INSERT INTO `sys_notice` VALUES (1, '温馨提醒：2018-07-01 若依新版本发布啦', '2', 0xE696B0E78988E69CACE58685E5AEB9, '0', 'admin', '2025-05-31 17:38:05', '', NULL, '管理员');
-INSERT INTO `sys_notice` VALUES (2, '维护通知：2018-07-01 若依系统凌晨维护', '1', 0xE7BBB4E68AA4E58685E5AEB9, '0', 'admin', '2025-05-31 17:38:05', '', NULL, '管理员');
+INSERT INTO `sys_notice` VALUES (1, 0xE6B8A9E9A6A8E68F90E98692EFBC9A323031382D30372D303120E88BA5E4BE9DE696B0E78988E69CACE58F91E5B883E595A6, '2', 0xE696B0E78988E69CACE58685E5AEB9, '0', 'admin', '2025-05-31 17:38:05', '', NULL, '管理员', 0, NULL, NULL);
+INSERT INTO `sys_notice` VALUES (2, 0xE7BBB4E68AA4E9809AE79FA5EFBC9A323031382D30372D303120E88BA5E4BE9DE7B3BBE7BB9FE5878CE699A8E7BBB4E68AA4, '2', 0xE7BBB4E68AA4E58685E5AEB9, '0', 'admin', '2025-05-31 17:38:05', '', NULL, '管理员', 0, NULL, NULL);
+INSERT INTO `sys_notice` VALUES (8, 0xE4BA92E68DA2, '2', 0x3C703EE5BF85E5A487E68A80E883BDE4B88D3C2F703E, '0', 'admin', '2025-07-01 09:42:47', '', NULL, NULL, 0, NULL, NULL);
+INSERT INTO `sys_notice` VALUES (11, 0xE682A8323032352D30372D30312031363A33383A3230E9A284E7BAA6E79A84E4B8BBE9A298E4B8BAE2809CE5958AE58F91E58F91E58F91E2809DEFBC8CE5BC80E5A78BE697B6E997B4E4B8BA323032352D30372D30332030383A30303A3030E79A84E4BC9AE8AEAEE5AEA4E5B7B2E98080E59B9E, '1', NULL, '0', 'admin', '2025-07-01 16:47:19', '', NULL, NULL, 1, 1, 'admin');
+INSERT INTO `sys_notice` VALUES (12, 0xE682A8323032352D30372D30312031363A32353A3132E9A284E7BAA6E79A84E4B8BBE9A298E4B8BAE2809CE5958AE58F91E58F91E2809DEFBC8CE5BC80E5A78BE697B6E997B4E4B8BA323032352D30372D30352030373A30303A3030E79A84E4BC9AE8AEAEE5AEA4E5B7B2E9809AE8BF87, '1', NULL, '0', 'admin', '2025-07-01 17:30:19', '', NULL, NULL, 1, 1, 'admin');
 
 -- ----------------------------
 -- Table structure for sys_oper_log
@@ -1152,7 +1190,7 @@ CREATE TABLE `sys_oper_log`  (
   INDEX `idx_sys_oper_log_bt`(`business_type`) USING BTREE,
   INDEX `idx_sys_oper_log_s`(`status`) USING BTREE,
   INDEX `idx_sys_oper_log_ot`(`oper_time`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 475 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志记录' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 532 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志记录' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_oper_log
@@ -1558,6 +1596,38 @@ INSERT INTO `sys_oper_log` VALUES (497, '字典类型', 1, 'com.rbs.web.controll
 INSERT INTO `sys_oper_log` VALUES (498, '字典数据', 1, 'com.rbs.web.controller.system.SysDictDataController.add()', 'POST', 1, 'admin', '研发部门', '/system/dict/data', '127.0.0.1', '内网IP', '{\"createBy\":\"admin\",\"default\":false,\"dictLabel\":\"可预定\",\"dictSort\":0,\"dictType\":\"sys_room_status\",\"dictValue\":\"0\",\"listClass\":\"primary\",\"params\":{},\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-06-24 22:41:17', 15);
 INSERT INTO `sys_oper_log` VALUES (499, '字典数据', 1, 'com.rbs.web.controller.system.SysDictDataController.add()', 'POST', 1, 'admin', '研发部门', '/system/dict/data', '127.0.0.1', '内网IP', '{\"createBy\":\"admin\",\"default\":false,\"dictLabel\":\"不可预定\",\"dictSort\":1,\"dictType\":\"sys_room_status\",\"dictValue\":\"1\",\"listClass\":\"danger\",\"params\":{},\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-06-24 22:41:38', 36);
 INSERT INTO `sys_oper_log` VALUES (500, '菜单管理', 2, 'com.rbs.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"createTime\":\"2025-05-31 17:38:05\",\"icon\":\"system\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuId\":1,\"menuName\":\"系统管理\",\"menuType\":\"M\",\"orderNum\":1,\"params\":{},\"parentId\":0,\"path\":\"system\",\"perms\":\"\",\"query\":\"\",\"routeName\":\"\",\"status\":\"0\",\"updateBy\":\"admin\",\"visible\":\"1\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-06-24 22:43:47', 75);
+INSERT INTO `sys_oper_log` VALUES (501, '通知公告', 1, 'com.rbs.web.controller.system.SysNoticeController.add()', 'POST', 1, 'admin', '研发部门', '/system/notice', '127.0.0.1', '内网IP', '{\"createBy\":\"admin\",\"noticeContent\":\"<p>必备技能不</p>\",\"noticeTitle\":\"互换\",\"noticeType\":\"1\",\"params\":{},\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 09:42:47', 20);
+INSERT INTO `sys_oper_log` VALUES (502, '会议室预订', 2, 'com.rbs.system.controller.SysMeetingReservationController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/reservation', '127.0.0.1', '内网IP', '{\"applicantName\":\"admin\",\"createBy\":\"admin\",\"createTime\":\"2025-06-11 10:15:00\",\"deptId\":105,\"deptName\":\"测试部门\",\"endTime\":\"2025-06-26 12:00:00\",\"params\":{},\"participants\":\"1002,1003\",\"purpose\":\"制定市场策略dsfdfd似懂非懂\",\"remark\":\"111\",\"reservationId\":36,\"reservationTitle\":\"市场策略讨论\",\"roomId\":2,\"startTime\":\"2025-06-26 11:00:00\",\"status\":\"1\",\"updateBy\":\"admin\",\"updateTime\":\"2025-07-01 15:59:15\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 15:59:15', 42);
+INSERT INTO `sys_oper_log` VALUES (503, '会议室预订', 2, 'com.rbs.system.controller.SysMeetingReservationController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/reservation', '127.0.0.1', '内网IP', '{\"applicantName\":\"123456789\",\"createTime\":\"2025-06-21 00:38:43\",\"deptName\":\"研发部门\",\"endTime\":\"2025-06-27 11:00:00\",\"params\":{},\"purpose\":\"而已忍野忍\",\"remark\":\"可以可以\",\"reservationId\":88,\"reservationTitle\":\"热也有\",\"roomId\":5,\"startTime\":\"2025-06-27 10:00:00\",\"status\":\"1\",\"updateTime\":\"2025-07-01 16:15:24\",\"userId\":106}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:15:24', 18);
+INSERT INTO `sys_oper_log` VALUES (504, '会议室预订', 2, 'com.rbs.system.controller.SysMeetingReservationController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/reservation', '127.0.0.1', '内网IP', '{\"applicantName\":\"123456789\",\"createTime\":\"2025-06-21 00:38:31\",\"deptName\":\"研发部门\",\"endTime\":\"2025-06-23 08:00:00\",\"params\":{},\"purpose\":\"尔特也\",\"remark\":\"111\",\"reservationId\":87,\"reservationTitle\":\"二页人与人\",\"roomId\":2,\"startTime\":\"2025-06-23 07:00:00\",\"status\":\"1\",\"updateTime\":\"2025-07-01 16:16:57\",\"userId\":106}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:16:57', 73);
+INSERT INTO `sys_oper_log` VALUES (505, '会议室预订', 2, 'com.rbs.system.controller.SysMeetingReservationController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/reservation', '127.0.0.1', '内网IP', '{\"applicantName\":\"admin\",\"createTime\":\"2025-06-24 21:37:04\",\"deptName\":\"研发部门\",\"endTime\":\"2025-06-25 08:00:00\",\"params\":{},\"purpose\":\"萨法地方\",\"remark\":\"111\",\"reservationId\":97,\"reservationTitle\":\"萨法\",\"roomId\":5,\"startTime\":\"2025-06-25 07:00:00\",\"status\":\"1\",\"updateTime\":\"2025-07-01 16:19:49\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:19:49', 15);
+INSERT INTO `sys_oper_log` VALUES (506, '会议室预订', 2, 'com.rbs.system.controller.SysMeetingReservationController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/reservation', '127.0.0.1', '内网IP', '{\"applicantName\":\"admin\",\"createTime\":\"2025-06-24 21:43:57\",\"deptName\":\"研发部门\",\"endTime\":\"2025-06-25 09:00:00\",\"params\":{},\"purpose\":\"电风扇噶\",\"remark\":\"huang\",\"reservationId\":98,\"reservationTitle\":\"东莞电饭锅\",\"roomId\":1,\"startTime\":\"2025-06-25 08:00:00\",\"status\":\"1\",\"updateTime\":\"2025-07-01 16:22:30\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:22:30', 61);
+INSERT INTO `sys_oper_log` VALUES (507, '会议室预订', 3, 'com.rbs.system.controller.SysMeetingReservationController.remove()', 'DELETE', 1, 'admin', '研发部门', '/system/reservation/36', '127.0.0.1', '内网IP', '[36]', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:24:57', 30);
+INSERT INTO `sys_oper_log` VALUES (508, '会议室预订', 3, 'com.rbs.system.controller.SysMeetingReservationController.remove()', 'DELETE', 1, 'admin', '研发部门', '/system/reservation/37', '127.0.0.1', '内网IP', '[37]', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:24:59', 11);
+INSERT INTO `sys_oper_log` VALUES (509, '会议室预订', 1, 'com.rbs.system.controller.SysMeetingReservationController.add()', 'POST', 1, 'admin', '研发部门', '/system/reservation', '127.0.0.1', '内网IP', '{\"applicantName\":\"admin\",\"createTime\":\"2025-07-01 16:25:12\",\"deptName\":\"研发部门\",\"endTime\":\"2025-07-02 08:00:00\",\"params\":{},\"purpose\":\"啊发发\",\"reservationId\":100,\"reservationTitle\":\"水电费萨芬\",\"roomId\":2,\"startTime\":\"2025-07-02 07:00:00\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:25:12', 21);
+INSERT INTO `sys_oper_log` VALUES (510, '会议室预订', 1, 'com.rbs.system.controller.SysMeetingReservationController.add()', 'POST', 1, 'admin', '研发部门', '/system/reservation', '127.0.0.1', '内网IP', '{\"applicantName\":\"admin\",\"createTime\":\"2025-07-01 16:25:20\",\"deptName\":\"财务部门\",\"endTime\":\"2025-07-06 08:00:00\",\"params\":{},\"purpose\":\"双法防\",\"reservationId\":101,\"reservationTitle\":\"手打范德萨\",\"roomId\":5,\"startTime\":\"2025-07-06 07:00:00\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:25:20', 69);
+INSERT INTO `sys_oper_log` VALUES (511, '会议室预订', 2, 'com.rbs.system.controller.SysMeetingReservationController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/reservation', '127.0.0.1', '内网IP', '{\"applicantName\":\"admin\",\"createTime\":\"2025-06-24 22:24:55\",\"deptId\":103,\"deptName\":\"研发部门\",\"endTime\":\"2025-06-25 08:00:00\",\"params\":{},\"purpose\":\"哈哈哈哈合格\",\"remark\":\"122\",\"reservationId\":99,\"reservationTitle\":\"回个电话规范\",\"roomId\":3,\"startTime\":\"2025-06-25 07:00:00\",\"status\":\"1\",\"updateTime\":\"2025-07-01 16:29:02\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:29:02', 19);
+INSERT INTO `sys_oper_log` VALUES (512, '会议室预订', 2, 'com.rbs.system.controller.SysMeetingReservationController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/reservation', '127.0.0.1', '内网IP', '{\"applicantName\":\"123\",\"createTime\":\"2025-06-22 11:02:15\",\"deptName\":\"市场部门\",\"endTime\":\"2025-06-22 08:00:00\",\"params\":{},\"purpose\":\"123\",\"remark\":\"1111\",\"reservationId\":96,\"reservationTitle\":\"123\",\"roomId\":1,\"startTime\":\"2025-06-22 07:00:00\",\"status\":\"1\",\"updateTime\":\"2025-07-01 16:29:56\",\"userId\":107}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:29:56', 48);
+INSERT INTO `sys_oper_log` VALUES (513, '会议室预订', 2, 'com.rbs.system.controller.SysMeetingReservationController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/reservation', '127.0.0.1', '内网IP', '{\"applicantName\":\"admin\",\"createTime\":\"2025-07-01 16:25:12\",\"deptName\":\"研发部门\",\"endTime\":\"2025-07-02 08:00:00\",\"params\":{},\"purpose\":\"啊发发\",\"remark\":\"151\",\"reservationId\":100,\"reservationTitle\":\"水电费萨芬\",\"roomId\":2,\"startTime\":\"2025-07-02 07:00:00\",\"status\":\"1\",\"updateTime\":\"2025-07-01 16:30:53\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:30:53', 15);
+INSERT INTO `sys_oper_log` VALUES (514, '会议室预订', 1, 'com.rbs.system.controller.SysMeetingReservationController.add()', 'POST', 1, 'admin', '研发部门', '/system/reservation', '127.0.0.1', '内网IP', '{\"applicantName\":\"admin\",\"createTime\":\"2025-07-01 16:38:10\",\"deptName\":\"市场部门\",\"endTime\":\"2025-07-06 09:00:00\",\"params\":{},\"purpose\":\"撒懂法守法\",\"reservationId\":102,\"reservationTitle\":\"阿萨发生\",\"roomId\":1,\"startTime\":\"2025-07-06 08:00:00\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:38:10', 82);
+INSERT INTO `sys_oper_log` VALUES (515, '会议室预订', 1, 'com.rbs.system.controller.SysMeetingReservationController.add()', 'POST', 1, 'admin', '研发部门', '/system/reservation', '127.0.0.1', '内网IP', '{\"applicantName\":\"admin\",\"createTime\":\"2025-07-01 16:38:20\",\"deptName\":\"财务部门\",\"endTime\":\"2025-07-03 09:00:00\",\"params\":{},\"purpose\":\"啊发发发\",\"reservationId\":103,\"reservationTitle\":\"阿是防辐射\",\"roomId\":5,\"startTime\":\"2025-07-03 08:00:00\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:38:20', 12);
+INSERT INTO `sys_oper_log` VALUES (516, '会议室预订', 2, 'com.rbs.system.controller.SysMeetingReservationController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/reservation', '127.0.0.1', '内网IP', '{\"applicantName\":\"admin\",\"createTime\":\"2025-07-01 16:25:21\",\"deptName\":\"财务部门\",\"endTime\":\"2025-07-06 08:00:00\",\"params\":{},\"purpose\":\"双法防\",\"remark\":\"测试\",\"reservationId\":101,\"reservationTitle\":\"手打范德萨\",\"roomId\":5,\"startTime\":\"2025-07-06 07:00:00\",\"status\":\"1\",\"updateTime\":\"2025-07-01 16:38:39\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:38:39', 18);
+INSERT INTO `sys_oper_log` VALUES (517, '会议室预订', 2, 'com.rbs.system.controller.SysMeetingReservationController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/reservation', '127.0.0.1', '内网IP', '{\"applicantName\":\"admin\",\"createTime\":\"2025-07-01 16:38:11\",\"deptName\":\"市场部门\",\"endTime\":\"2025-07-06 09:00:00\",\"params\":{},\"purpose\":\"撒懂法守法\",\"remark\":\"哈哈哈哈哈\",\"reservationId\":102,\"reservationTitle\":\"阿萨发生\",\"roomId\":1,\"startTime\":\"2025-07-06 08:00:00\",\"status\":\"1\",\"updateTime\":\"2025-07-01 16:40:01\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:40:01', 37);
+INSERT INTO `sys_oper_log` VALUES (518, '通知公告', 1, 'com.rbs.web.controller.system.SysNoticeController.add()', 'POST', 1, 'admin', '研发部门', '/system/notice', '127.0.0.1', '内网IP', '{\"createBy\":\"admin\",\"noticeTitle\":\"您2025-07-01 16:38:11预约的主题为撒懂法守法开始时间为2025-07-06 08:00:00的会议室已通过\",\"noticeType\":\"1\",\"params\":{},\"receiverId\":1,\"receiverName\":\"admin\",\"receiverType\":1,\"status\":\"0\"}', NULL, 1, '\r\n### Error updating database.  Cause: com.mysql.cj.jdbc.exceptions.MysqlDataTruncation: Data truncation: Data too long for column \'notice_title\' at row 1\r\n### The error may exist in file [D:\\资料\\room-booking\\rbs-system\\target\\classes\\mapper\\system\\SysNoticeMapper.xml]\r\n### The error may involve com.rbs.system.mapper.SysNoticeMapper.insertNotice-Inline\r\n### The error occurred while setting parameters\r\n### SQL: insert into sys_notice (          notice_title,            notice_type,                      status,                      create_by,            receiver_type,             receiver_id,             receiver_name,            create_time         ) values (          ?,            ?,                      ?,                      ?,            ?,             ?,             ?,            sysdate()         )\r\n### Cause: com.mysql.cj.jdbc.exceptions.MysqlDataTruncation: Data truncation: Data too long for column \'notice_title\' at row 1\n; Data truncation: Data too long for column \'notice_title\' at row 1; nested exception is com.mysql.cj.jdbc.exceptions.MysqlDataTruncation: Data truncation: Data too long for column \'notice_title\' at row 1', '2025-07-01 16:40:02', 73);
+INSERT INTO `sys_oper_log` VALUES (519, '会议室预订', 1, 'com.rbs.system.controller.SysMeetingReservationController.add()', 'POST', 1, 'admin', '研发部门', '/system/reservation', '127.0.0.1', '内网IP', '{\"applicantName\":\"admin\",\"createTime\":\"2025-07-01 16:42:35\",\"deptName\":\"研发部门\",\"endTime\":\"2025-07-06 08:00:00\",\"params\":{},\"purpose\":\"山大\",\"reservationId\":104,\"reservationTitle\":\"沙发沙发\",\"roomId\":2,\"startTime\":\"2025-07-06 07:00:00\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:42:35', 16);
+INSERT INTO `sys_oper_log` VALUES (520, '会议室预订', 2, 'com.rbs.system.controller.SysMeetingReservationController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/reservation', '127.0.0.1', '内网IP', '{\"applicantName\":\"admin\",\"createTime\":\"2025-07-01 16:38:11\",\"deptId\":104,\"deptName\":\"市场部门\",\"endTime\":\"2025-07-06 10:00:00\",\"params\":{},\"purpose\":\"撒懂法守法\",\"remark\":\"\",\"reservationId\":102,\"reservationTitle\":\"阿萨发生\",\"roomId\":1,\"startTime\":\"2025-07-06 09:00:00\",\"status\":\"0\",\"updateTime\":\"2025-07-01 16:42:43\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:42:43', 15);
+INSERT INTO `sys_oper_log` VALUES (521, '会议室预订', 2, 'com.rbs.system.controller.SysMeetingReservationController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/reservation', '127.0.0.1', '内网IP', '{\"applicantName\":\"admin\",\"createTime\":\"2025-07-01 16:25:21\",\"deptId\":106,\"deptName\":\"财务部门\",\"endTime\":\"2025-07-03 08:00:00\",\"params\":{},\"purpose\":\"双法防\",\"remark\":\"\",\"reservationId\":101,\"reservationTitle\":\"手打范德萨\",\"roomId\":5,\"startTime\":\"2025-07-03 07:00:00\",\"status\":\"0\",\"updateTime\":\"2025-07-01 16:42:48\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:42:48', 14);
+INSERT INTO `sys_oper_log` VALUES (522, '会议室预订', 2, 'com.rbs.system.controller.SysMeetingReservationController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/reservation', '127.0.0.1', '内网IP', '{\"applicantName\":\"admin\",\"createTime\":\"2025-07-01 16:25:12\",\"deptId\":103,\"deptName\":\"研发部门\",\"endTime\":\"2025-07-05 08:00:00\",\"params\":{},\"purpose\":\"啊发发\",\"remark\":\"\",\"reservationId\":100,\"reservationTitle\":\"水电费萨芬\",\"roomId\":2,\"startTime\":\"2025-07-05 07:00:00\",\"status\":\"0\",\"updateTime\":\"2025-07-01 16:42:53\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:42:53', 65);
+INSERT INTO `sys_oper_log` VALUES (523, '会议室预订', 2, 'com.rbs.system.controller.SysMeetingReservationController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/reservation', '127.0.0.1', '内网IP', '{\"applicantName\":\"admin\",\"createTime\":\"2025-07-01 16:38:11\",\"deptId\":104,\"deptName\":\"市场部门\",\"endTime\":\"2025-07-06 10:00:00\",\"params\":{},\"purpose\":\"撒懂法守法\",\"remark\":\"102\",\"reservationId\":102,\"reservationTitle\":\"阿萨发生\",\"roomId\":1,\"startTime\":\"2025-07-06 09:00:00\",\"status\":\"1\",\"updateTime\":\"2025-07-01 16:43:11\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:43:11', 20);
+INSERT INTO `sys_oper_log` VALUES (524, '通知公告', 1, 'com.rbs.web.controller.system.SysNoticeController.add()', 'POST', 1, 'admin', '研发部门', '/system/notice', '127.0.0.1', '内网IP', '{\"createBy\":\"admin\",\"noticeTitle\":\"您2025-07-01 16:38:11预约的主题为撒懂法守法开始时间为2025-07-06 09:00:00的会议室已通过\",\"noticeType\":\"1\",\"params\":{},\"receiverId\":1,\"receiverName\":\"admin\",\"receiverType\":1,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:43:12', 28);
+INSERT INTO `sys_oper_log` VALUES (525, '通知公告', 3, 'com.rbs.web.controller.system.SysNoticeController.remove()', 'DELETE', 1, 'admin', '研发部门', '/system/notice/9', '127.0.0.1', '内网IP', '[9]', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:46:06', 41);
+INSERT INTO `sys_oper_log` VALUES (526, '会议室预订', 2, 'com.rbs.system.controller.SysMeetingReservationController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/reservation', '127.0.0.1', '内网IP', '{\"applicantName\":\"admin\",\"createTime\":\"2025-07-01 16:42:35\",\"deptName\":\"研发部门\",\"endTime\":\"2025-07-06 08:00:00\",\"params\":{},\"purpose\":\"山大\",\"remark\":\"1111111\",\"reservationId\":104,\"reservationTitle\":\"沙发沙发\",\"roomId\":2,\"startTime\":\"2025-07-06 07:00:00\",\"status\":\"1\",\"updateTime\":\"2025-07-01 16:46:15\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:46:15', 15);
+INSERT INTO `sys_oper_log` VALUES (527, '通知公告', 1, 'com.rbs.web.controller.system.SysNoticeController.add()', 'POST', 1, 'admin', '研发部门', '/system/notice', '127.0.0.1', '内网IP', '{\"createBy\":\"admin\",\"noticeTitle\":\"您2025-07-01 16:42:35预约的主题为\\\"山大\\\",开始时间为2025-07-06 07:00:00的会议室已通过\",\"noticeType\":\"1\",\"params\":{},\"receiverId\":1,\"receiverName\":\"admin\",\"receiverType\":1,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:46:15', 10);
+INSERT INTO `sys_oper_log` VALUES (528, '通知公告', 3, 'com.rbs.web.controller.system.SysNoticeController.remove()', 'DELETE', 1, 'admin', '研发部门', '/system/notice/10', '127.0.0.1', '内网IP', '[10]', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:46:59', 11);
+INSERT INTO `sys_oper_log` VALUES (529, '会议室预订', 2, 'com.rbs.system.controller.SysMeetingReservationController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/reservation', '127.0.0.1', '内网IP', '{\"applicantName\":\"admin\",\"createTime\":\"2025-07-01 16:38:20\",\"deptName\":\"财务部门\",\"endTime\":\"2025-07-03 09:00:00\",\"params\":{},\"purpose\":\"啊发发发\",\"remark\":\"11111\",\"reservationId\":103,\"reservationTitle\":\"阿是防辐射\",\"roomId\":5,\"startTime\":\"2025-07-03 08:00:00\",\"status\":\"2\",\"updateTime\":\"2025-07-01 16:47:19\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:47:19', 14);
+INSERT INTO `sys_oper_log` VALUES (530, '通知公告', 1, 'com.rbs.web.controller.system.SysNoticeController.add()', 'POST', 1, 'admin', '研发部门', '/system/notice', '127.0.0.1', '内网IP', '{\"createBy\":\"admin\",\"noticeTitle\":\"您2025-07-01 16:38:20预约的主题为“啊发发发”，开始时间为2025-07-03 08:00:00的会议室已退回\",\"noticeType\":\"1\",\"params\":{},\"receiverId\":1,\"receiverName\":\"admin\",\"receiverType\":1,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 16:47:19', 18);
+INSERT INTO `sys_oper_log` VALUES (531, '会议室预订', 2, 'com.rbs.system.controller.SysMeetingReservationController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/reservation', '127.0.0.1', '内网IP', '{\"applicantName\":\"admin\",\"createTime\":\"2025-07-01 16:25:12\",\"deptId\":103,\"deptName\":\"研发部门\",\"endTime\":\"2025-07-05 08:00:00\",\"params\":{},\"purpose\":\"啊发发\",\"remark\":\"222\",\"reservationId\":100,\"reservationTitle\":\"水电费萨芬\",\"roomId\":2,\"startTime\":\"2025-07-05 07:00:00\",\"status\":\"1\",\"updateTime\":\"2025-07-01 17:30:19\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 17:30:19', 35);
+INSERT INTO `sys_oper_log` VALUES (532, '通知公告', 1, 'com.rbs.web.controller.system.SysNoticeController.add()', 'POST', 1, 'admin', '研发部门', '/system/notice', '127.0.0.1', '内网IP', '{\"createBy\":\"admin\",\"noticeTitle\":\"您2025-07-01 16:25:12预约的主题为“啊发发”，开始时间为2025-07-05 07:00:00的会议室已通过\",\"noticeType\":\"1\",\"params\":{},\"receiverId\":1,\"receiverName\":\"admin\",\"receiverType\":1,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-01 17:30:19', 11);
 
 -- ----------------------------
 -- Table structure for sys_post
@@ -1698,7 +1768,7 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '1', '/profile/avatar/2025/06/22/avatar_20250622103557A001.png', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2025-06-24 22:18:31', '2025-05-31 17:38:05', 'admin', '2025-05-31 17:38:05', '', '2025-06-24 22:18:30', '管理员');
+INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '1', '/profile/avatar/2025/06/22/avatar_20250622103557A001.png', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2025-07-02 15:52:07', '2025-05-31 17:38:05', 'admin', '2025-05-31 17:38:05', '', '2025-07-02 15:52:06', '管理员');
 INSERT INTO `sys_user` VALUES (2, 105, 'ry', '若依', '00', 'ry@qq.com', '15666666666', '1', '/profile/upload/2025/06/22/白粥_20250622103613A002.jpg', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2025-05-31 17:38:05', '2025-05-31 17:38:05', 'admin', '2025-05-31 17:38:05', 'admin', '2025-06-22 10:36:14', '测试员');
 INSERT INTO `sys_user` VALUES (100, 103, '123456', '123456', '00', 'huang@qq.com', '13421234567', '0', '/profile/upload/2025/06/22/豆浆_20250622103618A003.jpg', '$2a$10$.evINGFTWkr0/J38/drJae6DZx0xeVtIzkAozLAP19qE6OLLacSVq', '0', '0', '127.0.0.1', '2025-06-08 21:51:12', '2025-06-08 20:38:54', '', '2025-06-08 20:38:54', 'admin', '2025-06-22 10:37:09', NULL);
 INSERT INTO `sys_user` VALUES (101, 105, 'abab', 'abab', '00', '', '', '1', '/profile/upload/2025/06/22/白开水_20250622110747A001.jpg', '$2a$10$MEafI9tqlb0GbSML/iHYi.RgWMQE8lKJdp2TvdodgTVWmvqwnLXqO', '0', '0', '127.0.0.1', '2025-06-09 20:56:21', '2025-06-09 20:56:05', '', '2025-06-09 20:56:05', 'admin', '2025-06-22 11:07:48', '123456');
@@ -1706,7 +1776,7 @@ INSERT INTO `sys_user` VALUES (102, NULL, '111', '111', '00', '', '', '2', '', '
 INSERT INTO `sys_user` VALUES (103, 107, '1111', '1111', '00', '', '', '0', '/profile/upload/2025/06/22/蛋糕_20250622103630A005.jpg', '$2a$10$GKypFYSCgaZYQguJCfYGxuaPrWgRWk3tXEskwjqnxCVsmwdj4FrYO', '0', '0', '127.0.0.1', '2025-06-12 23:39:57', '2025-06-12 23:33:32', '', '2025-06-12 23:33:31', 'admin', '2025-06-22 10:37:19', NULL);
 INSERT INTO `sys_user` VALUES (104, 107, '啊啊啊', '晃', '00', '', '15398875478', '0', '/profile/upload/2025/06/22/包子_20250622103639A006.jpg', '$2a$10$nuB7ou/bfRxoQTHFUeC2z.YWOnMgAPoX2EPWheBWFG8r7jlUh5Fy6', '0', '0', '', NULL, NULL, 'admin', '2025-06-14 22:50:38', 'admin', '2025-06-22 10:37:23', NULL);
 INSERT INTO `sys_user` VALUES (105, 103, '哈哈哈哈', '强强强强', '00', '', '13578954567', '0', '/profile/upload/2025/06/22/大白菜_20250622103644A007.jpg', '$2a$10$2osFW9kH8QK1XBEX0.yJMOHBUB28gTlUxv/3yjshhTbTXz2T.dbbe', '0', '0', '', NULL, NULL, 'admin', '2025-06-14 22:56:19', 'admin', '2025-06-22 10:37:26', NULL);
-INSERT INTO `sys_user` VALUES (106, 104, '123456789', '123456789', '00', '', '', '0', '/profile/upload/2025/06/22/豆腐_20250622103650A008.jpg', '$2a$10$5QhCxs6tNuHGhbu7RPKGweXKoJCKZqlNYIdSy0Tmzqgmi40qM9rjW', '0', '0', '127.0.0.1', '2025-06-21 00:38:09', '2025-06-15 08:19:41', '', '2025-06-15 08:19:40', 'admin', '2025-06-22 10:36:51', NULL);
+INSERT INTO `sys_user` VALUES (106, 104, '123456789', '123456789', '00', '', '', '0', '/profile/upload/2025/06/22/豆腐_20250622103650A008.jpg', '$2a$10$5QhCxs6tNuHGhbu7RPKGweXKoJCKZqlNYIdSy0Tmzqgmi40qM9rjW', '0', '0', '127.0.0.1', '2025-07-02 15:49:28', '2025-06-15 08:19:41', '', '2025-06-15 08:19:40', 'admin', '2025-07-02 15:49:27', NULL);
 INSERT INTO `sys_user` VALUES (107, NULL, '123', '123', '00', '', '', '0', '', '$2a$10$4Qao4/GI2JPfCjlxU61k0.hulg1lTYZqNPj5K8KkZVF6CT26HMZra', '0', '0', '127.0.0.1', '2025-06-22 11:01:53', '2025-06-22 11:01:45', '', '2025-06-22 11:01:45', '', '2025-06-22 11:01:52', NULL);
 
 -- ----------------------------

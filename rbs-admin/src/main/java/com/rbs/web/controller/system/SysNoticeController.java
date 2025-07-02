@@ -33,7 +33,7 @@ public class SysNoticeController extends BaseController
     private ISysNoticeService noticeService;
 
     /**
-     * 获取通知公告列表
+     * 获取通知列表
      */
     @PreAuthorize("@ss.hasPermi('system:notice:list')")
     @GetMapping("/list")
@@ -45,7 +45,7 @@ public class SysNoticeController extends BaseController
     }
 
     /**
-     * 根据通知公告编号获取详细信息
+     * 根据通知编号获取详细信息
      */
     @PreAuthorize("@ss.hasPermi('system:notice:query')")
     @GetMapping(value = "/{noticeId}")
@@ -55,7 +55,7 @@ public class SysNoticeController extends BaseController
     }
 
     /**
-     * 新增通知公告
+     * 新增通知
      */
     @PreAuthorize("@ss.hasPermi('system:notice:add')")
     @Log(title = "通知公告", businessType = BusinessType.INSERT)
@@ -67,7 +67,7 @@ public class SysNoticeController extends BaseController
     }
 
     /**
-     * 修改通知公告
+     * 修改通知
      */
     @PreAuthorize("@ss.hasPermi('system:notice:edit')")
     @Log(title = "通知公告", businessType = BusinessType.UPDATE)
@@ -79,7 +79,7 @@ public class SysNoticeController extends BaseController
     }
 
     /**
-     * 删除通知公告
+     * 删除通知
      */
     @PreAuthorize("@ss.hasPermi('system:notice:remove')")
     @Log(title = "通知公告", businessType = BusinessType.DELETE)
@@ -88,4 +88,16 @@ public class SysNoticeController extends BaseController
     {
         return toAjax(noticeService.deleteNoticeByIds(noticeIds));
     }
+    /**
+     * 获取当前用户的个人通知列表
+     */
+    @GetMapping("/user/list")
+    public TableDataInfo userNoticeList()
+    {
+        startPage();
+        Long userId = getUserId();
+        List<SysNotice> list = noticeService.selectNoticeListByUserId(userId);
+        return getDataTable(list);
+    }
+
 }

@@ -68,13 +68,9 @@ public class SysMeetingReservationController extends BaseController
             @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
     ) {
-        // 设置分页参数
+
         PageHelper.startPage(pageNum, pageSize);
-
-        // 执行查询
         List<SysMeetingReservation> list = sysMeetingReservationService.selectSysMeetingReservationListByApplicantName(applicantName);
-
-        // 封装分页数据
         return getDataTable(list);
     }
 

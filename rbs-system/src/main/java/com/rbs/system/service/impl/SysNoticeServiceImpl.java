@@ -1,6 +1,11 @@
 package com.rbs.system.service.impl;
 
 import java.util.List;
+
+import com.rbs.common.core.domain.entity.SysUser;
+import com.rbs.common.core.page.TableDataInfo;
+import com.rbs.common.utils.SecurityUtils;
+import com.rbs.system.mapper.SysUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.rbs.system.domain.SysNotice;
@@ -89,4 +94,9 @@ public class SysNoticeServiceImpl implements ISysNoticeService
     {
         return noticeMapper.deleteNoticeByIds(noticeIds);
     }
+    @Override
+    public List<SysNotice> selectNoticeListByUserId(Long userId) {
+        return noticeMapper.selectNoticeListByUserId(userId);
+    }
+
 }

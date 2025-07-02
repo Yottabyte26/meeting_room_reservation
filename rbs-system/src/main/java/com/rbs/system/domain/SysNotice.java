@@ -27,10 +27,17 @@ public class SysNotice extends BaseEntity
 
     /** 公告内容 */
     private String noticeContent;
-
+    private Integer receiverType; // 接收类型
+    private Long receiverId;      // 接收用户ID
+    private String receiverName;  // 接收用户名(显示用)
     /** 公告状态（0正常 1关闭） */
     private String status;
-
+    public Integer getReceiverType() { return receiverType; }
+    public void setReceiverType(Integer receiverType) { this.receiverType = receiverType; }
+    public Long getReceiverId() { return receiverId; }
+    public void setReceiverId(Long receiverId) { this.receiverId = receiverId; }
+    public String getReceiverName() { return receiverName; }
+    public void setReceiverName(String receiverName) { this.receiverName = receiverName; }
     public Long getNoticeId()
     {
         return noticeId;
@@ -48,7 +55,7 @@ public class SysNotice extends BaseEntity
 
     @Xss(message = "公告标题不能包含脚本字符")
     @NotBlank(message = "公告标题不能为空")
-    @Size(min = 0, max = 50, message = "公告标题不能超过50个字符")
+    @Size(min = 0, max = 300, message = "公告标题不能超过300个字符")
     public String getNoticeTitle()
     {
         return noticeTitle;
@@ -86,17 +93,20 @@ public class SysNotice extends BaseEntity
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("noticeId", getNoticeId())
-            .append("noticeTitle", getNoticeTitle())
-            .append("noticeType", getNoticeType())
-            .append("noticeContent", getNoticeContent())
-            .append("status", getStatus())
-            .append("createBy", getCreateBy())
-            .append("createTime", getCreateTime())
-            .append("updateBy", getUpdateBy())
-            .append("updateTime", getUpdateTime())
-            .append("remark", getRemark())
-            .toString();
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("noticeId", getNoticeId())
+                .append("noticeTitle", getNoticeTitle())
+                .append("noticeType", getNoticeType())
+                .append("noticeContent", getNoticeContent())
+                .append("status", getStatus())
+                .append("receiverType", getReceiverType())
+                .append("receiverId", getReceiverId())
+                .append("receiverName", getReceiverName())
+                .append("createBy", getCreateBy())
+                .append("createTime", getCreateTime())
+                .append("updateBy", getUpdateBy())
+                .append("updateTime", getUpdateTime())
+                .append("remark", getRemark())
+                .toString();
     }
 }

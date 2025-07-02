@@ -17,7 +17,6 @@ public interface ISysNoticeService
      * @return 公告信息
      */
     public SysNotice selectNoticeById(Long noticeId);
-
     /**
      * 查询公告列表
      * 
@@ -57,4 +56,6 @@ public interface ISysNoticeService
      * @return 结果
      */
     public int deleteNoticeByIds(Long[] noticeIds);
+    /** 根据用户ID查询通知列表 */
+    List<SysNotice> selectNoticeListByUserId(Long userId);
 }

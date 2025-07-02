@@ -197,19 +197,27 @@ const selectDate = (dateStr) => {
 }
 // 生成最近7天日期
 const generateSevenDays = () => {
-  const today = new Date()
-  today.setHours(0, 0, 0, 0) // 将今天的时间重置为零点，用于比较
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // 设置为今天凌晨
+
   return Array.from({ length: 7 }, (_, i) => {
-    const date = new Date(today)
-    date.setDate(today.getDate() + i)
-    const formattedDate = date.toISOString().split('T')[0]
-    const isPast = date < today
+    const date = new Date(today);
+    date.setDate(today.getDate() + i);
+
+    // 使用本地时间格式化日期，避免时区问题
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+
+    const isPast = date < today;
+
     return {
       date: formattedDate,
       disabled: isPast
-    }
-  })
-}
+    };
+  });
+};
 onMounted(() => {
   recentSevenDays.value = generateSevenDays()
 })

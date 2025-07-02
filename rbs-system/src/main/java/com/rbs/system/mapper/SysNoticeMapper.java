@@ -57,4 +57,12 @@ public interface SysNoticeMapper
      * @return 结果
      */
     public int deleteNoticeByIds(Long[] noticeIds);
+    /**
+     * 根据用户ID查询通知列表
+     *
+     * @param userId 用户ID
+     * @return 通知集合
+     */
+    public List<SysNotice> selectNoticeListByUserId(Long userId);
+
 }

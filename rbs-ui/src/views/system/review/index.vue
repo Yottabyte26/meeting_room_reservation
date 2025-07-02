@@ -71,6 +71,7 @@
 <script setup name="Reservation">
 import { listReservation, getReservation, updateReservation } from "@/api/system/reservation"
 import { listRoom } from "@/api/system/room"
+import { addNotice } from "@/api/system/notice";
 const { proxy } = getCurrentInstance()
 const { sys_reservation_status } = proxy.useDict('sys_reservation_status')
 const roomList = ref([])
@@ -97,11 +98,19 @@ const data = reactive({
     status: 0,
     applicantName: null,
     deptName: null
-  }
-
+  },
+  noticeQueryParams: {
+    noticeTitle: undefined,
+    noticeType: 1,
+    noticeContent: undefined,
+    status: "0",
+    receiverType: 1,
+    receiverId: undefined,
+    receiverName: undefined
+  },
 })
 
-const { queryParams, form } = toRefs(data)
+const { queryParams, form, noticeQueryParams } = toRefs(data)
 
 /** 查询会议室预订列表 */
 function getList() {
@@ -200,10 +209,19 @@ function handleReservationAction(row, status, actionText, maxRemarkLength) {
         }
       );
     })
+
+
     .then(({ value: reason }) => {
       form.value.status = status;
       form.value.remark = reason;
       return updateReservation(form.value);
+    })
+    .then(() => {
+      noticeQueryParams.value.noticeTitle = `您${row.createTime}预约的主题为“${row.purpose}”，开始时间为${row.startTime}的会议室已${actionText}`;
+      noticeQueryParams.value.receiverId = row.userId;
+      noticeQueryParams.value.receiverName = row.applicantName;
+      console.log("@@@", noticeQueryParams.value)
+      return addNotice(noticeQueryParams.value);
     })
     .then(() => {
       getList();
