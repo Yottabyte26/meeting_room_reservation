@@ -47,6 +47,22 @@ public interface SysUserMapper
     public SysUser selectUserByUserName(String userName);
 
     /**
+     * 通过手机号查询用户
+     *
+     * @param phone 手机号
+     * @return 用户对象信息
+     */
+    public SysUser selectUserByPhonenumber(String phonenumber);
+
+    /**
+     * 通过邮箱查询用户
+     *
+     * @param email 邮箱
+     * @return 用户对象信息
+     */
+    public SysUser selectUserByEmail(String email);
+
+    /**
      * 通过用户ID查询用户
      * 
      * @param userId 用户ID

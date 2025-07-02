@@ -130,6 +130,28 @@ public class SysUserServiceImpl implements ISysUserService
     }
 
     /**
+     * 通过用户名查询用户
+     *
+     * @param phone 手机号
+     * @return 用户对象信息
+     */
+    @Override
+    public SysUser selectUserByPhonenumber(String phonenumber) {
+        return userMapper.selectUserByPhonenumber(phonenumber);
+    }
+
+    /**
+     * 通过用户名查询用户
+     *
+     * @param email 邮箱
+     * @return 用户对象信息
+     */
+    @Override
+    public SysUser selectUserByEmail(String email) {
+        return userMapper.selectUserByEmail(email);
+    }
+
+    /**
      * 通过用户ID查询用户
      * 
      * @param userId 用户ID
