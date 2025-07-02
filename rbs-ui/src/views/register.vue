@@ -199,12 +199,10 @@ onMounted(() => {
 
 .register-image-container img {
   height: 550px;
-  /* 增大图片显示高度，和表单高度适配 */
   width: 500px;
+  object-fit: cover;
   border-top-left-radius: 20px;
-  /* 设置左上角的圆角半径，可根据需要调整数值 */
   border-bottom-left-radius: 20px;
-  /* 设置左下角的圆角半径，可根据需要调整数值 */
   transform: translateY(2px);
 }
 
