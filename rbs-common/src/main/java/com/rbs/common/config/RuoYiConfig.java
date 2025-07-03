@@ -28,7 +28,7 @@ public class RuoYiConfig
     private static boolean addressEnabled;
 
     /** 验证码类型 */
-    private static String captchaType;
+    private String captchaType;
 
     public String getName()
     {
@@ -80,12 +80,16 @@ public class RuoYiConfig
         RuoYiConfig.addressEnabled = addressEnabled;
     }
 
-    public static String getCaptchaType() {
+    public static String getCaptchaType(RuoYiConfig config) {
+        return config.captchaType;
+    }
+
+    public String getCaptchaType() {
         return captchaType;
     }
 
     public void setCaptchaType(String captchaType) {
-        RuoYiConfig.captchaType = captchaType;
+        this.captchaType = captchaType;
     }
 
     /**

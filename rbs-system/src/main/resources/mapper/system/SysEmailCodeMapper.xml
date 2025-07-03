@@ -1,6 +1,27 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.system.mapper.SysEmailCodeMapper">
 
-</beans>
+    <!-- 新增验证码 -->
+    <insert id="insert" parameterType="com.rbs.system.domain.SysEmailCode">
+        insert into sys_email_code (email, code, type, expire_time, create_time)
+        values (#{email}, #{code}, #{type}, #{expireTime}, #{createTime})
+    </insert>
+
+    <!-- 删除旧验证码 -->
+    <delete id="deleteByEmailAndType" parameterType="com.rbs.system.domain.SysEmailCode">
+        delete from sys_email_code
+        where email = #{email} and type = #{type}
+    </delete>
+
+    <!-- 查询最新验证码 -->
+    <select id="selectLatestByEmailAndType" parameterType="com.rbs.system.domain.SysEmailCode"
+            resultType="com.rbs.system.domain.SysEmailCode">
+        select id, email, code, type, expire_time as expireTime, create_time as createTime
+        from sys_email_code
+        where email = #{email} and type = #{type}
+        order by create_time desc
+            limit 1
+    </select>
+</mapper>

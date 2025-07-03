@@ -1,2 +1,11 @@
-package com.rbs.system.service;public interface ISysEmailCodeService {
+package com.rbs.system.service;
+
+import com.rbs.common.core.domain.AjaxResult;
+
+public interface ISysEmailCodeService {
+    // 发送验证码（type:1-注册，2-找回密码）
+    AjaxResult sendCode(String email, Integer type);
+
+    // 验证验证码
+    boolean validateCode(String email, String code, Integer type);
 }

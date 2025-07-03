@@ -49,7 +49,7 @@ public interface SysUserMapper
     /**
      * 通过手机号查询用户
      *
-     * @param phone 手机号
+     * @param phonenumber 手机号
      * @return 用户对象信息
      */
     public SysUser selectUserByPhonenumber(String phonenumber);
@@ -153,4 +153,17 @@ public interface SysUserMapper
      * 性别统计
      */
     public List<GenderVo> selectGenderList();
+
+    /**
+     * 根据邮箱更新密码（找回密码专用）
+     * @param email 邮箱地址
+     * @param newPassword 新密码（已加密）
+     * @param updateBy 更新人
+     * @return 影响行数
+     */
+    public int updatePasswordByEmail(
+            @Param("email") String email,
+            @Param("newPassword") String newPassword,
+            @Param("updateBy") String updateBy
+    );
 }

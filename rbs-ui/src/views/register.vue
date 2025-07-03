@@ -11,35 +11,42 @@
           <div class="register-title-container">
             <h3 class="title" style="font-size: 25px">注册</h3>
           </div>
-
+          <!-- 账号输入 -->
           <el-form-item prop="username">
             <el-input v-model="registerForm.username" type="text" auto-complete="off" placeholder="请输入账号">
             </el-input>
           </el-form-item>
+
+          <!-- 邮箱输入 -->
+          <el-form-item prop="email">
+            <el-input v-model="registerForm.email" type="email" auto-complete="off" placeholder="请输入邮箱">
+              <template #prefix>
+                <svg-icon icon-class="email" class="el-input__icon input-icon" />
+              </template>
+            </el-input>
+          </el-form-item>
+
+          <!-- 密码输入 -->
           <el-form-item prop="password">
             <el-input v-model="registerForm.password" type="password" auto-complete="off" placeholder="请输入密码(5-20位数字)"
               @keyup.enter.native="handleRegister">
             </el-input>
           </el-form-item>
-          <!-- <el-form-item prop="deptName">
-            <el-input v-model="registerForm.confirmPassword" type="password" auto-complete="off"
-              placeholder="请再次输入密码(5-20位数字)" @keyup.enter.native="handleRegister">
-            </el-input>
-          </el-form-item> -->
           <el-form-item prop="confirmPassword">
             <el-input v-model="registerForm.confirmPassword" type="password" auto-complete="off"
               placeholder="请再次输入密码(5-20位数字)" @keyup.enter.native="handleRegister">
             </el-input>
           </el-form-item>
-          <el-form-item prop="code" v-if="captchaEnabled">
-            <el-input v-model="registerForm.code" autocomplete="off" placeholder="验证码" style="width: 63%"
+          <!-- 邮箱验证码区域 -->
+          <el-form-item prop="code">
+            <el-input v-model="registerForm.code" autocomplete="off" placeholder="输入6位验证码" style="width: 63%"
               @keyup.enter="handleRegister">
               <template #prefix>
                 <svg-icon icon-class="validCode" class="el-input__icon input-icon" />
               </template>
             </el-input>
             <div class="register-code">
-              <img :src="codeUrl" @click="getCode" class="register-code-img" />
+              <el-button style="margin-left: 10px; width: 100%; height: 100%;" type="primary" :disabled="isCodeDisabled" @click="handleSendCode"> {{ codeButtonText }}</el-button>
             </div>
           </el-form-item>
           <div class="checkbox" style="font-size: 15px">
@@ -72,7 +79,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { getCodeImg, register } from "@/api/login";
+import { register } from "@/api/login";
 
 const router = useRouter()
 
@@ -90,6 +97,10 @@ const registerForm = ref({
   agreeTerms: false  // 新增属性，用于跟踪是否同意服务协议和隐私政策
 })
 
+// 验证码按钮状态
+const isCodeDisabled = ref(false)
+const codeButtonText = ref("发送验证码")
+
 // 表单验证规则
 const equalToPassword = (rule, value, callback) => {
   if (registerForm.value.password !== value) {
@@ -104,6 +115,10 @@ const registerRules = {
     { required: true, trigger: "blur", message: "请输入您的账号" },
     { min: 2, max: 20, message: '用户账号长度必须介于 2 和 20 之间', trigger: 'blur' }
   ],
+  email: [
+    { required: true, trigger: "blur", message: "请输入邮箱地址" },
+    { type: 'email', message: '请输入有效的邮箱地址', trigger: ['blur', 'change'] }
+  ],
   password: [
     { required: true, trigger: "blur", message: "请输入您的密码" },
     { min: 5, max: 20, message: "用户密码长度必须介于 5 和 20 之间", trigger: "blur" },
@@ -112,6 +127,11 @@ const registerRules = {
   confirmPassword: [
     { required: true, trigger: "blur", message: "请再次输入您的密码" },
     { required: true, validator: equalToPassword, trigger: "blur" }
+  ],
+  code: [
+    { required: true, trigger: "blur", message: "请输入验证码" },
+    { len: 6, message: "验证码必须为6位", trigger: "blur" },
+    { pattern: /^\d{6}$/, message: "验证码必须为数字", trigger: "blur" }
   ],
   agreeTerms: [
     { required: true, trigger: "change", message: "您必须同意服务协议和隐私政策才能注册" }
@@ -123,16 +143,40 @@ const codeUrl = ref("")
 const loading = ref(false)
 const captchaEnabled = ref(true)
 
-// 获取验证码
-const getCode = () => {
-  getCodeImg().then(res => {
-    captchaEnabled.value = res.captchaEnabled === undefined ? true : res.captchaEnabled;
-    if (captchaEnabled.value) {
-      codeUrl.value = "data:image/gif;base64," + res.img;
-      registerForm.value.uuid = res.uuid;
+// 发送邮箱验证码（临时占位，等待后端接口）
+const handleSendCode = () => {
+  // 简单验证邮箱格式
+  if (!registerForm.value.email) {
+    ElMessage.warning("请先输入邮箱地址");
+    return;
+  }
+  const emailReg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailReg.test(registerForm.value.email)) {
+    ElMessage.warning("请输入有效的邮箱地址");
+    return;
+  }
+
+  // 模拟发送成功（实际需调用后端接口）
+  isCodeDisabled.value = true;
+  codeButtonText.value = "已发送(60s)";
+  
+  // 倒计时逻辑
+  let countdown = 60;
+  const timer = setInterval(() => {
+    countdown--;
+    codeButtonText.value = `重新发送(${countdown}s)`;
+    if (countdown <= 0) {
+      clearInterval(timer);
+      codeButtonText.value = "发送验证码";
+      isCodeDisabled.value = false;
     }
-  });
+  }, 1000);
+  
+  // 临时提示（实际应移除）
+  ElMessage.warning("注意：邮箱验证码接口尚未实现，此为模拟倒计时效果");
 }
+
+
 
 // 处理注册
 const handleRegister = () => {
@@ -154,18 +198,10 @@ const handleRegister = () => {
         }).catch(() => { });
       }).catch(() => {
         loading.value = false;
-        if (captchaEnabled.value) {
-          getCode();
-        }
       })
     }
   });
 }
-
-// 组件创建时获取验证码
-onMounted(() => {
-  getCode();
-})
 </script>
 
 <style lang="scss" scoped>
@@ -285,7 +321,7 @@ onMounted(() => {
   background: #ffffff;
   width: 450px;
   height: 550px;
-  padding: 40px 30px;
+  padding: 25px 30px;
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
 

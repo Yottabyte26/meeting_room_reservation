@@ -585,4 +585,9 @@ public class SysUserServiceImpl implements ISysUserService
         }
         return successMsg.toString();
     }
+
+    @Override
+    public int updatePasswordByEmail(String email, String newPassword, String updateBy) {
+        return userMapper.updatePasswordByEmail(email, newPassword, updateBy);
+    }
 }

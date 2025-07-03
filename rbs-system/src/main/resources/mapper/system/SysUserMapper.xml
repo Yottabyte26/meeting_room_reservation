@@ -253,6 +253,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="resetUserPwd" parameterType="SysUser">
  		update sys_user set pwd_update_date = sysdate(), password = #{password} where user_name = #{userName}
 	</update>
+
+	<!-- 通过邮箱更新密码（找回密码专用） -->
+	<update id="updatePasswordByEmail" parameterType="map">
+		UPDATE sys_user
+		SET
+			password = #{newPassword},  -- 新密码（已加密）
+			pwd_update_date = sysdate(),  -- 更新密码时间
+			update_by = #{updateBy},      -- 更新人
+			update_time = sysdate()       -- 更新时间
+		WHERE
+			email = #{email}              -- 邮箱地址（唯一标识）
+		  AND del_flag = '0'            -- 未删除的用户
+	</update>
 	
 	<delete id="deleteUserById" parameterType="Long">
  		update sys_user set del_flag = '2' where user_id = #{userId}

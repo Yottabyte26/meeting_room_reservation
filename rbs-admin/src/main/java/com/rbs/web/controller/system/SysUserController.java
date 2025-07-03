@@ -1,6 +1,7 @@
 package com.rbs.web.controller.system;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.ArrayUtils;
@@ -31,6 +32,10 @@ import com.rbs.system.service.ISysDeptService;
 import com.rbs.system.service.ISysPostService;
 import com.rbs.system.service.ISysRoleService;
 import com.rbs.system.service.ISysUserService;
+import com.rbs.system.mapper.SysUserMapper;
+import com.rbs.system.service.ISysEmailCodeService;
+
+import static com.rbs.framework.datasource.DynamicDataSourceContextHolder.log;
 
 /**
  * 用户信息
@@ -52,6 +57,14 @@ public class SysUserController extends BaseController
 
     @Autowired
     private ISysPostService postService;
+
+    // 注入邮箱验证码服务
+    @Autowired
+    private ISysEmailCodeService emailCodeService;
+
+    // 注入用户Mapper
+    @Autowired
+    private SysUserMapper userMapper;
 
     /**
      * 获取用户列表
@@ -252,5 +265,63 @@ public class SysUserController extends BaseController
     public AjaxResult deptTree(SysDept dept)
     {
         return success(deptService.selectDeptTreeList(dept));
+    }
+
+    /**
+     * 通过邮箱验证码重置密码（找回密码功能）
+     */
+    @PostMapping("/resetPasswordByEmail")
+    public AjaxResult resetPasswordByEmail(@RequestBody Map<String, String> params) {
+        // 从请求参数中获取邮箱、验证码、新密码（不依赖登录用户）
+        String email = params.get("email");
+        String code = params.get("code");
+        String newPassword = params.get("newPassword");
+
+        // 验证参数非空
+        if (StringUtils.isAnyBlank(email, code, newPassword)) {
+            return AjaxResult.error("参数不能为空");
+        }
+
+        // 1. 验证验证码是否正确
+        boolean isValid = emailCodeService.validateCode(email, code, 2); // 2表示找回密码类型
+        if (!isValid) {
+            return AjaxResult.error("验证码错误或已过期");
+        }
+
+        // 2. 通过邮箱查询用户
+        SysUser user = userService.selectUserByEmail(email);
+        if (user == null) {
+            return AjaxResult.error("该邮箱未注册");
+        }
+
+        // 3. 更新密码（注意：需要加密存储）
+        user.setPassword(SecurityUtils.encryptPassword(newPassword)); // 加密新密码
+        user.setUpdateBy("system"); // 重置密码的操作人可设为system
+        userService.updateUser(user);
+
+        return AjaxResult.success("密码重置成功");
+    }
+
+
+    /**
+     * 发送重置密码的邮箱验证码
+     */
+    @PostMapping("/sendResetPwdCode")
+    public AjaxResult sendResetPwdCode(@RequestBody Map<String, String> params) {
+        String email = params.get("email");
+        log.info("开始处理发送验证码请求，邮箱：{}", email);
+        // 1. 验证邮箱参数
+        if (StringUtils.isBlank(email)) {
+            return error("邮箱不能为空");
+        }
+
+        // 2. 验证邮箱是否已注册
+        SysUser user = userService.selectUserByEmail(email);
+        if (user == null) {
+            return error("该邮箱未注册");
+        }
+
+        // 3. 调用现有服务方法发送验证码（类型：2=找回密码）
+        return emailCodeService.sendCode(email, 2);
     }
 }

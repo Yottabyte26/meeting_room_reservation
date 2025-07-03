@@ -47,6 +47,22 @@ user:
 
 # Spring配置
 spring:
+  mail:
+    host: smtp.qq.com  # qq邮箱SMTP服务器
+    username: 3247106194@qq.com
+    password: oygwvoklqwwychfa  # qq邮箱的SMTP授权码
+    protocol: smtps
+    port: 465
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+          socketFactory:
+            port: 465
+            class: javax.net.ssl.SSLSocketFactory
+            fallback: false
   # 资源信息
   messages:
     # 国际化资源文件路径

@@ -15,6 +15,11 @@ import static com.google.code.kaptcha.Constants.*;
 @Configuration
 public class CaptchaConfig
 {
+    /**
+     * 获取验证码生成器
+     *
+     * @return 验证码生成器
+     */
     @Bean(name = "captchaProducer")
     public DefaultKaptcha getKaptchaBean()
     {
@@ -43,6 +48,11 @@ public class CaptchaConfig
         return defaultKaptcha;
     }
 
+    /**
+     * 获取数学验证码生成器
+     *
+     * @return 数学验证码生成器
+     */
     @Bean(name = "captchaProducerMath")
     public DefaultKaptcha getKaptchaBeanMath()
     {
@@ -80,4 +90,6 @@ public class CaptchaConfig
         defaultKaptcha.setConfig(config);
         return defaultKaptcha;
     }
+
+
 }

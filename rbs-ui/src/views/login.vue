@@ -16,7 +16,7 @@
           </el-form-item>
           <el-form-item prop="password">
             <el-input v-model="loginForm.password" :type="showPassword ? 'text' : 'password'" auto-complete="off"
-              placeholder="请输入您的密码（6-16位字母加数字）" @keyup.enter="handleLogin">
+              placeholder="请输入您的密码（5-20位字母加数字）" @keyup.enter="handleLogin">
               <template #suffix>
                 <i :class="showPassword ? 'fas fa-eye' : 'fas fa-eye-slash'" style="margin-top:8px;font-size:18px;"
                   @click="togglePasswordVisibility" />
@@ -71,13 +71,18 @@
     </div>
 
     <!-- 忘记密码弹窗 -->
-    <el-dialog 
-      v-model="forgotPasswordVisible" 
-      title="找回密码" 
-      width="400px"
-      :close-on-click-modal="false">
-      <el-form :model="forgotForm" :rules="forgotRules" ref="forgotFormRef">
-        <el-form-item prop="email">
+  <el-dialog 
+    v-model="forgotPasswordVisible" 
+    title="找回密码" 
+    width="400px"
+    :close-on-click-modal="false"
+    custom-class="forgot-password-dialog"
+    :show-close="true"
+  >
+    <el-form :model="forgotForm" :rules="forgotRules" ref="forgotFormRef" class="forgot-form">
+      <!-- 第一步：邮箱验证 -->
+      <template v-if="currentStep === 1">
+        <el-form-item prop="email" class="form-item">
           <el-input v-model="forgotForm.email" placeholder="请输入注册邮箱">
             <template #prefix>
               <svg-icon icon-class="email" />
@@ -85,31 +90,74 @@
           </el-input>
         </el-form-item>
         
-        <el-form-item prop="code">
+        <el-form-item prop="code" class="form-item">
           <div class="code-input">
-            <el-input v-model="forgotForm.code" placeholder="验证码" />
+            <el-input v-model="forgotForm.code" placeholder="请输入6位验证码" maxlength="6" />
             <el-button 
+              style="margin-left: 10px; width: 50%; height: 100%;"
+              type="primary"
               :disabled="codeDisabled" 
-              @click="sendCode"
+              @click="sendResetCode"
               class="code-button">
               {{ codeButtonText }}
             </el-button>
           </div>
         </el-form-item>
         
-        <el-form-item>
+        <el-form-item class="submit-item">
+          <el-button 
+            type="primary" 
+            @click="nextStep"
+            class="step-button"
+            :loading="submitLoading">
+            下一步
+          </el-button>
+        </el-form-item>
+      </template>
+
+      <!-- 第二步：设置新密码 -->
+      <template v-if="currentStep === 2">
+        <el-form-item prop="newPassword" class="form-item">
+          <el-input 
+            v-model="forgotForm.newPassword" 
+            type="password" 
+            placeholder="请设置新密码（5-20位字母加数字）" 
+            :show-password="showNewPwd"
+            @click:suffix="showNewPwd = !showNewPwd"
+          />
+        </el-form-item>
+        
+        <el-form-item prop="confirmPassword" class="form-item">
+          <el-input 
+            v-model="forgotForm.confirmPassword" 
+            type="password" 
+            placeholder="请确认新密码" 
+            :show-password="showConfirmPwd"
+            @click:suffix="showConfirmPwd = !showConfirmPwd"
+          />
+        </el-form-item>
+        
+        <el-form-item class="submit-item">
           <el-button 
             type="primary" 
             @click="submitForgotForm"
-            class="submit-button">
-            提交
+            class="step-button"
+            :loading="submitLoading">
+            确认重置
+          </el-button>
+          <el-button 
+            type="default" 
+            @click="prevStep"
+            class="step-button cancel-button">
+            上一步
           </el-button>
         </el-form-item>
-      </el-form>
-    </el-dialog>
+      </template>
+    </el-form>
+  </el-dialog>
 
     <!-- 微信登录弹窗 -->
-    <el-dialog 
+    <!-- <el-dialog 
       v-model="wechatLoginVisible" 
       title="微信登录" 
       width="350px"
@@ -136,14 +184,14 @@
           返回其他登录方式
         </el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getCodeImg } from "@/api/login"
+import { getCodeImg, sendResetPwdEmailCode, resetPasswordByEmail } from "@/api/login"
 import Cookies from "js-cookie"
 import { encrypt, decrypt } from "@/utils/jsencrypt"
 import useUserStore from '@/store/modules/user'
@@ -152,6 +200,12 @@ import { ElMessage } from 'element-plus'
 const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
+
+// 模拟步骤流程
+const currentStep = ref(1)
+const showNewPwd = ref(false)
+const showConfirmPwd = ref(false)
+const submitLoading = ref(false)
 
 // 登录表单数据
 const loginForm = ref({
@@ -165,7 +219,9 @@ const loginForm = ref({
 // 忘记密码表单数据
 const forgotForm = ref({
   email: '',
-  code: ''
+  code: '',
+  newPassword: '',     
+  confirmPassword: ''    
 })
 
 // 表单验证规则
@@ -182,6 +238,24 @@ const forgotRules = {
   ],
   code: [
     { required: true, message: '请输入验证码', trigger: 'blur' }
+  ],
+  newPassword: [
+    { required: true, message: '请输入新密码', trigger: 'blur' },
+    { min: 5, max: 20, message: '密码长度必须在5-20位之间', trigger: 'blur' },
+    { pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,20}$/, message: '密码必须包含字母和数字', trigger: 'blur' }
+  ],
+  confirmPassword: [
+    { required: true, message: '请确认新密码', trigger: 'blur' },
+    { 
+      validator: (rule, value, callback) => {
+        if (value !== forgotForm.value.newPassword) {
+          callback(new Error('两次输入的密码不一致'))
+        } else {
+          callback()
+        }
+      },
+      trigger: 'blur'
+    }
   ]
 }
 
@@ -195,9 +269,10 @@ const showPassword = ref(false)
 const eyeIconVisible = ref(true)
 const forgotPasswordVisible = ref(false)
 const wechatLoginVisible = ref(false)
+const isMobile = ref(false)
+// 验证码相关状态
 const codeDisabled = ref(false)
 const codeButtonText = ref('获取验证码')
-const isMobile = ref(false)
 let countdown = 60
 
 // 表单引用
@@ -231,40 +306,13 @@ const togglePasswordVisibility = () => {
   eyeIconVisible.value = showPassword.value
 }
 
-// 获取验证码
+// 获取图形验证码
 const getCode = () => {
   getCodeImg().then(res => {
     captchaEnabled.value = res.captchaEnabled === undefined ? true : res.captchaEnabled
     if (captchaEnabled.value) {
       codeUrl.value = "data:image/gif;base64," + res.img
       loginForm.value.uuid = res.uuid
-    }
-  })
-}
-
-// 发送验证码（忘记密码）
-const sendCode = () => {
-  // 实际应调用API发送验证码
-  codeDisabled.value = true
-  const timer = setInterval(() => {
-    countdown--
-    codeButtonText.value = `${countdown}秒后重新获取`
-    if (countdown <= 0) {
-      clearInterval(timer)
-      codeDisabled.value = false
-      codeButtonText.value = '获取验证码'
-      countdown = 60
-    }
-  }, 1000)
-}
-
-// 提交忘记密码表单
-const submitForgotForm = () => {
-  forgotFormRef.value?.validate(valid => {
-    if (valid) {
-      // 这里添加实际提交逻辑
-      forgotPasswordVisible.value = false
-      ElMessage.success('密码重置邮件已发送，请查收')
     }
   })
 }
@@ -317,6 +365,117 @@ const handleLogin = () => {
     }
   })
 }
+
+
+// 发送验证码重置密码
+const sendResetCode = () => {
+  // 验证邮箱格式
+  if (!forgotForm.value.email) {
+    ElMessage.warning('请先输入邮箱地址')
+    return
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(forgotForm.value.email)) {
+    ElMessage.warning('请输入有效的邮箱地址')
+    return
+  }
+
+  // 打印要发送的邮箱
+  console.log('发送验证码的邮箱：', forgotForm.value.email)
+
+  // 调用后端接口发送验证码
+  codeDisabled.value = true
+  codeButtonText.value = '发送中...'
+  sendResetPwdEmailCode(forgotForm.value.email).then(() => {
+    ElMessage.success('验证码已发送至您的邮箱，5分钟内有效')
+    // 启动倒计时
+    const timer = setInterval(() => {
+      countdown--
+      codeButtonText.value = `${countdown}秒后重发`
+      if (countdown <= 0) {
+        clearInterval(timer)
+        codeDisabled.value = false
+        codeButtonText.value = '获取验证码'
+        countdown = 60 // 重置倒计时
+      }
+    }, 1000)
+  }).catch(error => {
+    console.error('验证码发送失败：', error)
+    codeDisabled.value = false
+    codeButtonText.value = '获取验证码'
+    ElMessage.error(error.msg || '验证码发送失败，请重试')
+  })
+}
+
+// 下一步（验证验证码并进入设置密码步骤）
+const nextStep = () => {
+  forgotFormRef.value.validateField(['email', 'code'], (errors) => {
+    if (Object.keys(errors).length === 0) {
+      submitLoading.value = true
+      // 模拟接口验证延迟
+      setTimeout(() => {
+        submitLoading.value = false
+        currentStep.value = 2
+        // 自动聚焦到新密码输入框
+        nextTick(() => {
+          const newPwdInput = document.querySelector('input[placeholder="请设置新密码（5-20位字母加数字）"]')
+          newPwdInput?.focus()
+        })
+      }, 500)
+    } else {
+      // 显示第一个错误
+      const firstError = Object.values(errors)[0]
+      ElMessage.warning(firstError)
+    }
+  })
+}
+
+// 上一步（返回邮箱验证）
+const prevStep = () => {
+  currentStep.value = 1
+}
+
+// 提交密码重置（核心接口调用）
+const submitForgotForm = () => {
+  forgotFormRef.value.validateField(['newPassword', 'confirmPassword'], (errors) => {
+    if (Object.keys(errors).length === 0) {
+      submitLoading.value = true
+      // 构造参数调用后端重置接口
+      const params = {
+        email: forgotForm.value.email,
+        code: forgotForm.value.code,
+        newPassword: forgotForm.value.newPassword
+      }
+      resetPasswordByEmail(params).then(() => {
+        submitLoading.value = false
+        forgotPasswordVisible.value = false
+        ElMessage.success('密码重置成功，请使用新密码登录')
+        // 重置表单状态
+        resetForgotForm()
+      }).catch(error => {
+        submitLoading.value = false
+        ElMessage.error(error.msg || '密码重置失败，请重试')
+      })
+    } else {
+      const firstError = Object.values(errors)[0]
+      ElMessage.warning(firstError)
+    }
+  })
+}
+
+// 重置忘记密码表单
+const resetForgotForm = () => {
+  currentStep.value = 1
+  forgotForm.value = {
+    email: '',
+    code: '',
+    newPassword: '',
+    confirmPassword: ''
+  }
+  codeDisabled.value = false
+  codeButtonText.value = '获取验证码'
+  countdown = 60
+}
+
 </script>
 
 <style lang="scss" scoped>
@@ -570,17 +729,28 @@ const handleLogin = () => {
   margin-top: 20px;
 }
 
-/* 全局弹窗样式 */
 :deep(.el-dialog) {
-  border-radius: 12px;
-  
+  // 绝对定位实现居中
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  // 移除默认偏移量
+  margin: 0 !important;
+  // 确保弹窗在最上层
+  z-index: 3000 !important;
+
+  // 保持原有弹窗样式
+  .el-dialog__body {
+    padding: 20px 30px;
+  }
   .el-dialog__header {
     border-bottom: 1px solid #f0f0f0;
-    margin-right: 0;
+    padding: 18px 20px;
   }
-  
-  .el-dialog__body {
-    padding: 20px;
+  .el-dialog__title {
+    font-size: 16px;
+    font-weight: 500;
   }
 }
 </style>

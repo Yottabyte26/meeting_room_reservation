@@ -58,3 +58,29 @@ export function getCodeImg() {
     timeout: 20000
   })
 }
+
+// 发送密码重置用的邮箱验证码
+export function sendResetPwdEmailCode(email) {
+  return request({
+    url: '/system/user/sendResetPwdCode', // 后端发送重置密码验证码的接口
+    headers: {
+      isToken: false,
+      repeatSubmit: true
+    },
+    method: 'post',
+    data: { email }
+  })
+}
+
+// 通过邮箱验证码重置密码
+export function resetPasswordByEmail(data) {
+  return request({
+    url: '/system/user/resetPasswordByEmail',
+    headers: {
+      isToken: false, // 未登录状态下访问
+      repeatSubmit: false
+    },
+    method: 'post',
+    data: data // data包含：email、code、newPassword
+  })
+}

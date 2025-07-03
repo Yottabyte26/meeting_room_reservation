@@ -1,5 +1,6 @@
 package com.rbs.web.controller.system;
 
+import com.rbs.system.service.ISysEmailCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +26,9 @@ public class SysRegisterController extends BaseController
     @Autowired
     private ISysConfigService configService;
 
+    @Autowired
+    private ISysEmailCodeService emailCodeService;
+
     @PostMapping("/register")
     public AjaxResult register(@RequestBody RegisterBody user)
     {
@@ -32,7 +36,22 @@ public class SysRegisterController extends BaseController
         {
             return error("当前系统没有开启注册功能！");
         }
-        String msg = registerService.register(user);
-        return StringUtils.isEmpty(msg) ? success() : error(msg);
+        // 验证邮箱验证码（注册类型为1）
+        boolean isCodeValid = emailCodeService.validateCode(
+                user.getEmail(),  // 从注册信息中获取邮箱
+                user.getCode(),   // 从注册信息中获取验证码
+                1                 // 类型：1=注册
+        );
+        if (!isCodeValid) {
+            return error("验证码错误或已过期");
+        }
+        // 执行注册逻辑并直接返回结果
+        try {
+            registerService.register(user);
+            return success("注册成功");
+        } catch (Exception e) {
+            // 处理注册异常（如用户名重复、邮箱已注册等）
+            return error("注册失败：" + e.getMessage());
+        }
     }
 }

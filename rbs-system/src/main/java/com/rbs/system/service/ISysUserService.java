@@ -225,4 +225,7 @@ public interface ISysUserService
      * 性别统计
      */
     public List<GenderVo> getGenderList();
+
+    // 通过邮箱更新密码
+    public int updatePasswordByEmail(String email, String newPassword, String updateBy);
 }
