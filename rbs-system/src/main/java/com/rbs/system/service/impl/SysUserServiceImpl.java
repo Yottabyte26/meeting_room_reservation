@@ -132,7 +132,7 @@ public class SysUserServiceImpl implements ISysUserService
     /**
      * 通过用户名查询用户
      *
-     * @param phone 手机号
+     * @param phonenumber 手机号
      * @return 用户对象信息
      */
     @Override

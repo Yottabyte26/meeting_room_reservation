@@ -227,7 +227,11 @@ const forgotForm = ref({
 // 表单验证规则
 const loginRules = {
   username: [{ required: true, trigger: "blur", message: "用户名不得为空！" }],
-  password: [{ required: true, trigger: "blur", message: "请输入您的密码" }],
+  password: [
+    { required: true, trigger: "blur", message: "请输入您的密码" },
+    { min: 5, max: 20, message: '密码长度必须在5-20位之间', trigger: 'blur' },
+    { pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,20}$/, message: '密码必须包含字母和数字', trigger: 'blur' }
+  ],
   code: [{ required: true, trigger: "change", message: "请输入验证码" }]
 }
 
