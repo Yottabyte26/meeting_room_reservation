@@ -330,10 +330,6 @@ public class SysUserServiceImpl implements ISysUserService
     public int updateUser(SysUser user)
     {
         Long userId = user.getUserId();
-        // 新增用户与角色管理
-        // 删除用户与岗位关联
-        userPostMapper.deleteUserPostByUserId(userId);
-        // 新增用户与岗位管理
         insertUserPost(user);
         return userMapper.updateUser(user);
     }
