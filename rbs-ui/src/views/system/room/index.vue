@@ -42,6 +42,11 @@
       <el-table-column label="会议室名称" align="center" prop="roomName" width="110" />
       <el-table-column label="会议室编号" align="center" prop="roomCode" width="90" />
       <el-table-column label="会议室位置" align="center" prop="location" />
+      <el-table-column label="会议室图像" align="center" prop="roomImage">
+        <template #default="scope">
+          <image-preview :src="scope.row.roomImage" :width="50" :height="50" />
+        </template>
+      </el-table-column>
       <el-table-column label="容纳人数" align="center" prop="capacity" width="80" />
       <el-table-column label="会议室类型" align="center" prop="roomType" width="110" />
       <el-table-column label="状态" align="center" prop="status" width="80">
@@ -100,11 +105,15 @@
               :value="option.value" />
           </el-select>
         </el-form-item>
+
         <el-form-item label="会议室位置" prop="location">
           <el-input v-model="form.location" type="textarea" placeholder="请输入会议室位置" />
         </el-form-item>
         <el-form-item label="会议室描述" prop="description">
           <el-input v-model="form.description" type="textarea" placeholder="请输入内容" />
+        </el-form-item>
+          <el-form-item label="会议室图像" prop="roomImage">
+          <image-upload v-model="form.roomImage" :limit="1" />
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
