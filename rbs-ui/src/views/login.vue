@@ -46,7 +46,7 @@
               <span class="link-type" @click="forgotPasswordVisible = true">已有账号，忘记密码？</span>
             </div>
 
-            <div class="wechat-login-container">
+            <!-- <div class="wechat-login-container">
               <div class="login-divider">
                 <span class="divider-line"></span>
                 <span class="divider-text">使用其他账号登录</span>
@@ -57,9 +57,9 @@
                 <svg-icon icon-class="wechat" class="wechat-icon" />
                 <span>微信登录</span>
               </div>
-            </div>
+            </div> -->
           </el-form-item>
-          
+
           <div class="goregister">
             <div style="float: left;" v-if="register">
               <span style="color: gray">没有账号，去</span>
@@ -71,127 +71,67 @@
     </div>
 
     <!-- 忘记密码弹窗 -->
-  <el-dialog 
-    v-model="forgotPasswordVisible" 
-    title="找回密码" 
-    width="400px"
-    :close-on-click-modal="false"
-    custom-class="forgot-password-dialog"
-    :show-close="true"
-  >
-    <el-form :model="forgotForm" :rules="forgotRules" ref="forgotFormRef" class="forgot-form">
-      <!-- 第一步：邮箱验证 -->
-      <template v-if="currentStep === 1">
-        <el-form-item prop="email" class="form-item">
-          <el-input v-model="forgotForm.email" placeholder="请输入注册邮箱">
-            <template #prefix>
-              <svg-icon icon-class="email" />
-            </template>
-          </el-input>
-        </el-form-item>
-        
-        <el-form-item prop="code" class="form-item">
-          <div class="code-input">
-            <el-input v-model="forgotForm.code" placeholder="请输入6位验证码" maxlength="6" />
-            <el-button 
-              style="margin-left: 10px; width: 50%; height: 100%;"
-              type="primary"
-              :disabled="codeDisabled" 
-              @click="sendResetCode"
-              class="code-button">
-              {{ codeButtonText }}
+    <el-dialog v-model="forgotPasswordVisible" title="找回密码" width="400px" :close-on-click-modal="false"
+      custom-class="forgot-password-dialog" :show-close="true">
+      <el-form :model="forgotForm" :rules="forgotRules" ref="forgotFormRef" class="forgot-form">
+        <!-- 第一步：邮箱验证 -->
+        <template v-if="currentStep === 1">
+          <el-form-item prop="email" class="form-item">
+            <el-input v-model="forgotForm.email" placeholder="请输入注册邮箱">
+              <template #prefix>
+                <svg-icon icon-class="email" />
+              </template>
+            </el-input>
+          </el-form-item>
+
+          <el-form-item prop="code" class="form-item">
+            <div class="code-input">
+              <el-input v-model="forgotForm.code" placeholder="请输入6位验证码" maxlength="6" />
+              <el-button style="margin-left: 10px; width: 50%; height: 100%;" type="primary" :disabled="codeDisabled"
+                @click="sendResetCode" class="code-button">
+                {{ codeButtonText }}
+              </el-button>
+            </div>
+          </el-form-item>
+
+          <el-form-item class="submit-item">
+            <el-button type="primary" @click="nextStep" class="step-button" :loading="submitLoading"
+              :disabled="!forgotForm.email || !forgotForm.code">
+              下一步
             </el-button>
-          </div>
-        </el-form-item>
-        
-        <el-form-item class="submit-item">
-          <el-button 
-            type="primary" 
-            @click="nextStep"
-            class="step-button"
-            :loading="submitLoading">
-            下一步
-          </el-button>
-        </el-form-item>
-      </template>
+          </el-form-item>
+        </template>
 
-      <!-- 第二步：设置新密码 -->
-      <template v-if="currentStep === 2">
-        <el-form-item prop="newPassword" class="form-item">
-          <el-input 
-            v-model="forgotForm.newPassword" 
-            type="password" 
-            placeholder="请设置新密码（5-20位字母加数字）" 
-            :show-password="showNewPwd"
-            @click:suffix="showNewPwd = !showNewPwd"
-          />
-        </el-form-item>
-        
-        <el-form-item prop="confirmPassword" class="form-item">
-          <el-input 
-            v-model="forgotForm.confirmPassword" 
-            type="password" 
-            placeholder="请确认新密码" 
-            :show-password="showConfirmPwd"
-            @click:suffix="showConfirmPwd = !showConfirmPwd"
-          />
-        </el-form-item>
-        
-        <el-form-item class="submit-item">
-          <el-button 
-            type="primary" 
-            @click="submitForgotForm"
-            class="step-button"
-            :loading="submitLoading">
-            确认重置
-          </el-button>
-          <el-button 
-            type="default" 
-            @click="prevStep"
-            class="step-button cancel-button">
-            上一步
-          </el-button>
-        </el-form-item>
-      </template>
-    </el-form>
-  </el-dialog>
+        <!-- 第二步：设置新密码 -->
+        <template v-if="currentStep === 2">
+          <el-form-item prop="newPassword" class="form-item">
+            <el-input v-model="forgotForm.newPassword" type="password" placeholder="请设置新密码（5-20位字母加数字）"
+              :show-password="showNewPwd" @click:suffix="showNewPwd = !showNewPwd" />
+          </el-form-item>
 
-    <!-- 微信登录弹窗 -->
-    <!-- <el-dialog 
-      v-model="wechatLoginVisible" 
-      title="微信登录" 
-      width="350px"
-      :show-close="false"
-      :close-on-click-modal="false">
-      <div class="wechat-login-content">
-        <div class="qrcode-container" v-if="!isMobile">
-          <div class="qrcode-placeholder">
-            <svg-icon icon-class="wechat" class="qrcode-icon" />
-            <p>微信扫码登录</p>
-          </div>
-          <p class="tip">请使用微信扫描二维码</p>
-        </div>
-        
-        <div class="mobile-tip" v-else>
-          <svg-icon icon-class="wechat" class="wechat-icon" />
-          <p>请在微信客户端打开链接</p>
-        </div>
-        
-        <el-button 
-          type="text" 
-          @click="wechatLoginVisible = false"
-          class="close-button">
-          返回其他登录方式
-        </el-button>
-      </div>
-    </el-dialog> -->
+          <el-form-item prop="confirmPassword" class="form-item">
+            <el-input v-model="forgotForm.confirmPassword" type="password" placeholder="请确认新密码"
+              :show-password="showConfirmPwd" @click:suffix="showConfirmPwd = !showConfirmPwd" />
+          </el-form-item>
+
+          <el-form-item class="submit-item">
+            <el-button type="primary" @click="submitForgotForm" class="step-button" :loading="submitLoading">
+              确认重置
+            </el-button>
+            <el-button type="default" @click="onCancel" class="step-button cancel-button">
+              取消
+            </el-button>
+          </el-form-item>
+        </template>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getCodeImg, sendResetPwdEmailCode, resetPasswordByEmail } from "@/api/login"
+import { getCodeImg, sendResetPwdEmailCode, resetPasswordByEmail, verifyEmailCode } from "@/api/login"
 import Cookies from "js-cookie"
 import { encrypt, decrypt } from "@/utils/jsencrypt"
 import useUserStore from '@/store/modules/user'
@@ -220,8 +160,8 @@ const loginForm = ref({
 const forgotForm = ref({
   email: '',
   code: '',
-  newPassword: '',     
-  confirmPassword: ''    
+  newPassword: '',
+  confirmPassword: ''
 })
 
 // 表单验证规则
@@ -250,7 +190,7 @@ const forgotRules = {
   ],
   confirmPassword: [
     { required: true, message: '请确认新密码', trigger: 'blur' },
-    { 
+    {
       validator: (rule, value, callback) => {
         if (value !== forgotForm.value.newPassword) {
           callback(new Error('两次输入的密码不一致'))
@@ -410,32 +350,39 @@ const sendResetCode = () => {
   })
 }
 
-// 下一步（验证验证码并进入设置密码步骤）
 const nextStep = () => {
   forgotFormRef.value.validateField(['email', 'code'], (errors) => {
     if (Object.keys(errors).length === 0) {
-      submitLoading.value = true
-      // 模拟接口验证延迟
-      setTimeout(() => {
-        submitLoading.value = false
-        currentStep.value = 2
-        // 自动聚焦到新密码输入框
-        nextTick(() => {
-          const newPwdInput = document.querySelector('input[placeholder="请设置新密码（5-20位字母加数字）"]')
-          newPwdInput?.focus()
+      submitLoading.value = true;
+      verifyEmailCode(forgotForm.value.email, forgotForm.value.code)
+        .then(() => {
+          currentStep.value = 2;
+          nextTick(() => {
+            const newPwdInput = document.querySelector('input[placeholder="请设置新密码（5-20位字母加数字）"]');
+            newPwdInput?.focus();
+          });
         })
-      }, 500)
+        .catch((error) => {
+          console.log("!!!!!!!!!!!", error.response)
+          if (error.response) {
+            ElMessage.error(error.response.data.msg || '验证码错误或已过期');
+          }
+        })
+        .finally(() => {
+          submitLoading.value = false;
+        });
     } else {
-      // 显示第一个错误
-      const firstError = Object.values(errors)[0]
-      ElMessage.warning(firstError)
+      if (errors.email) {
+        ElMessage.warning(errors.email);
+      } else if (errors.code) {
+        ElMessage.warning(errors.code);
+      }
     }
-  })
+  });
 }
-
-// 上一步（返回邮箱验证）
-const prevStep = () => {
-  currentStep.value = 1
+const onCancel = () => {
+  submitLoading.value = false;
+  forgotPasswordVisible.value = false
 }
 
 // 提交密码重置（核心接口调用）
@@ -521,7 +468,7 @@ const resetForgotForm = () => {
 
 .system-title {
   position: absolute;
-  top:85px; 
+  top: 85px;
   left: 50%;
   transform: translateX(-50%);
   color: #696666;
@@ -553,7 +500,7 @@ const resetForgotForm = () => {
   width: 450px;
   background: #ffffff;
   height: 550px;
-  padding:40px 30px;
+  padding: 40px 30px;
   border-top-right-radius: 20px;
   border-bottom-right-radius: px;
 }
@@ -571,12 +518,13 @@ const resetForgotForm = () => {
   text-align: center;
   margin-top: 10px;
   margin-left: 125px;
+
   .link-type {
     color: rgb(110, 133, 213);
     cursor: pointer;
     text-decoration: none;
     font-size: 13px;
-    
+
     &:hover {
       text-decoration: underline;
     }
@@ -586,25 +534,25 @@ const resetForgotForm = () => {
 .wechat-login-container {
   text-align: center;
   width: 100%;
-  
+
   .login-divider {
     display: flex;
     align-items: center;
     margin: 10px 0;
-    
+
     .divider-line {
       flex: 1;
       height: 1px;
       background-color: #dcdfe6;
     }
-    
+
     .divider-text {
       padding: 0 10px;
       color: #909399;
       font-size: 12px;
     }
   }
-  
+
   .wechat-login-btn {
     display: inline-flex;
     align-items: center;
@@ -614,17 +562,17 @@ const resetForgotForm = () => {
     padding: 5px 15px;
     border-radius: 4px;
     margin-top: 5px;
-    
+
     .wechat-icon {
       width: 20px;
       height: 20px;
       margin-right: 8px;
     }
-    
+
     span {
       font-size: 12px;
     }
-    
+
     &:hover {
       background-color: rgba(7, 193, 96, 0.1);
     }
@@ -697,18 +645,18 @@ const resetForgotForm = () => {
   background: #f5f5f5;
   border-radius: 8px;
   transition: all 0.3s ease;
-  
+
   .qrcode-icon {
     font-size: 80px;
     color: #07C160;
     margin-bottom: 15px;
   }
-  
+
   p {
     color: #333;
     font-size: 16px;
   }
-  
+
   &:hover {
     box-shadow: 0 0 10px rgba(7, 193, 96, 0.2);
   }
@@ -721,7 +669,7 @@ const resetForgotForm = () => {
 
 .mobile-tip {
   padding: 30px 0;
-  
+
   .wechat-icon {
     font-size: 60px;
     color: #07C160;
@@ -748,10 +696,12 @@ const resetForgotForm = () => {
   .el-dialog__body {
     padding: 20px 30px;
   }
+
   .el-dialog__header {
     border-bottom: 1px solid #f0f0f0;
     padding: 18px 20px;
   }
+
   .el-dialog__title {
     font-size: 16px;
     font-weight: 500;

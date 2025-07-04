@@ -8,14 +8,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import com.rbs.common.annotation.Log;
 import com.rbs.common.core.controller.BaseController;
@@ -267,6 +260,16 @@ public class SysUserController extends BaseController
         return success(deptService.selectDeptTreeList(dept));
     }
 
+    @PostMapping("/verifyCode")
+    public AjaxResult verifyCode(@RequestParam String email,
+                                 @RequestParam String code,
+                                 @RequestParam(required = false, defaultValue = "2") Integer type) {
+        boolean isValid = emailCodeService.validateCode(email, code, type);
+        if (!isValid) {
+            return AjaxResult.error("验证码错误或已过期");
+        }
+        return AjaxResult.success();
+    }
     /**
      * 通过邮箱验证码重置密码（找回密码功能）
      */
@@ -283,10 +286,10 @@ public class SysUserController extends BaseController
         }
 
         // 1. 验证验证码是否正确
-        boolean isValid = emailCodeService.validateCode(email, code, 2); // 2表示找回密码类型
-        if (!isValid) {
-            return AjaxResult.error("验证码错误或已过期");
-        }
+//        boolean isValid = emailCodeService.validateCode(email, code, 2); // 2表示找回密码类型
+//        if (!isValid) {
+//            return AjaxResult.error("验证码错误或已过期");
+//        }
 
         // 2. 通过邮箱查询用户
         SysUser user = userService.selectUserByEmail(email);
@@ -301,7 +304,43 @@ public class SysUserController extends BaseController
 
         return AjaxResult.success("密码重置成功");
     }
+    /**
+     * 发送密码重置通知邮件
+     */
+    @PostMapping("/sendPasswordResetNotification")
+    public AjaxResult sendPasswordResetNotification(@RequestBody Map<String, String> params) {
+        String email = params.get("email");
+        String newPassword = params.get("newPassword");
+        String userName = params.get("userName");
 
+        log.info("开始处理发送密码重置通知邮件，邮箱：{}，用户名：{}", email, userName);
+
+        // 1. 验证参数
+        if (StringUtils.isBlank(email)) {
+            return error("邮箱不能为空");
+        }
+        if (StringUtils.isBlank(newPassword)) {
+            return error("新密码不能为空");
+        }
+        if (StringUtils.isBlank(userName)) {
+            return error("用户名不能为空");
+        }
+
+        // 2. 验证邮箱是否已注册
+        SysUser user = userService.selectUserByEmail(email);
+        if (user == null) {
+            return error("该邮箱未注册");
+        }
+
+        // 3. 发送密码重置通知邮件
+        try {
+            emailCodeService.sendPasswordResetNotificationSync(email, userName, newPassword);
+            return success("密码重置通知邮件发送成功");
+        } catch (Exception e) {
+            log.error("发送密码重置通知邮件失败", e);
+            return error("邮件发送失败，请重试");
+        }
+    }
 
     /**
      * 发送重置密码的邮箱验证码

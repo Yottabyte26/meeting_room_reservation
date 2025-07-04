@@ -150,4 +150,50 @@ public class SysEmailCodeServiceImpl implements ISysEmailCodeService {
         // 直接调用现有方法，指定类型为1（注册）
         return sendCode(email, 1);
     }
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<Boolean> sendPasswordResetNotification(String email, String userName, String newPassword) {
+        log.info("开始发送密码重置通知邮件，收件人：{}，用户名：{}", email, userName);
+
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom(fromEmail);
+            message.setTo(email);
+            message.setSubject("密码重置通知");
+            message.setText(String.format(
+                    "尊敬的 %s 用户：\n\n" +
+                            "您的密码已被管理员重置为：%s\n\n" +
+                            "请使用新密码登录系统，建议您登录后及时修改密码以确保账户安全。\n\n" +
+                            "如果这不是您本人的操作，请及时联系管理员。\n\n" +
+                            "此邮件由系统自动发送，请勿回复。",
+                    userName, newPassword
+            ));
+
+            long startTime = System.currentTimeMillis();
+            mailSender.send(message);
+            long costTime = System.currentTimeMillis() - startTime;
+
+            log.info("密码重置通知邮件发送成功，收件人：{}，耗时：{}ms", email, costTime);
+            return CompletableFuture.completedFuture(true);
+        } catch (Exception e) {
+            log.error("密码重置通知邮件发送失败，收件人：{}", email, e);
+            return CompletableFuture.completedFuture(false);
+        }
+    }
+
+    /**
+     * 发送密码重置通知邮件（同步版本，供Controller调用）
+     */
+    public void sendPasswordResetNotificationSync(String email, String userName, String newPassword) {
+        try {
+            CompletableFuture<Boolean> future = sendPasswordResetNotification(email, userName, newPassword);
+            Boolean result = future.get(); // 等待异步操作完成
+            if (!result) {
+                throw new RuntimeException("邮件发送失败");
+            }
+        } catch (Exception e) {
+            log.error("发送密码重置通知邮件失败", e);
+            throw new RuntimeException("邮件发送失败", e);
+        }
+    }
 }

@@ -105,3 +105,12 @@ export function resetPasswordByEmail(data) {
     data: data // data包含：email、code、newPassword
   })
 }
+// api/login.js
+// api/login.js
+export const verifyEmailCode = (email, code) => {
+  return request({
+    url: '/system/user/verifyCode', 
+    method: 'post',
+    params: { email, code, type: 2 } // type=2表示找回密码类型
+  })
+}

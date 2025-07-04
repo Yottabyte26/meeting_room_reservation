@@ -98,8 +98,10 @@
               删除
             </el-button>
             <!-- 重置密码按钮 -->
+
             <el-button link type="warning" icon="Key" @click="handleResetPwd(scope.row)"
-              v-hasPermi="['system:user:resetPwd']">
+              v-hasPermi="['system:user:resetPwd']" :disabled="!scope.row.email || scope.row.status === '1'"
+              :title="!scope.row.email ? '该用户没有绑定邮箱' : scope.row.status === '1' ? '该用户已被停用' : ''">
               重置密码
             </el-button>
           </el-button-group>
@@ -228,11 +230,10 @@ import {
   delUser,
   getUser,
   updateUser,
-  addUser,
+  addUser, sendPasswordResetNotification
 } from "@/api/system/user";
 import { addNotice } from "@/api/system/notice";
 import { listDeptSimple } from "@/api/system/dept";
-
 const router = useRouter();
 const { proxy } = getCurrentInstance();
 const { sys_normal_disable, sys_user_sex } = proxy.useDict("sys_normal_disable", "sys_user_sex");
@@ -255,7 +256,12 @@ const deptName = ref("");
 const deptOptions = ref([]);
 const initPassword = ref(undefined);
 const roleOptions = ref([]);
-
+const forgotForm = ref({
+  email: '',
+  code: '',
+  newPassword: '',
+  confirmPassword: ''
+})
 /*** 用户导入参数 */
 const upload = reactive({
   // 是否显示弹出层（用户导入）
@@ -303,12 +309,11 @@ const data = reactive({
       trigger: "blur"
     }],
     nickName: [{ required: true, message: "用户昵称不能为空", trigger: "blur" }],
-    password: [{ required: true, message: "用户密码不能为空", trigger: "blur" }, {
-      min: 5,
-      max: 20,
-      message: "用户密码长度必须介于 5 和 20 之间",
-      trigger: "blur"
-    }],
+    password: [
+      { required: true, trigger: "blur", message: "请输入您的密码" },
+      { min: 5, max: 20, message: '密码长度必须在5-20位之间', trigger: 'blur' },
+      { pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,20}$/, message: '密码必须包含字母和数字', trigger: 'blur' }
+    ],
     email: [{ type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"] }],
     phonenumber: [{ pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: "请输入正确的手机号码", trigger: "blur" }]
   }
@@ -389,35 +394,58 @@ function handleStatusChange(row) {
 
 /** 重置密码按钮操作 */
 function handleResetPwd(row) {
+  // 校验用户是否有邮箱
+  if (!row.email) {
+    proxy.$modal.msgError("该用户没有绑定邮箱，无法发送密码重置通知邮件");
+    return;
+  }
+
+  // 校验用户状态是否正常
+  if (row.status === "1") {
+    proxy.$modal.msgError("该用户已被停用，无法重置密码");
+    return;
+  }
+
   proxy.$prompt('请输入"' + row.userName + '"的新密码', "提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     closeOnClickModal: false,
-    inputPattern: /^.{5,20}$/,
-    inputErrorMessage: "用户密码长度必须介于 5 和 20 之间",
-    inputValue: '123456'
+    inputPattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,20}$/,
+    inputErrorMessage: "密码必须包含字母和数字，长度在5-20位之间",
+    inputValue: '123456Aa'
   }).then(({ value }) => {
+    // 再次校验密码格式
+    if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,20}$/.test(value)) {
+      proxy.$modal.msgError("密码格式不正确，必须包含字母和数字，长度在5-20位之间");
+      return;
+    }
+
     resetUserPwd(row.userId, value).then(response => {
       proxy.$modal.msgSuccess("修改成功，新密码是：" + value);
 
+      // 发送密码重置通知邮件
+      const emailParams = {
+        email: row.email,
+        newPassword: value,
+        userName: row.userName
+      };
+
+      // 调用发送邮件接口
+      return sendPasswordResetNotification(emailParams);
+    }).then(() => {
       // 获取当前日期字符串（仅年-月-日）
       const now = new Date();
       const formatDate = (date) => {
         const pad = (n) => n.toString().padStart(2, '0');
         return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
       };
-
-      // 添加通知公告
-      const noticeForm = {
-        noticeTitle: `温馨提示：${formatDate(now)} 管理员已重置您的账户密码`,
-        noticeType: "1",
-        noticeContent: `管理员已重置您的账户密码为：${value}。`,
-        status: "0"
-      };
-      // 继续处理 addNotice
-      return addNotice(noticeForm)
+    }).catch(error => {
+      console.error("重置密码或发送邮件失败:", error);
+      proxy.$modal.msgError("操作失败，请重试");
     });
-  }).catch(() => { });
+  }).catch(() => {
+    // 用户取消操作
+  });
 }
 
 /** 选择条数  */

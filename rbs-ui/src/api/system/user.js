@@ -133,3 +133,11 @@ export function deptTreeSelect() {
     method: 'get'
   })
 }
+// 发送密码重置通知邮件
+export function sendPasswordResetNotification(data) {
+  return request({
+    url: '/system/user/sendPasswordResetNotification',
+    method: 'post',
+    data: data
+  })
+}

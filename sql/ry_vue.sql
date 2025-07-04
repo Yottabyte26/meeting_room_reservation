@@ -11,7 +11,7 @@
  Target Server Version : 80028
  File Encoding         : 65001
 
- Date: 04/07/2025 17:03:09
+ Date: 05/07/2025 00:56:07
 */
 
 SET NAMES utf8mb4;
@@ -533,7 +533,7 @@ INSERT INTO `sys_email_code` VALUES (34, 'huangrite@163.com', '768603', 1, '2025
 INSERT INTO `sys_email_code` VALUES (37, 'huang@163.com', '626441', 1, '2025-07-04 14:45:12', '2025-07-04 14:40:12');
 INSERT INTO `sys_email_code` VALUES (38, 'huangrite@163.com', '707061', 2, '2025-07-04 14:45:29', '2025-07-04 14:40:29');
 INSERT INTO `sys_email_code` VALUES (39, '2494487782@qq.com', '260277', 1, '2025-07-04 16:06:58', '2025-07-04 16:01:58');
-INSERT INTO `sys_email_code` VALUES (41, '2494487782@qq.com', '927998', 2, '2025-07-04 17:05:27', '2025-07-04 17:00:27');
+INSERT INTO `sys_email_code` VALUES (53, '2494487782@qq.com', '249202', 2, '2025-07-04 23:38:58', '2025-07-04 23:33:58');
 
 -- ----------------------------
 -- Table structure for sys_job
@@ -960,6 +960,33 @@ INSERT INTO `sys_logininfor` VALUES (451, 'why', '127.0.0.1', '内网IP', 'Chrom
 INSERT INTO `sys_logininfor` VALUES (452, 'why', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2025-07-04 17:01:20');
 INSERT INTO `sys_logininfor` VALUES (453, 'why', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-04 17:01:34');
 INSERT INTO `sys_logininfor` VALUES (454, 'why', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2025-07-04 17:02:06');
+INSERT INTO `sys_logininfor` VALUES (455, 'why', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-04 17:22:35');
+INSERT INTO `sys_logininfor` VALUES (456, 'why', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2025-07-04 17:22:49');
+INSERT INTO `sys_logininfor` VALUES (457, 'why', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-04 17:24:03');
+INSERT INTO `sys_logininfor` VALUES (458, 'why', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2025-07-04 17:24:07');
+INSERT INTO `sys_logininfor` VALUES (459, 'why', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-04 17:24:47');
+INSERT INTO `sys_logininfor` VALUES (460, 'why', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-04 21:29:25');
+INSERT INTO `sys_logininfor` VALUES (461, 'why', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2025-07-04 21:31:01');
+INSERT INTO `sys_logininfor` VALUES (462, 'why', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-04 23:11:00');
+INSERT INTO `sys_logininfor` VALUES (463, 'why', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2025-07-04 23:11:13');
+INSERT INTO `sys_logininfor` VALUES (464, 'why', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-04 23:17:34');
+INSERT INTO `sys_logininfor` VALUES (465, 'why', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2025-07-04 23:20:18');
+INSERT INTO `sys_logininfor` VALUES (466, 'why', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-04 23:34:48');
+INSERT INTO `sys_logininfor` VALUES (467, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '1', '用户不存在/密码错误', '2025-07-05 00:13:48');
+INSERT INTO `sys_logininfor` VALUES (468, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-05 00:13:59');
+INSERT INTO `sys_logininfor` VALUES (469, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2025-07-05 00:15:13');
+INSERT INTO `sys_logininfor` VALUES (470, 'why', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-05 00:15:33');
+INSERT INTO `sys_logininfor` VALUES (471, 'why', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2025-07-05 00:15:42');
+INSERT INTO `sys_logininfor` VALUES (472, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '1', '验证码已失效', '2025-07-05 00:17:50');
+INSERT INTO `sys_logininfor` VALUES (473, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-05 00:17:54');
+INSERT INTO `sys_logininfor` VALUES (474, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2025-07-05 00:24:54');
+INSERT INTO `sys_logininfor` VALUES (475, 'why', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-05 00:25:05');
+INSERT INTO `sys_logininfor` VALUES (476, 'why', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2025-07-05 00:26:00');
+INSERT INTO `sys_logininfor` VALUES (477, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-05 00:26:11');
+INSERT INTO `sys_logininfor` VALUES (478, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2025-07-05 00:27:16');
+INSERT INTO `sys_logininfor` VALUES (479, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-05 00:28:11');
+INSERT INTO `sys_logininfor` VALUES (480, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2025-07-05 00:51:26');
+INSERT INTO `sys_logininfor` VALUES (481, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-05 00:51:39');
 
 -- ----------------------------
 -- Table structure for sys_meeting_notification
@@ -1263,6 +1290,8 @@ INSERT INTO `sys_notice` VALUES (8, 0xE4BA92E68DA2, '2', 0x3C703EE5BF85E5A487E68
 INSERT INTO `sys_notice` VALUES (11, 0xE682A8323032352D30372D30312031363A33383A3230E9A284E7BAA6E79A84E4B8BBE9A298E4B8BAE2809CE5958AE58F91E58F91E58F91E2809DEFBC8CE5BC80E5A78BE697B6E997B4E4B8BA323032352D30372D30332030383A30303A3030E79A84E4BC9AE8AEAEE5AEA4E5B7B2E98080E59B9E, '1', NULL, '0', 'admin', '2025-07-01 16:47:19', '', NULL, NULL, 1, 1, 'admin');
 INSERT INTO `sys_notice` VALUES (12, 0xE682A8323032352D30372D30312031363A32353A3132E9A284E7BAA6E79A84E4B8BBE9A298E4B8BAE2809CE5958AE58F91E58F91E2809DEFBC8CE5BC80E5A78BE697B6E997B4E4B8BA323032352D30372D30352030373A30303A3030E79A84E4BC9AE8AEAEE5AEA4E5B7B2E9809AE8BF87, '1', NULL, '0', 'admin', '2025-07-01 17:30:19', '', NULL, NULL, 1, 1, 'admin');
 INSERT INTO `sys_notice` VALUES (13, 0xE682A8323032352D30372D30342031313A32363A3531E9A284E7BAA6E79A84E4B8BBE9A298E4B8BAE2809C736466736466E2809DEFBC8CE5BC80E5A78BE697B6E997B4E4B8BA323032352D30372D30362031313A30303A3030E79A84E4BC9AE8AEAEE5AEA4E5B7B2E9809AE8BF87, '1', NULL, '0', 'admin', '2025-07-04 11:27:51', '', NULL, NULL, 1, NULL, 'why');
+INSERT INTO `sys_notice` VALUES (14, 0xE6B8A9E9A6A8E68F90E7A4BAEFBC9A323032352D30372D303520E7AEA1E79086E59198E5B7B2E9878DE7BDAEE682A8E79A84E8B4A6E688B7E5AF86E7A081, '1', 0xE7AEA1E79086E59198E5B7B2E9878DE7BDAEE682A8E79A84E8B4A6E688B7E5AF86E7A081E4B8BAEFBC9A313233343536E38082, '0', 'admin', '2025-07-05 00:14:22', '', NULL, NULL, 0, NULL, NULL);
+INSERT INTO `sys_notice` VALUES (15, 0xE6B8A9E9A6A8E68F90E7A4BAEFBC9A323032352D30372D303520E7AEA1E79086E59198E5B7B2E9878DE7BDAEE682A8E79A84E8B4A6E688B7E5AF86E7A081, '1', 0xE7AEA1E79086E59198E5B7B2E9878DE7BDAEE682A8E79A84E8B4A6E688B7E5AF86E7A081E4B8BAEFBC9A3132333435364161E38082, '0', 'admin', '2025-07-05 00:15:02', '', NULL, NULL, 0, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_oper_log
@@ -1733,6 +1762,23 @@ INSERT INTO `sys_oper_log` VALUES (534, '会议室预订', 1, 'com.rbs.system.co
 INSERT INTO `sys_oper_log` VALUES (535, '会议室预订', 2, 'com.rbs.system.controller.SysMeetingReservationController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/reservation', '127.0.0.1', '内网IP', '{\"applicantName\":\"why\",\"createTime\":\"2025-07-04 11:26:51\",\"deptName\":\"研发部门\",\"endTime\":\"2025-07-06 12:00:00\",\"params\":{},\"purpose\":\"sdfsdf\",\"remark\":\"111\",\"reservationId\":105,\"reservationTitle\":\"asda\",\"roomId\":1,\"startTime\":\"2025-07-06 11:00:00\",\"status\":\"1\",\"updateTime\":\"2025-07-04 11:27:50\",\"userId\":109}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-04 11:27:50', 11);
 INSERT INTO `sys_oper_log` VALUES (536, '通知公告', 1, 'com.rbs.web.controller.system.SysNoticeController.add()', 'POST', 1, 'admin', '研发部门', '/system/notice', '127.0.0.1', '内网IP', '{\"createBy\":\"admin\",\"noticeTitle\":\"您2025-07-04 11:26:51预约的主题为“sdfsdf”，开始时间为2025-07-06 11:00:00的会议室已通过\",\"noticeType\":\"1\",\"params\":{},\"receiverId\":109,\"receiverName\":\"why\",\"receiverType\":1,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-04 11:27:51', 16);
 INSERT INTO `sys_oper_log` VALUES (537, '会议室预订', 1, 'com.rbs.system.controller.SysMeetingReservationController.add()', 'POST', 1, 'why', NULL, '/system/reservation', '127.0.0.1', '内网IP', '{\"applicantName\":\"why\",\"createTime\":\"2025-07-04 17:01:48\",\"deptName\":\"研发部门\",\"endTime\":\"2025-07-10 08:00:00\",\"params\":{},\"purpose\":\"1212\",\"reservationId\":106,\"reservationTitle\":\"131\",\"roomId\":2,\"startTime\":\"2025-07-10 07:00:00\",\"userId\":110}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-04 17:01:48', 33);
+INSERT INTO `sys_oper_log` VALUES (538, '用户管理', 2, 'com.rbs.web.controller.system.SysUserController.resetPwd()', 'PUT', 1, 'admin', '研发部门', '/system/user/resetPwd', '127.0.0.1', '内网IP', '{\"admin\":false,\"params\":{},\"updateBy\":\"admin\",\"userId\":110}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-05 00:14:21', 81);
+INSERT INTO `sys_oper_log` VALUES (539, '通知公告', 1, 'com.rbs.web.controller.system.SysNoticeController.add()', 'POST', 1, 'admin', '研发部门', '/system/notice', '127.0.0.1', '内网IP', '{\"createBy\":\"admin\",\"noticeContent\":\"管理员已重置您的账户密码为：123456。\",\"noticeTitle\":\"温馨提示：2025-07-05 管理员已重置您的账户密码\",\"noticeType\":\"1\",\"params\":{},\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-05 00:14:22', 16);
+INSERT INTO `sys_oper_log` VALUES (540, '用户管理', 2, 'com.rbs.web.controller.system.SysUserController.resetPwd()', 'PUT', 1, 'admin', '研发部门', '/system/user/resetPwd', '127.0.0.1', '内网IP', '{\"admin\":false,\"params\":{},\"updateBy\":\"admin\",\"userId\":110}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-05 00:15:01', 69);
+INSERT INTO `sys_oper_log` VALUES (541, '通知公告', 1, 'com.rbs.web.controller.system.SysNoticeController.add()', 'POST', 1, 'admin', '研发部门', '/system/notice', '127.0.0.1', '内网IP', '{\"createBy\":\"admin\",\"noticeContent\":\"管理员已重置您的账户密码为：123456Aa。\",\"noticeTitle\":\"温馨提示：2025-07-05 管理员已重置您的账户密码\",\"noticeType\":\"1\",\"params\":{},\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-05 00:15:02', 5);
+INSERT INTO `sys_oper_log` VALUES (542, '用户管理', 2, 'com.rbs.web.controller.system.SysUserController.resetPwd()', 'PUT', 1, 'admin', '研发部门', '/system/user/resetPwd', '127.0.0.1', '内网IP', '{\"admin\":false,\"params\":{},\"updateBy\":\"admin\",\"userId\":2}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-05 00:18:09', 182);
+INSERT INTO `sys_oper_log` VALUES (543, '用户头像', 2, 'com.rbs.web.controller.system.SysProfileController.avatar()', 'POST', 1, 'admin', '研发部门', '/system/user/profile/avatar', '127.0.0.1', '内网IP', '', '{\"msg\":\"操作成功\",\"imgUrl\":\"/profile/avatar/2025/07/05/白粥_20250705002427A001.jpg\",\"code\":200}', 0, NULL, '2025-07-05 00:24:27', 91);
+INSERT INTO `sys_oper_log` VALUES (544, '用户管理', 2, 'com.rbs.web.controller.system.SysUserController.resetPwd()', 'PUT', 1, 'admin', '研发部门', '/system/user/resetPwd', '127.0.0.1', '内网IP', '{\"admin\":false,\"params\":{},\"updateBy\":\"admin\",\"userId\":110}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-05 00:24:45', 178);
+INSERT INTO `sys_oper_log` VALUES (545, '用户管理', 2, 'com.rbs.web.controller.system.SysUserController.resetPwd()', 'PUT', 1, 'admin', '研发部门', '/system/user/resetPwd', '127.0.0.1', '内网IP', '{\"admin\":false,\"params\":{},\"updateBy\":\"admin\",\"userId\":101}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-05 00:26:19', 131);
+INSERT INTO `sys_oper_log` VALUES (546, '用户管理', 2, 'com.rbs.web.controller.system.SysUserController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/user', '127.0.0.1', '内网IP', '{\"admin\":false,\"avatar\":\"/profile/upload/2025/06/22/蛋糕_20250622103630A005.jpg\",\"createBy\":\"\",\"createTime\":\"2025-06-12 23:33:31\",\"delFlag\":\"0\",\"dept\":{\"children\":[],\"deptId\":107,\"deptName\":\"运维部门\",\"leader\":\"若依\",\"params\":{},\"status\":\"0\"},\"deptId\":107,\"email\":\"\",\"loginDate\":\"2025-06-12 23:39:57\",\"loginIp\":\"127.0.0.1\",\"nickName\":\"1111\",\"params\":{},\"phonenumber\":\"\",\"pwdUpdateDate\":\"2025-06-12 23:33:32\",\"roleIds\":[2],\"roles\":[{\"admin\":false,\"dataScope\":\"2\",\"deptCheckStrictly\":false,\"flag\":false,\"menuCheckStrictly\":false,\"params\":{},\"roleId\":2,\"roleKey\":\"common\",\"roleName\":\"普通角色\",\"roleSort\":2,\"status\":\"0\"}],\"sex\":\"0\",\"status\":\"0\",\"updateBy\":\"admin\",\"userId\":103,\"userName\":\"1111\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-05 00:26:54', 43);
+INSERT INTO `sys_oper_log` VALUES (547, '用户管理', 2, 'com.rbs.web.controller.system.SysUserController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/user', '127.0.0.1', '内网IP', '{\"admin\":false,\"avatar\":\"/profile/upload/2025/06/22/蛋糕_20250622103630A005.jpg\",\"createBy\":\"\",\"createTime\":\"2025-06-12 23:33:31\",\"delFlag\":\"0\",\"dept\":{\"children\":[],\"deptId\":107,\"deptName\":\"运维部门\",\"leader\":\"若依\",\"params\":{},\"status\":\"0\"},\"deptId\":107,\"email\":\"huang32@qq.com\",\"loginDate\":\"2025-06-12 23:39:57\",\"loginIp\":\"127.0.0.1\",\"nickName\":\"1111\",\"params\":{},\"phonenumber\":\"\",\"pwdUpdateDate\":\"2025-06-12 23:33:32\",\"roleIds\":[2],\"roles\":[{\"admin\":false,\"dataScope\":\"2\",\"deptCheckStrictly\":false,\"flag\":false,\"menuCheckStrictly\":false,\"params\":{},\"roleId\":2,\"roleKey\":\"common\",\"roleName\":\"普通角色\",\"roleSort\":2,\"status\":\"0\"}],\"sex\":\"0\",\"status\":\"0\",\"updateBy\":\"admin\",\"userId\":103,\"userName\":\"1111\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-05 00:27:13', 20);
+INSERT INTO `sys_oper_log` VALUES (548, '个人信息', 2, 'com.rbs.web.controller.system.SysProfileController.updateProfile()', 'PUT', 1, 'admin', '研发部门', '/system/user/profile', '127.0.0.1', '内网IP', '{\"admin\":false,\"email\":\"2494487782@qq.com\",\"nickName\":\"若依\",\"params\":{},\"phonenumber\":\"15888888888\",\"sex\":\"1\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-05 00:37:01', 74);
+INSERT INTO `sys_oper_log` VALUES (549, '个人信息', 2, 'com.rbs.web.controller.system.SysProfileController.updatePwd()', 'PUT', 1, 'admin', '研发部门', '/system/user/profile/updatePwd', '127.0.0.1', '内网IP', '{}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-05 00:37:42', 189);
+INSERT INTO `sys_oper_log` VALUES (550, '个人信息', 2, 'com.rbs.web.controller.system.SysProfileController.updatePwd()', 'PUT', 1, 'admin', '研发部门', '/system/user/profile/updatePwd', '127.0.0.1', '内网IP', '{}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-05 00:52:05', 251);
+INSERT INTO `sys_oper_log` VALUES (551, '个人信息', 2, 'com.rbs.web.controller.system.SysProfileController.updatePwd()', 'PUT', 1, 'admin', '研发部门', '/system/user/profile/updatePwd', '127.0.0.1', '内网IP', '{}', '{\"msg\":\"修改密码失败，旧密码错误\",\"code\":500}', 0, NULL, '2025-07-05 00:53:21', 60);
+INSERT INTO `sys_oper_log` VALUES (552, '个人信息', 2, 'com.rbs.web.controller.system.SysProfileController.updatePwd()', 'PUT', 1, 'admin', '研发部门', '/system/user/profile/updatePwd', '127.0.0.1', '内网IP', '{}', '{\"msg\":\"修改密码失败，旧密码错误\",\"code\":500}', 0, NULL, '2025-07-05 00:54:15', 64);
+INSERT INTO `sys_oper_log` VALUES (553, '个人信息', 2, 'com.rbs.web.controller.system.SysProfileController.updatePwd()', 'PUT', 1, 'admin', '研发部门', '/system/user/profile/updatePwd', '127.0.0.1', '内网IP', '{}', '{\"msg\":\"修改密码失败，旧密码错误\",\"code\":500}', 0, NULL, '2025-07-05 00:55:02', 61);
+INSERT INTO `sys_oper_log` VALUES (554, '个人信息', 2, 'com.rbs.web.controller.system.SysProfileController.updatePwd()', 'PUT', 1, 'admin', '研发部门', '/system/user/profile/updatePwd', '127.0.0.1', '内网IP', '{}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-07-05 00:55:11', 281);
 
 -- ----------------------------
 -- Table structure for sys_post
@@ -1874,17 +1920,16 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '1', '/profile/avatar/2025/07/03/profile_20250703152913A001.jpg', '$2a$10$aa8zjSyYLr5dOto27ZGlrOgVVztiRASXMpBMAgyKPm5DNKRgK3W0G', '0', '0', '127.0.0.1', '2025-07-04 15:02:02', '2025-05-31 17:38:05', 'admin', '2025-05-31 17:38:05', 'system', '2025-07-04 15:02:02', '管理员');
-INSERT INTO `sys_user` VALUES (2, 105, 'ry', '若依', '00', 'ry@qq.com', '15666666666', '1', '/profile/upload/2025/06/22/白粥_20250622103613A002.jpg', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2025-05-31 17:38:05', '2025-05-31 17:38:05', 'admin', '2025-05-31 17:38:05', 'admin', '2025-06-22 10:36:14', '测试员');
+INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', '2494487782@qq.com', '15888888888', '1', '/profile/avatar/2025/07/05/白粥_20250705002427A001.jpg', '$2a$10$TxTFzLP7Ko8xesrY71urkeqfMQOS6.Z18mWHAMgoQkPJW43wnjx6S', '0', '0', '127.0.0.1', '2025-07-05 00:51:40', '2025-07-05 00:55:11', 'admin', '2025-05-31 17:38:05', 'system', '2025-07-05 00:51:39', '管理员');
+INSERT INTO `sys_user` VALUES (2, 105, 'ry', '若依', '00', 'ry@qq.com', '15666666666', '1', '/profile/upload/2025/06/22/白粥_20250622103613A002.jpg', '$2a$10$aSzcPOJJOePikcEgPEuHpuiXaCO.Cb.bs./uLzBPyjxRZBO.cQiNu', '0', '0', '127.0.0.1', '2025-05-31 17:38:05', '2025-05-31 17:38:05', 'admin', '2025-05-31 17:38:05', 'admin', '2025-07-05 00:18:09', '测试员');
 INSERT INTO `sys_user` VALUES (100, 103, '123456', '123456', '00', 'huang@qq.com', '13421234567', '0', '/profile/upload/2025/06/22/豆浆_20250622103618A003.jpg', '$2a$10$8p2AsJF/xk4rMr3oijoiMO/3mZp0bGUDhKxGFcHL2TBpGdNa.99my', '0', '0', '127.0.0.1', '2025-07-03 18:53:11', '2025-06-08 20:38:54', '', '2025-06-08 20:38:54', 'system', '2025-07-03 18:53:10', NULL);
-INSERT INTO `sys_user` VALUES (101, 105, 'abab', 'abab', '00', 'huang2@qq.com', '', '1', '/profile/upload/2025/06/22/白开水_20250622110747A001.jpg', '$2a$10$MEafI9tqlb0GbSML/iHYi.RgWMQE8lKJdp2TvdodgTVWmvqwnLXqO', '0', '0', '127.0.0.1', '2025-06-09 20:56:21', '2025-06-09 20:56:05', '', '2025-06-09 20:56:05', 'admin', '2025-06-22 11:07:48', '123456');
+INSERT INTO `sys_user` VALUES (101, 105, 'abab', 'abab', '00', 'huang2@qq.com', '', '1', '/profile/upload/2025/06/22/白开水_20250622110747A001.jpg', '$2a$10$46uaZ3xkE4.dj2HVIzXBZ.s/IDEZG3KF4JdXzbBvR7gguw7RpZVnu', '0', '0', '127.0.0.1', '2025-06-09 20:56:21', '2025-06-09 20:56:05', '', '2025-06-09 20:56:05', 'admin', '2025-07-05 00:26:19', '123456');
 INSERT INTO `sys_user` VALUES (102, NULL, '111', '111', '00', 'huang3@qq.com', '', '2', '', '$2a$10$W.Ue7OJOwJOXpSAjObNAsuOodJvCWbuODCBVF83cDJFdDGcIxu3Pa', '0', '2', '127.0.0.1', '2025-06-12 22:45:45', NULL, 'admin', '2025-06-12 22:45:11', 'admin', '2025-06-12 22:45:44', NULL);
-INSERT INTO `sys_user` VALUES (103, 107, '1111', '1111', '00', 'huang4@qq.com', '', '0', '/profile/upload/2025/06/22/蛋糕_20250622103630A005.jpg', '$2a$10$GKypFYSCgaZYQguJCfYGxuaPrWgRWk3tXEskwjqnxCVsmwdj4FrYO', '0', '0', '127.0.0.1', '2025-06-12 23:39:57', '2025-06-12 23:33:32', '', '2025-06-12 23:33:31', 'admin', '2025-06-22 10:37:19', NULL);
+INSERT INTO `sys_user` VALUES (103, 107, '1111', '1111', '00', 'huang32@qq.com', '', '0', '/profile/upload/2025/06/22/蛋糕_20250622103630A005.jpg', '$2a$10$GKypFYSCgaZYQguJCfYGxuaPrWgRWk3tXEskwjqnxCVsmwdj4FrYO', '0', '0', '127.0.0.1', '2025-06-12 23:39:57', '2025-06-12 23:33:32', '', '2025-06-12 23:33:31', 'admin', '2025-07-05 00:27:13', NULL);
 INSERT INTO `sys_user` VALUES (104, 107, '啊啊啊', '晃', '00', 'huang5@qq.com', '15398875478', '0', '/profile/upload/2025/06/22/包子_20250622103639A006.jpg', '$2a$10$nuB7ou/bfRxoQTHFUeC2z.YWOnMgAPoX2EPWheBWFG8r7jlUh5Fy6', '0', '0', '', NULL, NULL, 'admin', '2025-06-14 22:50:38', 'admin', '2025-06-22 10:37:23', NULL);
 INSERT INTO `sys_user` VALUES (105, 103, '哈哈哈哈', '强强强强', '00', '3247106194@qq.com', '13578954567', '0', '/profile/upload/2025/06/22/大白菜_20250622103644A007.jpg', '$2a$10$zaznCLHH1vhgh0S0zKwav.S68fP9bFzSXYgPAscbOm38S/pNxPyBq', '0', '0', '127.0.0.1', '2025-07-04 08:40:18', NULL, 'admin', '2025-06-14 22:56:19', 'system', '2025-07-04 08:40:17', NULL);
 INSERT INTO `sys_user` VALUES (106, 104, '123456789', '123456789', '00', 'huang7@qq.com', '', '0', '/profile/upload/2025/06/22/豆腐_20250622103650A008.jpg', '$2a$10$5QhCxs6tNuHGhbu7RPKGweXKoJCKZqlNYIdSy0Tmzqgmi40qM9rjW', '0', '0', '127.0.0.1', '2025-07-02 15:49:28', '2025-06-15 08:19:41', '', '2025-06-15 08:19:40', 'admin', '2025-07-02 15:49:27', NULL);
 INSERT INTO `sys_user` VALUES (108, NULL, 'huangrite', 'huangrite', '00', 'huangrite@163.com', '', '0', '', '$2a$10$d8lXtTaMoNYha4z2XcZ/W.nJdV5z4Cz8rYfuhSB5q.Spdoasg0izq', '0', '0', '127.0.0.1', '2025-07-04 11:24:47', '2025-07-04 11:24:28', '', '2025-07-04 11:24:28', '', '2025-07-04 11:24:46', NULL);
-INSERT INTO `sys_user` VALUES (110, NULL, 'why', 'why', '00', '2494487782@qq.com', '', '0', '', '$2a$10$MLTTaCMbkq/5bJ9i07o.f.fzKbiuV6Y69.GyQUoCyhzr.4/OMWgb6', '0', '0', '127.0.0.1', '2025-07-04 17:01:34', '2025-07-04 16:02:18', '', '2025-07-04 16:02:18', 'system', '2025-07-04 17:01:34', NULL);
 
 -- ----------------------------
 -- Table structure for sys_user_post
@@ -1922,7 +1967,6 @@ INSERT INTO `sys_user_role` VALUES (104, 2);
 INSERT INTO `sys_user_role` VALUES (105, 2);
 INSERT INTO `sys_user_role` VALUES (106, 2);
 INSERT INTO `sys_user_role` VALUES (108, 2);
-INSERT INTO `sys_user_role` VALUES (110, 2);
 
 -- ----------------------------
 -- Triggers structure for table sys_meeting_reservation
