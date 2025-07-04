@@ -11,7 +11,7 @@
  Target Server Version : 80040 (8.0.40)
  File Encoding         : 65001
 
- Date: 03/07/2025 19:18:27
+ Date: 04/07/2025 09:56:11
 */
 
 SET NAMES utf8mb4;
@@ -514,7 +514,7 @@ CREATE TABLE `sys_email_code`  (
   `expire_time` datetime NOT NULL COMMENT '过期时间',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 28 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '邮箱验证码表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 30 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '邮箱验证码表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_email_code
@@ -527,8 +527,8 @@ INSERT INTO `sys_email_code` VALUES (6, 'huang6@qq.com', '345678', 2, '2025-07-0
 INSERT INTO `sys_email_code` VALUES (7, 'huang7@qq.com', '901234', 1, '2025-07-03 12:55:40', '2025-07-03 12:45:40');
 INSERT INTO `sys_email_code` VALUES (8, 'ry@163.com', '567890', 2, '2025-07-03 12:27:40', '2025-07-03 12:17:40');
 INSERT INTO `sys_email_code` VALUES (9, 'newuser@example.com', '112233', 1, '2025-07-03 13:12:40', '2025-07-03 12:57:40');
-INSERT INTO `sys_email_code` VALUES (26, 'huangrite@163.com', '367202', 2, '2025-07-03 19:04:24', '2025-07-03 18:59:24');
-INSERT INTO `sys_email_code` VALUES (27, '3247106194@qq.com', '762779', 2, '2025-07-03 19:07:52', '2025-07-03 19:02:52');
+INSERT INTO `sys_email_code` VALUES (28, 'huangrite@163.com', '537204', 2, '2025-07-04 08:42:50', '2025-07-04 08:37:50');
+INSERT INTO `sys_email_code` VALUES (29, '3247106194@qq.com', '691107', 2, '2025-07-04 08:44:34', '2025-07-04 08:39:34');
 
 -- ----------------------------
 -- Table structure for sys_job
@@ -595,7 +595,7 @@ CREATE TABLE `sys_logininfor`  (
   PRIMARY KEY (`info_id`) USING BTREE,
   INDEX `idx_sys_logininfor_s`(`status` ASC) USING BTREE,
   INDEX `idx_sys_logininfor_lt`(`login_time` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 420 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统访问记录' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 428 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统访问记录' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_logininfor
@@ -920,6 +920,14 @@ INSERT INTO `sys_logininfor` VALUES (416, '3247106194@qq.com', '127.0.0.1', '内
 INSERT INTO `sys_logininfor` VALUES (417, '哈哈哈哈', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2025-07-03 19:08:49');
 INSERT INTO `sys_logininfor` VALUES (418, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '1', '验证码错误', '2025-07-03 19:09:01');
 INSERT INTO `sys_logininfor` VALUES (419, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-03 19:09:04');
+INSERT INTO `sys_logininfor` VALUES (420, '15888888888', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-04 08:37:16');
+INSERT INTO `sys_logininfor` VALUES (421, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2025-07-04 08:37:22');
+INSERT INTO `sys_logininfor` VALUES (422, 'huangrite@163.com', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-04 08:37:35');
+INSERT INTO `sys_logininfor` VALUES (423, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2025-07-04 08:37:40');
+INSERT INTO `sys_logininfor` VALUES (424, 'huangrite@163.com', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-04 08:38:45');
+INSERT INTO `sys_logininfor` VALUES (425, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2025-07-04 08:38:50');
+INSERT INTO `sys_logininfor` VALUES (426, '3247106194@qq.com', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-04 08:40:17');
+INSERT INTO `sys_logininfor` VALUES (427, '哈哈哈哈', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2025-07-04 08:41:53');
 
 -- ----------------------------
 -- Table structure for sys_meeting_notification
@@ -1804,8 +1812,8 @@ CREATE TABLE `sys_user`  (
   `user_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '用户账号',
   `nick_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '用户昵称',
   `user_type` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '00' COMMENT '用户类型（00系统用户）',
-  `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '用户邮箱',
-  `phonenumber` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '手机号码',
+  `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '用户邮箱',
+  `phonenumber` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '手机号码',
   `sex` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '0' COMMENT '用户性别（0男 1女 2未知）',
   `avatar` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '头像地址',
   `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '密码',
@@ -1819,20 +1827,21 @@ CREATE TABLE `sys_user`  (
   `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '更新者',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
-  PRIMARY KEY (`user_id`) USING BTREE
+  PRIMARY KEY (`user_id`, `phonenumber`) USING BTREE,
+  UNIQUE INDEX `idx_email`(`email` ASC) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 108 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户信息表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', 'huangrite@163.com', '15888888888', '1', '/profile/avatar/2025/07/03/profile_20250703152913A001.jpg', '$2a$10$pafiBZyLIWNtN005AJVJh.IkGfjc7u2Y.ykNhNAOw6o.FEUmZjnIK', '0', '0', '127.0.0.1', '2025-07-03 19:09:05', '2025-05-31 17:38:05', 'admin', '2025-05-31 17:38:05', 'system', '2025-07-03 19:09:04', '管理员');
+INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', 'huangrite@163.com', '15888888888', '1', '/profile/avatar/2025/07/03/profile_20250703152913A001.jpg', '$2a$10$aa8zjSyYLr5dOto27ZGlrOgVVztiRASXMpBMAgyKPm5DNKRgK3W0G', '0', '0', '127.0.0.1', '2025-07-04 08:38:45', '2025-05-31 17:38:05', 'admin', '2025-05-31 17:38:05', 'system', '2025-07-04 08:38:45', '管理员');
 INSERT INTO `sys_user` VALUES (2, 105, 'ry', '若依', '00', 'ry@qq.com', '15666666666', '1', '/profile/upload/2025/06/22/白粥_20250622103613A002.jpg', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2025-05-31 17:38:05', '2025-05-31 17:38:05', 'admin', '2025-05-31 17:38:05', 'admin', '2025-06-22 10:36:14', '测试员');
-INSERT INTO `sys_user` VALUES (100, 103, '123456', '123456', '00', '', '13421234567', '0', '/profile/upload/2025/06/22/豆浆_20250622103618A003.jpg', '$2a$10$8p2AsJF/xk4rMr3oijoiMO/3mZp0bGUDhKxGFcHL2TBpGdNa.99my', '0', '0', '127.0.0.1', '2025-07-03 18:53:11', '2025-06-08 20:38:54', '', '2025-06-08 20:38:54', 'system', '2025-07-03 18:53:10', NULL);
+INSERT INTO `sys_user` VALUES (100, 103, '123456', '123456', '00', 'huang@qq.com', '13421234567', '0', '/profile/upload/2025/06/22/豆浆_20250622103618A003.jpg', '$2a$10$8p2AsJF/xk4rMr3oijoiMO/3mZp0bGUDhKxGFcHL2TBpGdNa.99my', '0', '0', '127.0.0.1', '2025-07-03 18:53:11', '2025-06-08 20:38:54', '', '2025-06-08 20:38:54', 'system', '2025-07-03 18:53:10', NULL);
 INSERT INTO `sys_user` VALUES (101, 105, 'abab', 'abab', '00', 'huang2@qq.com', '', '1', '/profile/upload/2025/06/22/白开水_20250622110747A001.jpg', '$2a$10$MEafI9tqlb0GbSML/iHYi.RgWMQE8lKJdp2TvdodgTVWmvqwnLXqO', '0', '0', '127.0.0.1', '2025-06-09 20:56:21', '2025-06-09 20:56:05', '', '2025-06-09 20:56:05', 'admin', '2025-06-22 11:07:48', '123456');
 INSERT INTO `sys_user` VALUES (102, NULL, '111', '111', '00', 'huang3@qq.com', '', '2', '', '$2a$10$W.Ue7OJOwJOXpSAjObNAsuOodJvCWbuODCBVF83cDJFdDGcIxu3Pa', '0', '2', '127.0.0.1', '2025-06-12 22:45:45', NULL, 'admin', '2025-06-12 22:45:11', 'admin', '2025-06-12 22:45:44', NULL);
 INSERT INTO `sys_user` VALUES (103, 107, '1111', '1111', '00', 'huang4@qq.com', '', '0', '/profile/upload/2025/06/22/蛋糕_20250622103630A005.jpg', '$2a$10$GKypFYSCgaZYQguJCfYGxuaPrWgRWk3tXEskwjqnxCVsmwdj4FrYO', '0', '0', '127.0.0.1', '2025-06-12 23:39:57', '2025-06-12 23:33:32', '', '2025-06-12 23:33:31', 'admin', '2025-06-22 10:37:19', NULL);
 INSERT INTO `sys_user` VALUES (104, 107, '啊啊啊', '晃', '00', 'huang5@qq.com', '15398875478', '0', '/profile/upload/2025/06/22/包子_20250622103639A006.jpg', '$2a$10$nuB7ou/bfRxoQTHFUeC2z.YWOnMgAPoX2EPWheBWFG8r7jlUh5Fy6', '0', '0', '', NULL, NULL, 'admin', '2025-06-14 22:50:38', 'admin', '2025-06-22 10:37:23', NULL);
-INSERT INTO `sys_user` VALUES (105, 103, '哈哈哈哈', '强强强强', '00', '3247106194@qq.com', '13578954567', '0', '/profile/upload/2025/06/22/大白菜_20250622103644A007.jpg', '$2a$10$daV5jfVIKmtRcuzwadoU8emC2s03x8Jd27H67l4506y9BJZztN/xC', '0', '0', '127.0.0.1', '2025-07-03 19:03:30', NULL, 'admin', '2025-06-14 22:56:19', 'system', '2025-07-03 19:03:29', NULL);
+INSERT INTO `sys_user` VALUES (105, 103, '哈哈哈哈', '强强强强', '00', '3247106194@qq.com', '13578954567', '0', '/profile/upload/2025/06/22/大白菜_20250622103644A007.jpg', '$2a$10$zaznCLHH1vhgh0S0zKwav.S68fP9bFzSXYgPAscbOm38S/pNxPyBq', '0', '0', '127.0.0.1', '2025-07-04 08:40:18', NULL, 'admin', '2025-06-14 22:56:19', 'system', '2025-07-04 08:40:17', NULL);
 INSERT INTO `sys_user` VALUES (106, 104, '123456789', '123456789', '00', 'huang7@qq.com', '', '0', '/profile/upload/2025/06/22/豆腐_20250622103650A008.jpg', '$2a$10$5QhCxs6tNuHGhbu7RPKGweXKoJCKZqlNYIdSy0Tmzqgmi40qM9rjW', '0', '0', '127.0.0.1', '2025-07-02 15:49:28', '2025-06-15 08:19:41', '', '2025-06-15 08:19:40', 'admin', '2025-07-02 15:49:27', NULL);
 
 -- ----------------------------
@@ -1863,10 +1872,13 @@ CREATE TABLE `sys_user_role`  (
 -- Records of sys_user_role
 -- ----------------------------
 INSERT INTO `sys_user_role` VALUES (2, 2);
+INSERT INTO `sys_user_role` VALUES (100, 2);
 INSERT INTO `sys_user_role` VALUES (101, 2);
+INSERT INTO `sys_user_role` VALUES (102, 2);
 INSERT INTO `sys_user_role` VALUES (103, 2);
+INSERT INTO `sys_user_role` VALUES (104, 2);
+INSERT INTO `sys_user_role` VALUES (105, 2);
 INSERT INTO `sys_user_role` VALUES (106, 2);
-INSERT INTO `sys_user_role` VALUES (107, 2);
 
 -- ----------------------------
 -- Triggers structure for table sys_meeting_reservation

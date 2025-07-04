@@ -7,10 +7,10 @@ package com.rbs.common.core.domain.model;
  */
 public class RegisterBody extends LoginBody
 {
-    private String username;    // 原有：用户名
-    private String password;    // 原有：密码
-    private String email;       // 新增：邮箱
-    private String code;        // 新增：验证码
+    private String username;    // 用户名
+    private String password;    // 密码
+    private String email;       // 邮箱
+    private String code;        // 验证码
 
     @Override
     public String getUsername() {

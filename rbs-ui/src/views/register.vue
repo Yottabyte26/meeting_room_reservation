@@ -46,7 +46,7 @@
               </template>
             </el-input>
             <div class="register-code">
-              <el-button style="margin-left: 10px; width: 100%; height: 100%;" type="primary" :disabled="isCodeDisabled" @click="handleSendCode"> {{ codeButtonText }}</el-button>
+              <el-button style="margin-left: 10px; width: 100%; height: 100%;" type="primary" :disabled="isCodeDisabled || !registerForm.email.trim()"  @click="handleSendCode"> {{ codeButtonText }}</el-button>
             </div>
           </el-form-item>
           <div class="checkbox" style="font-size: 15px">
@@ -76,10 +76,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { register } from "@/api/login";
+import { register, sendRegisterCode } from "@/api/login";
 
 const router = useRouter()
 
@@ -92,6 +92,7 @@ const registerForm = ref({
   password: "",
   confirmPassword: "",
   code: "",
+  email: "",
   uuid: "",
   deptName: "",
   agreeTerms: false  // 新增属性，用于跟踪是否同意服务协议和隐私政策
@@ -100,11 +101,24 @@ const registerForm = ref({
 // 验证码按钮状态
 const isCodeDisabled = ref(false)
 const codeButtonText = ref("发送验证码")
+// 加载状态
+const loading = ref(false)
+const codeSendTime = ref(0)
 
 // 表单验证规则
 const equalToPassword = (rule, value, callback) => {
   if (registerForm.value.password !== value) {
     callback(new Error("两次输入的密码不一致"));
+  } else {
+    callback();
+  }
+};
+
+// 用户名验证（不允许特殊字符）
+const validateUsername = (rule, value, callback) => {
+  const reg = /^[a-zA-Z0-9_]{2,20}$/;
+  if (!reg.test(value)) {
+    callback(new Error("用户名只能包含字母、数字和下划线，长度2-20位"));
   } else {
     callback();
   }
@@ -117,7 +131,11 @@ const registerRules = {
   ],
   email: [
     { required: true, trigger: "blur", message: "请输入邮箱地址" },
-    { type: 'email', message: '请输入有效的邮箱地址', trigger: ['blur', 'change'] }
+    { 
+      pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/, 
+      message: '请输入有效的邮箱地址', 
+      trigger: ['blur', 'change'] 
+    }
   ],
   password: [
     { required: true, trigger: "blur", message: "请输入您的密码" },
@@ -138,67 +156,96 @@ const registerRules = {
   ]
 }
 
-// 响应式数据
-const codeUrl = ref("")
-const loading = ref(false)
-const captchaEnabled = ref(true)
-
-// 发送邮箱验证码（临时占位，等待后端接口）
+// 发送邮箱验证码
 const handleSendCode = () => {
-  // 简单验证邮箱格式
-  if (!registerForm.value.email) {
-    ElMessage.warning("请先输入邮箱地址");
-    return;
-  }
-  const emailReg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailReg.test(registerForm.value.email)) {
-    ElMessage.warning("请输入有效的邮箱地址");
-    return;
-  }
-
-  // 模拟发送成功（实际需调用后端接口）
-  isCodeDisabled.value = true;
-  codeButtonText.value = "已发送(60s)";
+  console.log("发送验证码按钮被点击，开始执行逻辑");
   
-  // 倒计时逻辑
-  let countdown = 60;
-  const timer = setInterval(() => {
-    countdown--;
-    codeButtonText.value = `重新发送(${countdown}s)`;
-    if (countdown <= 0) {
-      clearInterval(timer);
+  // 1. 手动验证邮箱是否为空
+  if (!registerForm.value.email.trim()) {
+    ElMessage.warning("请输入邮箱地址");
+    return;
+  }
+  
+  // 2. 手动验证邮箱格式
+  const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+  if (!emailReg.test(registerForm.value.email)) {
+    ElMessage.warning("请输入有效的邮箱地址（如：xxx@example.com）");
+    return;
+  }
+  
+  // 3. 验证通过，执行发送逻辑
+  isCodeDisabled.value = true;
+  codeButtonText.value = "发送中...";
+  
+  sendRegisterCode(registerForm.value.email)
+    .then((response) => {
+      // 记录验证码发送时间（时间戳）
+      codeSendTime.value = Date.now();
+      // 明确提示有效期（5分钟）
+      ElMessage.success("验证码已发送至您的邮箱，5分钟内有效，请及时查收！");
+      
+      // 倒计时逻辑（未修改）
+      let countdown = 60;
+      const timer = setInterval(() => {
+        countdown--;
+        codeButtonText.value = `重新发送(${countdown}s)`;
+        if (countdown <= 0) {
+          clearInterval(timer);
+          codeButtonText.value = "发送验证码";
+          isCodeDisabled.value = false;
+        }
+      }, 1000);
+    })
+    .catch((error) => {
+      // 修改6：优化错误提示（明确标注"发送失败"）
+      ElMessage.error(`发送失败：${error.response?.data?.msg || "验证码发送失败，请稍后重试"}`);
       codeButtonText.value = "发送验证码";
       isCodeDisabled.value = false;
-    }
-  }, 1000);
-  
-  // 临时提示（实际应移除）
-  ElMessage.warning("注意：邮箱验证码接口尚未实现，此为模拟倒计时效果");
-}
+    });
+};
 
 
 
 // 处理注册
 const handleRegister = () => {
-  // 使用正确的引用方式
   registerFormRef.value.validate(valid => {
     if (valid) {
       if (!registerForm.value.agreeTerms) {
-        ElMessage.error("请勾选同意服务协议和隐私政策后再注册");
+        ElMessage.error("请勾选同意服务协议和隐私政策");
         return;
       }
+
       loading.value = true;
-      register(registerForm.value).then(res => {
-        const username = registerForm.value.username;
-        ElMessageBox.alert("<font color='red'>恭喜你，您的账号 " + username + " 注册成功！</font>", '系统提示', {
-          dangerouslyUseHTMLString: true,
-          type: 'success'
-        }).then(() => {
-          router.push("/login");
-        }).catch(() => { });
-      }).catch(() => {
-        loading.value = false;
-      })
+      
+      const registerData = {
+        username: registerForm.value.username,
+        password: registerForm.value.password,
+        email: registerForm.value.email,
+        code: registerForm.value.code
+      };
+      
+      register(registerData)
+        .then(response => {
+          // 明确判断成功条件
+          if (response.code === 200) {
+            ElMessageBox.alert(
+              `恭喜！账号 ${registerForm.value.username} 注册成功`,
+              '注册成功',
+              { type: 'success' }
+            ).then(() => {
+              router.push("/login");
+            });
+          } else {
+            ElMessage.error(response.msg || "注册失败");
+          }
+        })
+        .catch(error => {
+          const errorMsg = error.response?.data?.msg || error.message || "注册失败";
+          ElMessage.error(`注册失败：${errorMsg}`);
+        })
+        .finally(() => {
+          loading.value = false;
+        });
     }
   });
 }
@@ -353,6 +400,8 @@ const handleRegister = () => {
   width: 33%;
   height: 38px;
   float: right;
+  position: relative; // 确保按钮在顶层
+  z-index: 10; // 提高层级，避免被遮挡
 
   img {
     cursor: pointer;

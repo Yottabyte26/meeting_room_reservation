@@ -27,7 +27,28 @@ export function register(data) {
       isToken: false
     },
     method: 'post',
-    data: data
+    data: data,
+    // 添加响应转换器确保能获取原始错误信息
+    transformResponse: [function (data) {
+      try {
+        return JSON.parse(data);
+      } catch (e) {
+        return { code: 500, msg: data };
+      }
+    }]
+  })
+}
+
+// 发送注册验证码
+export function sendRegisterCode(email) {
+  return request({
+    url: '/sendCode',  // 对应后端SysRegisterController的/sendCode接口
+    headers: {
+      isToken: false,  // 未登录状态可访问
+      repeatSubmit: false  // 防止重复提交
+    },
+    method: 'post',
+    data: { email }    // 传递邮箱参数
   })
 }
 

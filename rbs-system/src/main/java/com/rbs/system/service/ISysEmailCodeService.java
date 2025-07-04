@@ -6,6 +6,9 @@ public interface ISysEmailCodeService {
     // 发送验证码（type:1-注册，2-找回密码）
     AjaxResult sendCode(String email, Integer type);
 
+    // 专门用于注册的验证码发送接口
+    AjaxResult sendRegisterCode(String email);
+
     // 验证验证码
     boolean validateCode(String email, String code, Integer type);
 }

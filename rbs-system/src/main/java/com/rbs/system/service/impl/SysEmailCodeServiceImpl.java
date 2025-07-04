@@ -143,4 +143,11 @@ public class SysEmailCodeServiceImpl implements ISysEmailCodeService {
             return CompletableFuture.completedFuture(false);
         }
     }
+
+    @Override
+    @Transactional
+    public AjaxResult sendRegisterCode(String email) {
+        // 直接调用现有方法，指定类型为1（注册）
+        return sendCode(email, 1);
+    }
 }
