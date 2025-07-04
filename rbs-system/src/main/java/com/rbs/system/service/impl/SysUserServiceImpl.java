@@ -330,10 +330,7 @@ public class SysUserServiceImpl implements ISysUserService
     public int updateUser(SysUser user)
     {
         Long userId = user.getUserId();
-        // 删除用户与角色关联
-        userRoleMapper.deleteUserRoleByUserId(userId);
         // 新增用户与角色管理
-        insertUserRole(user);
         // 删除用户与岗位关联
         userPostMapper.deleteUserPostByUserId(userId);
         // 新增用户与岗位管理
@@ -585,7 +582,7 @@ public class SysUserServiceImpl implements ISysUserService
         }
         return successMsg.toString();
     }
-
+    @Transactional
     @Override
     public int updatePasswordByEmail(String email, String newPassword, String updateBy) {
         return userMapper.updatePasswordByEmail(email, newPassword, updateBy);
