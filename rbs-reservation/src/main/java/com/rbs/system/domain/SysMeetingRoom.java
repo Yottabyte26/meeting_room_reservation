@@ -50,6 +50,17 @@ public class SysMeetingRoom extends BaseEntity
     @Excel(name = "是否启用", readConverterExp = "0=禁用,1=启用")
     private String isEnabled;
 
+    /** 会议室图片路径*/
+    private String roomImage;
+
+    public String getRoomImage() {
+        return roomImage;
+    }
+
+    public void setRoomImage(String roomImage) {
+        this.roomImage = roomImage;
+    }
+
     public void setRoomId(Long roomId) 
     {
         this.roomId = roomId;

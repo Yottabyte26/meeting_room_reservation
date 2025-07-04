@@ -29,6 +29,16 @@
           <dict-tag :options="sys_room_status" :value="scope.row.status" />
         </template>
       </el-table-column>
+      <!-- 会议室图片上传 -->
+      <el-table-column label="会议室图片" align="center" width="120">
+        <template #default="scope">
+          <!-- 显示图片，支持点击预览 -->
+          <image-preview
+            :src="scope.row.roomImage" 
+            :width="50" :height="50"
+          ></image-preview>
+        </template>
+      </el-table-column>
       <el-table-column label="会议室描述" align="center" prop="description" />
       <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
