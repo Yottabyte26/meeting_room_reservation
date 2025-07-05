@@ -121,7 +121,7 @@
           </el-form-item>
           <el-form-item label="预定时间段" prop="selectedTime">
             <el-select v-model="selectedTime" placeholder="请选择时间段" style="width: 200px;" @change="updateStartTime">
-              <el-option v-for="time in times" :key="time.value" :label="time.label" :value="time.value" />
+              <el-option v-for="time in filteredTimes" :key="time.value" :label="time.label" :value="time.value" />
             </el-select>
           </el-form-item>
         </el-row>
@@ -226,10 +226,41 @@ const data = reactive({
     ]
   }
 })
+
+// 计算属性：根据选中日期过滤可用时间段
+const filteredTimes = computed(() => {
+  if (!data.selectedDate) return [];
+  
+  const now = new Date();
+  const selectedDate = new Date(data.selectedDate);
+  const isToday = selectedDate.toDateString() === now.toDateString();
+  
+  // 对于今天的日期，需要过滤掉已过的时间段（考虑提前1小时）
+  if (isToday) {
+    // 当前时间加1小时，作为最早可预约开始时间
+    const earliestStart = new Date(now.getTime() + 30 * 60 * 1000);
+    return times.value.filter(time => {
+      const startTimeStr = time.value.split('-')[0];
+      const [hours, minutes, seconds] = startTimeStr.split(':').map(Number);
+      const startTime = new Date();
+      startTime.setHours(hours, minutes, seconds);
+      
+      // 时间段开始时间必须晚于当前时间加半小时
+      return startTime >= earliestStart;
+    });
+  }
+  
+  // 非今天的日期，所有时间段都可用
+  return times.value;
+});
+
+
 const selectDate = (dateStr) => {
   const selectedDay = recentSevenDays.value.find(day => day.date === dateStr)
   if (!selectedDay || selectedDay.disabled) return
-  selectedDate.value = selectedDay.date
+  data.selectedDate = selectedDay.date;
+  // 重置时间段选择
+  data.selectedTime = null; 
 }
 // 生成最近7天日期
 const generateSevenDays = () => {
@@ -332,6 +363,8 @@ function reset() {
     updateTime: null,
     remark: null
   }
+  data.selectedDate = null; 
+  data.selectedTime = null; 
   proxy.resetForm("reservationRef")
 }
 
@@ -387,23 +420,54 @@ function checkExactMatch(reservationList, form) {
 }
 /** 提交按钮 */
 function submitForm() {
-  form.value.selectedDate = selectedDate;
-  form.value.selectedTime = selectedTime;
-  if (selectedDate && selectedTime) {
-    const [startTimePart, endTimePart] = selectedTime.value.split('-')
-    form.value.startTime = `${selectedDate.value} ${startTimePart}`
-    form.value.endTime = `${selectedDate.value} ${endTimePart}`
+  // 修正：使用正确的响应式数据引用
+  form.value.selectedDate = data.selectedDate;
+  form.value.selectedTime = data.selectedTime;
+  
+  // 验证是否选择了日期和时间段
+  if (!data.selectedDate || !data.selectedTime) {
+    proxy.$message.error('请选择预约日期和时间段');
+    return;
   }
+  
+  // 解析开始和结束时间
+  const [startTimePart, endTimePart] = data.selectedTime.split('-');
+  const startTime = new Date(`${data.selectedDate} ${startTimePart}`);
+  const endTime = new Date(`${data.selectedDate} ${endTimePart}`);
+  
+  // 验证时间逻辑
+  const now = new Date();
+  
+  // 检查是否至少提前1小时预约
+  if (startTime - now < 30 * 60 * 1000) {
+    proxy.$message.error('预约需至少提前1小时，请选择合适的时间');
+    return;
+  }
+  
+  // 检查开始时间是否早于结束时间
+  if (startTime >= endTime) {
+    proxy.$message.error('开始时间不能晚于结束时间');
+    return;
+  }
+  
+  // 设置表单中的时间值
+  form.value.startTime = `${data.selectedDate} ${startTimePart}`;
+  form.value.endTime = `${data.selectedDate} ${endTimePart}`;
+  
+  // 检查是否已被预约
   if (checkExactMatch(reservationList.value, form.value)) {
     proxy.$message.error('该会议室时间已被预约，请选择其他时间');
     return;
   }
+  
+  // 表单验证
   proxy.$refs["reservationRef"].validate(valid => {
     if (valid) {
       addReservation(form.value).then(response => {
         proxy.$modal.msgSuccess("新增预定成功");
         open.value = false;
-        getList();
+        getList();           // 刷新会议室列表
+        getReservationList();// 刷新预约列表
       });
     }
   });
