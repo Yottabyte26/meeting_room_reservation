@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>账号安全验证</title>
+    <style>
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 15px;
+            border-radius: 8px 8px 0 0;
+        }
+        .header h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+        .content {
+            padding: 20px;
+        }
+        .code-box {
+            background-color: #e9f2ff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .code {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+            letter-spacing: 5px;
+        }
+        .info {
+            color: #666;
+            margin-top: 10px;
+        }
+        .tip {
+            color: #999;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h2>账号安全验证</h2>
+    </div>
+    <div class="content">
+        <p>尊敬的用户：</p>
+        <p>您正在进行账号注册/登录操作，请在验证码有效期内完成验证：</p>
+        <div class="code-box">
+            <span class="code" th:text="${code}"></span>
+        </div>
+        <p class="info">验证码有效期至 <span th:text="${expireTime}"></span>（5 分钟内有效）</p>
+        <p class="info">如非本人操作，请忽略此邮件。</p>
+        <p class="tip">此为系统邮件，请勿直接回复</p>
+    </div>
+</div>
+</body>
+</html>
