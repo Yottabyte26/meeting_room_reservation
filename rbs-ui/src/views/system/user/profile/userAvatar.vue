@@ -4,18 +4,9 @@
     <el-dialog :title="title" v-model="open" width="800px" append-to-body @opened="modalOpened" @close="closeDialog">
       <el-row>
         <el-col :xs="24" :md="12" :style="{ height: '350px' }">
-          <vue-cropper
-            ref="cropper"
-            :img="options.img"
-            :info="true"
-            :autoCrop="options.autoCrop"
-            :autoCropWidth="options.autoCropWidth"
-            :autoCropHeight="options.autoCropHeight"
-            :fixedBox="options.fixedBox"
-            :outputType="options.outputType"
-            @realTime="realTime"
-            v-if="visible"
-          />
+          <vue-cropper ref="cropper" :img="options.img" :info="true" :autoCrop="options.autoCrop"
+            :autoCropWidth="options.autoCropWidth" :autoCropHeight="options.autoCropHeight" :fixedBox="options.fixedBox"
+            :outputType="options.outputType" @realTime="realTime" v-if="visible" />
         </el-col>
         <el-col :xs="24" :md="12" :style="{ height: '350px' }">
           <div class="avatar-upload-preview">
@@ -26,15 +17,12 @@
       <br />
       <el-row>
         <el-col :lg="2" :md="2">
-          <el-upload
-            action="#"
-            :http-request="requestUpload"
-            :show-file-list="false"
-            :before-upload="beforeUpload"
-          >
+          <el-upload action="#" :http-request="requestUpload" :show-file-list="false" :before-upload="beforeUpload">
             <el-button>
               选择
-              <el-icon class="el-icon--right"><Upload /></el-icon>
+              <el-icon class="el-icon--right">
+                <Upload />
+              </el-icon>
             </el-button>
           </el-upload>
         </el-col>
@@ -63,7 +51,8 @@ import "vue-cropper/dist/index.css";
 import { VueCropper } from "vue-cropper";
 import { uploadAvatar } from "@/api/system/user";
 import useUserStore from "@/store/modules/user";
-
+import { getUploadToken } from "@/api/system/room"
+import axios from "axios";
 const userStore = useUserStore();
 const { proxy } = getCurrentInstance();
 
@@ -92,7 +81,7 @@ function modalOpened() {
   visible.value = true;
 }
 /** 覆盖默认上传行为 */
-function requestUpload() {}
+function requestUpload() { }
 /** 向左旋转 */
 function rotateLeft() {
   proxy.$refs.cropper.rotateLeft();
@@ -119,17 +108,37 @@ function beforeUpload(file) {
     };
   }
 }
-/** 上传图片 */
+
+const uploadToken = ref(""); // 响应式变量
+onMounted(() => {
+  getUploadToken().then(res => {
+    uploadToken.value = res.token;
+  });
+});
 function uploadImg() {
   proxy.$refs.cropper.getCropBlob(data => {
     let formData = new FormData();
-    formData.append("avatarfile", data, options.filename);
-    uploadAvatar(formData).then(response => {
-      open.value = false;
-      options.img = import.meta.env.VITE_APP_BASE_API + response.imgUrl;
-      userStore.avatar = options.img;
-      proxy.$modal.msgSuccess("修改成功");
-      visible.value = false;
+    formData.append("file", data, options.filename);
+    formData.append("token", uploadToken.value);
+
+    axios.post("https://api.superbed.cn/upload", formData, {
+      headers: { "Content-Type": "multipart/form-data" }
+    }).then(res => {
+      const url = res.data.urls[0];
+      // 保存到数据库
+      let avatarForm = new FormData();
+      avatarForm.append("avatarfile", data, options.filename);
+      uploadAvatar(avatarForm).then(response => {
+        open.value = false;
+        options.img = url;
+        userStore.avatar = url;
+        proxy.$modal.msgSuccess("修改成功");
+        visible.value = false;
+      }).catch(() => {
+        proxy.$modal.msgError("保存头像失败");
+      });
+    }).catch(() => {
+      proxy.$modal.msgError("上传失败");
     });
   });
 }
