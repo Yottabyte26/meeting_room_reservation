@@ -46,7 +46,7 @@ export function delRoom(roomId) {
 // 获取上传图片的token
 export function getUploadToken() {
   return request({
-    url: '/system/room/upload-token',
+    url: '/system/room//picture/upload-token',
     method: 'get'
   })
 }

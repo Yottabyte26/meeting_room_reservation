@@ -37,7 +37,7 @@ import com.rbs.common.core.page.TableDataInfo;
 public class SysMeetingRoomController extends BaseController
 {
 
-    @GetMapping("/upload-token")
+    @GetMapping("/picture/upload-token")
     public Map<String, Object> getUploadToken() {
         String token = "437b90c01c9d41739d271a55a688073b";
         Map<String, Object> result = new HashMap<>();
