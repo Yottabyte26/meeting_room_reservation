@@ -218,11 +218,50 @@
         </div>
       </template>
     </el-dialog>
+
+<!-- 重置密码对话框 -->
+<el-dialog 
+  v-model="resetPwdDialog.visible" 
+  :title="resetPwdDialog.title" 
+  width="500px"
+  class="reset-pwd-dialog"
+  :modal="true"
+  :center="true" 
+  :append-to-body="true"
+  style="position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%);"
+>
+  <el-form>
+    <el-form-item label="新密码">
+      <el-input 
+        v-model="resetPwdDialog.password" 
+        :type="resetPwdDialog.showPassword ? 'text' : 'password'" 
+        placeholder="请输入新密码"
+      >
+        <template #suffix>
+          <el-icon 
+            style="cursor: pointer" 
+            @click="resetPwdDialog.showPassword = !resetPwdDialog.showPassword"
+          >
+            <View v-if="resetPwdDialog.showPassword" />
+            <Hide v-else />
+          </el-icon>
+        </template>
+      </el-input>
+    </el-form-item>
+  </el-form>
+  <template #footer>
+    <el-button @click="resetPwdDialog.visible = false">取消</el-button>
+    <el-button type="primary" @click="confirmResetPwd">确定</el-button>
+  </template>
+</el-dialog>
+    
   </div>
 </template>
 
 <script setup name="User">
 import { getToken } from "@/utils/auth";
+import { View, Hide } from '@element-plus/icons-vue';
+import { ref, reactive, computed, getCurrentInstance } from 'vue';
 import {
   changeUserStatus,
   listUser,
@@ -230,18 +269,16 @@ import {
   delUser,
   getUser,
   updateUser,
-  addUser, sendPasswordResetNotification
+  addUser, 
+  sendPasswordResetNotification
 } from "@/api/system/user";
-import { addNotice } from "@/api/system/notice";
 import { listDeptSimple } from "@/api/system/dept";
+
 const router = useRouter();
 const { proxy } = getCurrentInstance();
 const { sys_normal_disable, sys_user_sex } = proxy.useDict("sys_normal_disable", "sys_user_sex");
 
-const filteredSexOptions = computed(() => {
-  return sys_user_sex.value.filter(option => option.label !== '未知');
-});
-
+// 数据定义
 const userList = ref([]);
 const open = ref(false);
 const loading = ref(true);
@@ -256,27 +293,28 @@ const deptName = ref("");
 const deptOptions = ref([]);
 const initPassword = ref(undefined);
 const roleOptions = ref([]);
-const forgotForm = ref({
-  email: '',
-  code: '',
-  newPassword: '',
-  confirmPassword: ''
-})
-/*** 用户导入参数 */
+
+// 重置密码对话框状态
+const resetPwdDialog = reactive({
+  visible: false,
+  title: '',
+  password: '123456Aa',
+  showPassword: false,
+  userId: null,
+  userName: '',
+  email: ''
+});
+
+// 用户导入参数
 const upload = reactive({
-  // 是否显示弹出层（用户导入）
   open: false,
-  // 弹出层标题（用户导入）
   title: "",
-  // 是否禁用上传
   isUploading: false,
-  // 是否更新已经存在的用户数据
   updateSupport: 0,
-  // 设置上传的请求头部
   headers: { Authorization: "Bearer " + getToken() },
-  // 上传的地址
   url: import.meta.env.VITE_APP_BASE_API + "/system/user/importData"
 });
+
 // 列显隐信息
 const columns = ref([
   { key: 0, label: `用户编号`, visible: true },
@@ -286,7 +324,6 @@ const columns = ref([
   { key: 3, label: `部门`, visible: true },
   { key: 4, label: `手机号码`, visible: true },
   { key: 5, label: `邮箱`, visible: true },
-  { key: 6, label: `头像`, visible: true },
   { key: 7, label: `性别`, visible: true },
   { key: 8, label: `状态`, visible: true }
 ]);
@@ -392,6 +429,36 @@ function handleStatusChange(row) {
   });
 };
 
+
+// 在script setup部分添加
+const PasswordInput = {
+  props: ['value', 'showPassword'],
+  emits: ['update:value', 'update:showPassword'],
+  render() {
+    return h('div', { style: { position: 'relative' } }, [
+      h('el-input', {
+        modelValue: this.value,
+        type: this.showPassword ? 'text' : 'password',
+        'onUpdate:modelValue': (val) => this.$emit('update:value', val),
+        style: { width: '100%' }
+      }),
+      h('el-icon', {
+        style: {
+          position: 'absolute',
+          right: '10px',
+          top: '10px',
+          cursor: 'pointer',
+          zIndex: 1
+        },
+        onClick: () => this.$emit('update:showPassword', !this.showPassword)
+      }, [
+        this.showPassword ? h(View) : h(Hide)
+      ])
+    ])
+  }
+}
+
+
 /** 重置密码按钮操作 */
 function handleResetPwd(row) {
   // 校验用户是否有邮箱
@@ -406,47 +473,41 @@ function handleResetPwd(row) {
     return;
   }
 
-  proxy.$prompt('请输入"' + row.userName + '"的新密码', "提示", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    closeOnClickModal: false,
-    inputPattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,20}$/,
-    inputErrorMessage: "密码必须包含字母和数字，长度在5-20位之间",
-    inputValue: '123456Aa'
-  }).then(({ value }) => {
-    // 再次校验密码格式
-    if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,20}$/.test(value)) {
-      proxy.$modal.msgError("密码格式不正确，必须包含字母和数字，长度在5-20位之间");
-      return;
-    }
-
-    resetUserPwd(row.userId, value).then(response => {
-      proxy.$modal.msgSuccess("修改成功，新密码是：" + value);
-
-      // 发送密码重置通知邮件
-      const emailParams = {
-        email: row.email,
-        newPassword: value,
-        userName: row.userName
-      };
-
-      // 调用发送邮件接口
-      return sendPasswordResetNotification(emailParams);
-    }).then(() => {
-      // 获取当前日期字符串（仅年-月-日）
-      const now = new Date();
-      const formatDate = (date) => {
-        const pad = (n) => n.toString().padStart(2, '0');
-        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
-      };
-    }).catch(error => {
-      console.error("重置密码或发送邮件失败:", error);
-      proxy.$modal.msgError("操作失败，请重试");
-    });
-  }).catch(() => {
-    // 用户取消操作
-  });
+  // 设置对话框数据
+  resetPwdDialog.title = `请输入"${row.userName}"的新密码`;
+  resetPwdDialog.password = '123456Aa';
+  resetPwdDialog.showPassword = false;
+  resetPwdDialog.userId = row.userId;
+  resetPwdDialog.userName = row.userName;
+  resetPwdDialog.email = row.email;
+  resetPwdDialog.visible = true;
 }
+
+/** 确认重置密码 */
+const confirmResetPwd = () => {
+  // 验证密码格式
+  if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,20}$/.test(resetPwdDialog.password)) {
+    proxy.$modal.msgError("密码格式不正确，必须包含字母和数字，长度在5-20位之间");
+    return;
+  }
+
+  resetUserPwd(resetPwdDialog.userId, resetPwdDialog.password).then(response => {
+    proxy.$modal.msgSuccess("修改成功，新密码是：" + resetPwdDialog.password);
+    resetPwdDialog.visible = false;
+
+    // 发送密码重置通知邮件
+    const emailParams = {
+      email: resetPwdDialog.email,
+      newPassword: resetPwdDialog.password,
+      userName: resetPwdDialog.userName
+    };
+
+    return sendPasswordResetNotification(emailParams);
+  }).catch(error => {
+    console.error("重置密码或发送邮件失败:", error);
+    proxy.$modal.msgError("操作失败，请重试");
+  });
+};
 
 /** 选择条数  */
 function handleSelectionChange(selection) {
@@ -559,3 +620,5 @@ onMounted(() => {
   getList()
 })
 </script>
+
+
