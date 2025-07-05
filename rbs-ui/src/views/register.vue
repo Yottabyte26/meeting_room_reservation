@@ -26,17 +26,42 @@
             </el-input>
           </el-form-item>
 
-          <!-- 密码输入 -->
-          <el-form-item prop="password">
-            <el-input v-model="registerForm.password" type="password" auto-complete="off" placeholder="请输入密码(5-20位数字)"
-              @keyup.enter.native="handleRegister">
-            </el-input>
-          </el-form-item>
-          <el-form-item prop="confirmPassword">
-            <el-input v-model="registerForm.confirmPassword" type="password" auto-complete="off"
-              placeholder="请再次输入密码(5-20位数字)" @keyup.enter.native="handleRegister">
-            </el-input>
-          </el-form-item>
+<!-- 密码输入 -->
+<el-form-item prop="password">
+  <el-input 
+    v-model="registerForm.password" 
+    :type="showPassword ? 'text' : 'password'" 
+    auto-complete="off" 
+    placeholder="请输入密码(5-20位数字)"
+    @keyup.enter.native="handleRegister"
+  >
+    <template #suffix>
+      <span class="password-eye" @click.stop="togglePasswordVisibility">
+        <svg-icon icon-class="eye-open" />
+        <span class="eye-slash" :class="{ 'active': !showPassword }"></span>
+      </span>
+    </template>
+  </el-input>
+</el-form-item>
+
+<!-- 确认密码输入 -->
+<el-form-item prop="confirmPassword">
+  <el-input 
+    v-model="registerForm.confirmPassword" 
+    :type="showConfirmPassword ? 'text' : 'password'" 
+    auto-complete="off" 
+    placeholder="请再次输入密码(5-20位数字)"
+    @keyup.enter.native="handleRegister"
+  >
+    <template #suffix>
+      <span class="password-eye" @click.stop="toggleConfirmPasswordVisibility">
+        <svg-icon icon-class="eye-open" />
+        <span class="eye-slash" :class="{ 'active': !showConfirmPassword }"></span>
+      </span>
+    </template>
+  </el-input>
+</el-form-item>
+
           <!-- 邮箱验证码区域 -->
           <el-form-item prop="code">
             <el-input v-model="registerForm.code" autocomplete="off" placeholder="输入6位验证码" style="width: 63%"
@@ -85,6 +110,18 @@ const router = useRouter()
 
 // 创建表单引用
 const registerFormRef = ref(null)
+
+//密码隐藏显示
+const showPassword = ref(false);
+const showConfirmPassword = ref(false);
+
+const togglePasswordVisibility = () => {
+  showPassword.value = !showPassword.value;
+};
+
+const toggleConfirmPasswordVisibility = () => {
+  showConfirmPassword.value = !showConfirmPassword.value;
+};
 
 // 表单数据
 const registerForm = ref({
@@ -438,5 +475,45 @@ const handleRegister = () => {
 
 .register-code-img {
   height: 38px;
+}
+
+.password-eye {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 8px;
+  cursor: pointer;
+  color: #c0c4cc;
+  transition: color 0.2s;
+  
+  &:hover {
+    color: #909399;
+  }
+  
+  .svg-icon {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .eye-slash {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 2px;
+    background-color: transparent;
+    transform: translate(-50%, -50%) rotate(45deg);
+    transform-origin: center;
+    transition: all 0.2s;
+    
+    &.active {
+      background-color: #c0c4cc;
+    }
+  }
+  
+  &:hover .eye-slash.active {
+    background-color: #909399;
+  }
 }
 </style>

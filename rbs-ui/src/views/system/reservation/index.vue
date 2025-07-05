@@ -74,10 +74,9 @@
       @pagination="getList" 
     />
 
-    <!-- 预定弹窗 -->
+ <!-- 预定弹窗-->
     <el-dialog :title="title" v-model="open" width="600px" append-to-body>
       <el-form ref="reservationRef" :model="form" :rules="rules" label-width="100px">
-        <!-- 表单内容保持不变 -->
         <el-row>
           <el-col :span="12">
             <el-form-item label="会议室名称" prop="roomName">
@@ -86,27 +85,50 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="预定部门" prop="deptName">
-              <el-select 
-                v-model="form.deptName" 
-                placeholder="请选择部门" 
-                filterable 
-                clearable 
-                remote
-                :remote-method="remoteMethodDept" 
-                :loading="loadingDept"
-              >
+              <el-select v-model="form.deptName" placeholder="请选择部门" filterable clearable remote
+                :remote-method="remoteMethodDept" :loading="loadingDept">
                 <el-option label="请选择预定部门" disabled></el-option>
-                <el-option 
-                  v-for="item in deptList" 
-                  :key="item.deptId" 
-                  :label="item.deptName" 
-                  :value="item.deptName"
-                ></el-option>
+                <el-option v-for="item in deptList" :key="item.deptId" :label="item.deptName" :value="item.deptName">
+                </el-option>
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
-        <!-- 其他表单内容保持不变 -->
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="预定人" prop="applicantName">
+              <el-input :placeholder="form.applicantName" disabled />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="预订主题" prop="reservationTitle">
+              <el-input v-model="form.reservationTitle" placeholder="请输入预订主题" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-form-item label="预定日期" prop="selectedDate">
+            <ul class="dateUl">
+              <li v-for="(day, index) in recentSevenDays" :key="index">
+                <el-button :class="{ 'is-primary': selectedDate === day.date && selectedDate !== null }"
+                  :disabled="day.disabled" @click="selectDate(day.date)"
+                  style="margin: 5px; min-width: 80px; height: 36px;">
+                  {{ day.date }}
+                </el-button>
+              </li>
+            </ul>
+          </el-form-item>
+          <el-form-item label="预定时间段" prop="selectedTime">
+            <el-select v-model="selectedTime" placeholder="请选择时间段" style="width: 200px;" @change="updateStartTime">
+              <el-option v-for="time in times" :key="time.value" :label="time.label" :value="time.value" />
+            </el-select>
+          </el-form-item>
+        </el-row>
+
+        <el-form-item label="预订用途" prop="purpose">
+          <el-input v-model="form.purpose" type="textarea" placeholder="请输入内容" />
+        </el-form-item>
+
       </el-form>
       <template #footer>
         <div class="dialog-footer">

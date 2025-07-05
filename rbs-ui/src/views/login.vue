@@ -14,15 +14,25 @@
             <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="用户名/手机号/邮箱">
             </el-input>
           </el-form-item>
-          <el-form-item prop="password">
-            <el-input v-model="loginForm.password" :type="showPassword ? 'text' : 'password'" auto-complete="off"
-              placeholder="请输入您的密码（5-20位字母加数字）" @keyup.enter="handleLogin">
-              <template #suffix>
-                <i :class="showPassword ? 'fas fa-eye' : 'fas fa-eye-slash'" style="margin-top:8px;font-size:18px;"
-                  @click="togglePasswordVisibility" />
-              </template>
-            </el-input>
-          </el-form-item>
+
+
+<el-form-item prop="password">
+  <el-input 
+    v-model="loginForm.password" 
+    :type="showPassword ? 'text' : 'password'" 
+    auto-complete="off"
+    placeholder="请输入您的密码（5-20位字母加数字）" 
+    @keyup.enter="handleLogin"
+  >
+    <template #suffix>
+      <span class="password-eye" @click="togglePasswordVisibility">
+        <svg-icon icon-class="eye-open" />
+        <span class="eye-slash" :class="{ 'active': !showPassword }"></span>
+      </span>
+    </template>
+  </el-input>
+</el-form-item>
+
           <el-form-item prop="code" v-if="captchaEnabled">
             <el-input v-model="loginForm.code" size="large" auto-complete="off" placeholder="验证码" style="width: 63%"
               @keyup.enter="handleLogin">
@@ -679,6 +689,45 @@ const resetForgotForm = () => {
 
 .close-button {
   margin-top: 20px;
+}
+.password-eye {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 8px;
+  cursor: pointer;
+  color: #c0c4cc;
+  transition: color 0.2s;
+  
+  &:hover {
+    color: #909399;
+  }
+  
+  .svg-icon {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .eye-slash {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 2px;
+    background-color: transparent;
+    transform: translate(-50%, -50%) rotate(45deg);
+    transform-origin: center;
+    transition: all 0.2s;
+    
+    &.active {
+      background-color: #c0c4cc;
+    }
+  }
+  
+  &:hover .eye-slash.active {
+    background-color: #909399;
+  }
 }
 
 :deep(.el-dialog) {
