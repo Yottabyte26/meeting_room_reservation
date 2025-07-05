@@ -21,10 +21,9 @@
     <el-form-item prop="code" class="form-item">
       <div class="code-container">
         <el-input v-model="user.code" style="margin-left: 10px;" placeholder="请输入6位验证码" maxlength="6" />
-          <el-button type="primary" :disabled="codeDisabled || !canSendCode"
-            @click="sendResetCode" class="code-button">
-              {{ codeButtonText }}
-          </el-button>
+        <el-button type="primary" :disabled="codeDisabled || !canSendCode" @click="sendResetCode" class="code-button">
+          {{ codeButtonText }}
+        </el-button>
       </div>
     </el-form-item>
 
@@ -91,23 +90,18 @@ const equalToPassword = (rule, value, callback) => {
 };
 
 // 表单验证规则（新增邮箱和验证码校验）
-const rules = ref({
-  oldPassword: [{ required: true, message: "旧密码不能为空", trigger: "blur" }],
+const rules = {
+  oldPassword: [
+    { required: true, message: "旧密码不能为空", trigger: "blur" }
+  ],
   newPassword: [
-    { required: true, validator: validatePassword, trigger: "blur" }
-  ],
-  confirmPassword: [
-    { required: true, validator: equalToPassword, trigger: "blur" }
-  ],
-  email: [
-    { required: true, message: "请输入注册邮箱", trigger: "blur" },
-    { type: "email", message: "请输入正确的邮箱格式", trigger: ["blur", "change"] }
+    { required: true, message: "新密码不能为空", trigger: "blur" },
+    { min: 6, message: "新密码不能少于6位", trigger: "blur" }
   ],
   code: [
-    { required: true, message: "请输入验证码", trigger: "blur" },
-    { min: 6, max: 6, message: "验证码长度为6位", trigger: "blur" }
+    { required: true, message: "验证码不能为空", trigger: "blur" }
   ]
-});
+}
 
 // 清空表单
 function resetForm() {
@@ -121,9 +115,9 @@ function resetForm() {
 // 计算属性，判断是否可以发送验证码
 const canSendCode = computed(() => {
   return (
-    user.oldPassword && 
-    user.newPassword && 
-    user.confirmPassword && 
+    user.oldPassword &&
+    user.newPassword &&
+    user.confirmPassword &&
     user.newPassword === user.confirmPassword &&
     /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,20}$/.test(user.newPassword)
   );
@@ -131,74 +125,60 @@ const canSendCode = computed(() => {
 
 // 发送邮箱验证码
 function sendResetCode() {
-   // 先验证密码表单
-   proxy.$refs.pwdRef.validateField(['oldPassword', 'newPassword', 'confirmPassword'], (valid) => {
+  // 先验证密码表单
+  proxy.$refs.pwdRef.validateField(['oldPassword', 'newPassword', 'confirmPassword'], (valid) => {
     if (!valid) {
       proxy.$modal.msgWarning("请先正确填写密码信息");
       return;
     }
-  // 邮箱格式校验
-  if (!user.email) {
-    proxy.$modal.msgWarning("请输入邮箱地址");
-    return;
-  }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(user.email)) {
-    proxy.$modal.msgWarning("请输入正确的邮箱格式");
-    return;
-  }
+    // 邮箱格式校验
+    if (!user.email) {
+      proxy.$modal.msgWarning("请输入邮箱地址");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(user.email)) {
+      proxy.$modal.msgWarning("请输入正确的邮箱格式");
+      return;
+    }
 
-  // 发送验证码
-  codeDisabled.value = true;
-  codeButtonText.value = "发送中...";
-  sendResetPwdEmailCode(user.email)
-    .then(() => {
-      proxy.$modal.msgSuccess("验证码已发送至您的邮箱，5分钟内有效");
-      // 倒计时逻辑
-      const timer = setInterval(() => {
-        countdown--;
-        codeButtonText.value = `${countdown}秒后重发`;
-        if (countdown <= 0) {
-          clearInterval(timer);
-          codeDisabled.value = false;
-          codeButtonText.value = "获取验证码";
-          countdown = 60; // 重置倒计时
-        }
-      }, 1000);
-    })
-    .catch(error => {
-      codeDisabled.value = false;
-      codeButtonText.value = "获取验证码";
-      proxy.$modal.msgError(error.msg || "验证码发送失败，请重试");
-    });
-}, 1000);
+    // 发送验证码
+    codeDisabled.value = true;
+    codeButtonText.value = "发送中...";
+    sendResetPwdEmailCode(user.email)
+      .then(() => {
+        proxy.$modal.msgSuccess("验证码已发送至您的邮箱，5分钟内有效");
+        // 倒计时逻辑
+        const timer = setInterval(() => {
+          countdown--;
+          codeButtonText.value = `${countdown}秒后重发`;
+          if (countdown <= 0) {
+            clearInterval(timer);
+            codeDisabled.value = false;
+            codeButtonText.value = "获取验证码";
+            countdown = 60; // 重置倒计时
+          }
+        }, 1000);
+      })
+      .catch(error => {
+        codeDisabled.value = false;
+        codeButtonText.value = "获取验证码";
+        proxy.$modal.msgError(error.msg || "验证码发送失败，请重试");
+      });
+  }, 1000);
 }
 
 /** 提交修改密码 */
 function submit() {
   proxy.$refs.pwdRef.validate(valid => {
     if (valid) {
-      loading.value = true;
-      // 1. 先验证邮箱验证码
+      // 先验证邮箱验证码
       verifyEmailCode(user.email, user.code)
-        .then(() => {
-          // 2. 验证码通过后，提交密码修改
-          return updateUserPwd(user.oldPassword, user.newPassword);
-        })
+        .then(() => updateUserPwd(user.oldPassword, user.newPassword))
         .then(() => {
           proxy.$modal.msgSuccess("密码修改成功");
-          // 3. 发送修改成功通知（可选）
-          if (currentUser.value?.email) {
-            return sendPasswordResetNotification({
-              email: currentUser.value.email,
-              userName: currentUser.value.userName
-            });
-          }
-        })
-        .then(() => {
-          resetForm(); // 清空表单
+          resetForm();
         })
         .catch(error => {
-          // 区分验证码错误和密码修改错误
           const errorMsg = error.response?.data?.msg || "操作失败，请重试";
           proxy.$modal.msgError(errorMsg);
         })
@@ -232,17 +212,22 @@ onMounted(() => {
 
 /* 验证码输入框样式 */
 .code-input {
-  flex: 1; /* 占满剩余空间 */
+  flex: 1;
+  /* 占满剩余空间 */
   height: 40px;
 }
 
 /* 验证码按钮样式 */
 .get-code-btn {
   margin-left: 10px;
-  width: 120px; /* 固定按钮宽度，确保文字不换行 */
-  height: 40px; /* 与输入框高度一致 */
-  padding: 0; /* 去除默认内边距，避免按钮过高 */
-  white-space: nowrap; /* 防止按钮文字换行 */
+  width: 120px;
+  /* 固定按钮宽度，确保文字不换行 */
+  height: 40px;
+  /* 与输入框高度一致 */
+  padding: 0;
+  /* 去除默认内边距，避免按钮过高 */
+  white-space: nowrap;
+  /* 防止按钮文字换行 */
 }
 
 /* 统一输入框样式 */
