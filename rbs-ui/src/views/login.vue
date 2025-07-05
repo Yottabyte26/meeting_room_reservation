@@ -69,7 +69,7 @@
     </div>
 
     <!-- 忘记密码弹窗 -->
-    <el-dialog v-model="forgotPasswordVisible" title="找回密码" width="400px" :close-on-click-modal="false"
+    <el-dialog v-model="forgotPasswordVisible" title="重置密码" width="400px" :close-on-click-modal="false"
       custom-class="forgot-password-dialog" :show-close="true">
       <el-form :model="forgotForm" :rules="forgotRules" ref="forgotFormRef" class="forgot-form">
         <!-- 第一步：邮箱验证 -->
@@ -103,13 +103,28 @@
         <!-- 第二步：设置新密码 -->
         <template v-if="currentStep === 2">
           <el-form-item prop="newPassword" class="form-item">
-            <el-input v-model="forgotForm.newPassword" type="password" placeholder="请设置新密码（5-20位字母加数字）"
-              :show-password="showNewPwd" @click:suffix="showNewPwd = !showNewPwd" />
+            <el-input v-model="forgotForm.newPassword" :type="showPassword ? 'text' : 'password'"  placeholder="请设置新密码（5-20位字母加数字）"
+              :show-password="showNewPwd" @click:suffix="showNewPwd = !showNewPwd" prefix-icon="Lock">
+              <template #suffix>
+                <span class="password-eye" @click="togglePasswordVisibility">
+                  <svg-icon icon-class="eye-open" />
+                  <span class="eye-slash" :class="{ 'active': !showPassword }"></span>
+                </span>
+              </template>
+            </el-input>
           </el-form-item>
 
           <el-form-item prop="confirmPassword" class="form-item">
-            <el-input v-model="forgotForm.confirmPassword" type="password" placeholder="请确认新密码"
-              :show-password="showConfirmPwd" @click:suffix="showConfirmPwd = !showConfirmPwd" @keyup.enter="submitForgotForm" />
+            <el-input v-model="forgotForm.confirmPassword" :type="showPassword ? 'text' : 'password'"  placeholder="请确认新密码"
+              :show-password="showConfirmPwd" @click:suffix="showConfirmPwd = !showConfirmPwd" 
+              @keyup.enter="submitForgotForm" prefix-icon="Lock">
+              <template #suffix>
+                <span class="password-eye" @click="togglePasswordVisibility">
+                  <svg-icon icon-class="eye-open" />
+                  <span class="eye-slash" :class="{ 'active': !showPassword }"></span>
+                </span>
+              </template>
+            </el-input>
           </el-form-item>
 
           <el-form-item class="submit-item">

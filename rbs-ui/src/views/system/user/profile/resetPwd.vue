@@ -10,8 +10,8 @@
       <el-input v-model="user.confirmPassword" placeholder="请确认新密码" type="password" show-password />
     </el-form-item>
 
-    <el-form-item label="邮箱" prop="email" class="form-item" disabled>
-      <el-input v-model="user.email" placeholder="请输入注册邮箱">
+    <el-form-item label="邮箱" prop="email" class="form-item">
+      <el-input v-model="user.email" placeholder="请输入注册邮箱" disabled>
         <template #prefix>
           <svg-icon icon-class="email" />
         </template>
@@ -36,7 +36,7 @@
 
 <script setup>
 import { ref, reactive, onMounted, getCurrentInstance, computed } from "vue";
-import { updateUserPwd, getUserProfile, sendPasswordResetNotification } from "@/api/system/user";
+import { updateUserPwd, getUserProfile } from "@/api/system/user";
 import { sendResetPwdEmailCode, verifyEmailCode } from "@/api/login";
 
 const { proxy } = getCurrentInstance();

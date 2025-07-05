@@ -63,7 +63,7 @@ public class SysEmailCodeServiceImpl implements ISysEmailCodeService {
                 return AjaxResult.error("该邮箱已被注册");
             }
         }
-        // 校验邮箱是否存在（找回密码场景）
+        // 校验邮箱是否存在（重置密码场景）
         else if (type == 2) {
             SysUser user = userMapper.selectUserByEmail(email);
             if (user == null) {
@@ -142,7 +142,7 @@ public class SysEmailCodeServiceImpl implements ISysEmailCodeService {
             helper.setTo(to);
 
             // 设置邮件主题，包含系统名称
-            String subject = type == 1 ? systemName + " - 注册验证码" : systemName + " - 找回密码验证码";
+            String subject = type == 1 ? systemName + " - 注册验证码" : systemName + " - 重置密码验证码";
             helper.setSubject(subject);
 
             // 构建 Thymeleaf 上下文
@@ -157,7 +157,7 @@ public class SysEmailCodeServiceImpl implements ISysEmailCodeService {
             context.setVariable("systemName", systemName);
 
             // 添加操作类型描述
-            context.setVariable("actionType", type == 1 ? "注册" : "找回密码");
+            context.setVariable("actionType", type == 1 ? "注册" : "重置密码");
 
             // 渲染 HTML 模板
             String htmlContent = templateEngine.process("email/code_email_template", context);
