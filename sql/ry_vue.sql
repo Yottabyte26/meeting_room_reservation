@@ -11,7 +11,7 @@
  Target Server Version : 80028
  File Encoding         : 65001
 
- Date: 05/07/2025 16:04:22
+ Date: 05/07/2025 16:55:22
 */
 
 SET NAMES utf8mb4;
@@ -514,7 +514,7 @@ CREATE TABLE `sys_email_code`  (
   `expire_time` datetime(0) NOT NULL COMMENT '过期时间',
   `create_time` datetime(0) NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 41 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '邮箱验证码表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 54 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '邮箱验证码表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_email_code
@@ -577,7 +577,7 @@ CREATE TABLE `sys_job_log`  (
   `exception_info` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '异常信息',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`job_log_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '定时任务调度日志表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '定时任务调度日志表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_job_log
@@ -600,7 +600,7 @@ CREATE TABLE `sys_logininfor`  (
   PRIMARY KEY (`info_id`) USING BTREE,
   INDEX `idx_sys_logininfor_s`(`status`) USING BTREE,
   INDEX `idx_sys_logininfor_lt`(`login_time`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 447 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统访问记录' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 490 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统访问记录' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_logininfor
@@ -992,6 +992,10 @@ INSERT INTO `sys_logininfor` VALUES (483, 'admin', '127.0.0.1', '内网IP', 'Chr
 INSERT INTO `sys_logininfor` VALUES (484, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-05 14:41:32');
 INSERT INTO `sys_logininfor` VALUES (485, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-05 14:43:29');
 INSERT INTO `sys_logininfor` VALUES (486, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-05 15:57:46');
+INSERT INTO `sys_logininfor` VALUES (487, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-05 16:07:01');
+INSERT INTO `sys_logininfor` VALUES (488, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2025-07-05 16:14:40');
+INSERT INTO `sys_logininfor` VALUES (489, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-05 16:14:57');
+INSERT INTO `sys_logininfor` VALUES (490, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2025-07-05 16:53:29');
 
 -- ----------------------------
 -- Table structure for sys_meeting_notification
@@ -1011,7 +1015,7 @@ CREATE TABLE `sys_meeting_notification`  (
   INDEX `idx_user_id`(`user_id`) USING BTREE,
   INDEX `idx_type`(`type`) USING BTREE,
   INDEX `idx_status`(`status`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '会议室通知记录表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '会议室通知记录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_meeting_notification
@@ -1046,7 +1050,7 @@ CREATE TABLE `sys_meeting_reservation`  (
   INDEX `idx_status`(`status`) USING BTREE,
   INDEX `idx_start_end_time`(`start_time`, `end_time`) USING BTREE,
   CONSTRAINT `fk_reservation_dept` FOREIGN KEY (`dept_id`) REFERENCES `sys_dept` (`dept_id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 106 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '会议室预订表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 107 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '会议室预订表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_meeting_reservation
@@ -1284,7 +1288,7 @@ CREATE TABLE `sys_notice`  (
   PRIMARY KEY (`notice_id`) USING BTREE,
   INDEX `fk_notice_receiver_id`(`receiver_id`) USING BTREE,
   CONSTRAINT `fk_notice_receiver_id` FOREIGN KEY (`receiver_id`) REFERENCES `sys_user` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '通知公告表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '通知公告表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_notice
@@ -1324,7 +1328,7 @@ CREATE TABLE `sys_oper_log`  (
   INDEX `idx_sys_oper_log_bt`(`business_type`) USING BTREE,
   INDEX `idx_sys_oper_log_s`(`status`) USING BTREE,
   INDEX `idx_sys_oper_log_ot`(`oper_time`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 537 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志记录' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 594 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志记录' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_oper_log
@@ -1822,6 +1826,9 @@ INSERT INTO `sys_oper_log` VALUES (589, '会议室信息', 2, 'com.rbs.system.co
 INSERT INTO `sys_oper_log` VALUES (590, '用户管理', 2, 'com.rbs.web.controller.system.SysUserController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/user', '127.0.0.1', '内网IP', '{\"admin\":true,\"avatar\":\"https://pic1.imgdb.cn/item/686899a5f8595c5440cf3e05.jpg\",\"createBy\":\"admin\",\"createTime\":\"2025-05-31 17:38:05\",\"delFlag\":\"0\",\"dept\":{\"children\":[],\"deptId\":103,\"deptName\":\"研发部门\",\"leader\":\"若依\",\"params\":{},\"status\":\"0\"},\"deptId\":103,\"email\":\"2494487782@qq.com\",\"loginDate\":\"2025-07-05 14:43:30\",\"loginIp\":\"127.0.0.1\",\"nickName\":\"若依\",\"params\":{},\"phonenumber\":\"15888888888\",\"pwdUpdateDate\":\"2025-07-05 00:55:11\",\"remark\":\"管理员\",\"roleIds\":[],\"roles\":[],\"sex\":\"1\",\"status\":\"0\",\"userId\":1,\"userName\":\"admin\"}', NULL, 1, '不允许操作超级管理员用户', '2025-07-05 15:27:28', 2);
 INSERT INTO `sys_oper_log` VALUES (591, '用户管理', 2, 'com.rbs.web.controller.system.SysUserController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/user', '127.0.0.1', '内网IP', '{\"admin\":true,\"avatar\":\"https://pic1.imgdb.cn/item/686899a5f8595c5440cf3e05.jpg\",\"createBy\":\"admin\",\"createTime\":\"2025-05-31 17:38:05\",\"delFlag\":\"0\",\"dept\":{\"children\":[],\"deptId\":103,\"deptName\":\"研发部门\",\"leader\":\"若依\",\"params\":{},\"status\":\"0\"},\"deptId\":103,\"email\":\"2494487782@qq.com\",\"loginDate\":\"2025-07-05 14:43:30\",\"loginIp\":\"127.0.0.1\",\"nickName\":\"若依\",\"params\":{},\"phonenumber\":\"15888888888\",\"pwdUpdateDate\":\"2025-07-05 00:55:11\",\"remark\":\"管理员\",\"roleIds\":[],\"roles\":[],\"sex\":\"1\",\"status\":\"0\",\"userId\":1,\"userName\":\"admin\"}', NULL, 1, '不允许操作超级管理员用户', '2025-07-05 15:27:48', 1);
 INSERT INTO `sys_oper_log` VALUES (592, '用户头像', 2, 'com.rbs.web.controller.system.SysProfileController.avatar()', 'POST', 1, 'admin', '研发部门', '/system/user/profile/avatar', '127.0.0.1', '内网IP', '', '{\"msg\":\"操作成功\",\"imgUrl\":\"/profile/avatar/2025/07/05/红薯_20250705160212A001.jpg\",\"code\":200}', 0, NULL, '2025-07-05 16:02:12', 155);
+INSERT INTO `sys_oper_log` VALUES (593, '用户头像', 2, 'com.rbs.web.controller.system.SysProfileController.avatar()', 'POST', 1, 'admin', '研发部门', '/system/user/profile/avatar', '127.0.0.1', '内网IP', '', '{\"msg\":\"操作成功\",\"imgUrl\":\"/profile/avatar/2025/07/05/酱香饼_20250705160843A001.jpg\",\"code\":200}', 0, NULL, '2025-07-05 16:08:43', 94);
+INSERT INTO `sys_oper_log` VALUES (594, '用户头像', 2, 'com.rbs.web.controller.system.SysProfileController.avatar()', 'POST', 1, 'admin', '研发部门', '/system/user/profile/avatar', '127.0.0.1', '内网IP', '', '{\"msg\":\"操作成功\",\"imgUrl\":\"/profile/avatar/2025/07/05/红薯_20250705163440A002.jpg\",\"code\":200}', 0, NULL, '2025-07-05 16:34:40', 20);
+INSERT INTO `sys_oper_log` VALUES (595, '用户头像', 2, 'com.rbs.web.controller.system.SysProfileController.avatar()', 'POST', 1, 'admin', '研发部门', '/system/user/profile/avatar', '127.0.0.1', '内网IP', '', '{\"msg\":\"操作成功\",\"imgUrl\":\"/profile/avatar/2025/07/05/鸡肉_20250705163913A003.jpg\",\"code\":200}', 0, NULL, '2025-07-05 16:39:13', 14);
 
 -- ----------------------------
 -- Table structure for sys_post
@@ -1963,7 +1970,7 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', '2494487782@qq.com', '15888888888', '1', '/profile/avatar/2025/07/05/红薯_20250705160212A001.jpg', '$2a$10$TxTFzLP7Ko8xesrY71urkeqfMQOS6.Z18mWHAMgoQkPJW43wnjx6S', '0', '0', '127.0.0.1', '2025-07-05 15:57:46', '2025-07-05 00:55:11', 'admin', '2025-05-31 17:38:05', 'system', '2025-07-05 15:57:46', '管理员');
+INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', '2494487782@qq.com', '15888888888', '1', 'https://pic1.imgdb.cn/item/6868d323f8595c5440cf785c.png', '$2a$10$TxTFzLP7Ko8xesrY71urkeqfMQOS6.Z18mWHAMgoQkPJW43wnjx6S', '0', '0', '127.0.0.1', '2025-07-05 16:53:30', '2025-07-05 00:55:11', 'admin', '2025-05-31 17:38:05', 'system', '2025-07-05 16:53:29', '管理员');
 INSERT INTO `sys_user` VALUES (2, 105, 'ry', '若依', '00', 'ry@qq.com', '15666666666', '1', 'https://pic1.imgdb.cn/item/6868981df8595c5440cf3d1e.jpg', '$2a$10$aSzcPOJJOePikcEgPEuHpuiXaCO.Cb.bs./uLzBPyjxRZBO.cQiNu', '0', '0', '127.0.0.1', '2025-05-31 17:38:05', '2025-05-31 17:38:05', 'admin', '2025-05-31 17:38:05', 'admin', '2025-07-05 11:33:26', '测试员');
 INSERT INTO `sys_user` VALUES (100, 103, '123456', '123456', '00', 'huang@qq.com', '13421234567', '0', 'https://pic1.imgdb.cn/item/686899a5f8595c5440cf3e05.jpg', '$2a$10$8p2AsJF/xk4rMr3oijoiMO/3mZp0bGUDhKxGFcHL2TBpGdNa.99my', '0', '0', '127.0.0.1', '2025-07-03 18:53:11', '2025-06-08 20:38:54', '', '2025-06-08 20:38:54', 'admin', '2025-07-05 11:32:23', NULL);
 INSERT INTO `sys_user` VALUES (101, 105, 'abab', 'abab', '00', 'huang2@qq.com', '', '1', 'https://pic1.imgdb.cn/item/68689846f8595c5440cf3d41.jpg', '$2a$10$46uaZ3xkE4.dj2HVIzXBZ.s/IDEZG3KF4JdXzbBvR7gguw7RpZVnu', '0', '0', '127.0.0.1', '2025-06-09 20:56:21', '2025-06-09 20:56:05', '', '2025-06-09 20:56:05', 'admin', '2025-07-05 11:33:37', '123456');

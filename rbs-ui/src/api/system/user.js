@@ -108,6 +108,14 @@ export function uploadAvatar(data) {
     data: data
   })
 }
+// 接受url的头像
+export function uploadAvatarByUrl(url) {
+  return request({
+    url: '/system/user/profile/avatarByUrl',
+    method: 'post',
+    data: { avatar: url }
+  })
+}
 
 // 查询授权角色
 export function getAuthRole(userId) {

@@ -115,7 +115,20 @@ public class SysProfileController extends BaseController
         }
         return error("修改密码异常，请联系管理员");
     }
-
+    @PostMapping("/avatarByUrl")
+    public AjaxResult avatarByUrl(@RequestBody Map<String, String> params) {
+        String url = params.get("avatar");
+        LoginUser loginUser = getLoginUser();
+        if (userService.updateUserAvatar(loginUser.getUsername(), url)) {
+            AjaxResult ajax = AjaxResult.success();
+            ajax.put("imgUrl", url);
+            // 更新缓存用户头像
+            loginUser.getUser().setAvatar(url);
+            tokenService.setLoginUser(loginUser);
+            return ajax;
+        }
+        return error("保存头像失败");
+    }
     /**
      * 头像上传
      */

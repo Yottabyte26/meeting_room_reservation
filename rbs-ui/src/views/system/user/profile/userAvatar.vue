@@ -49,7 +49,7 @@
 <script setup>
 import "vue-cropper/dist/index.css";
 import { VueCropper } from "vue-cropper";
-import { uploadAvatar } from "@/api/system/user";
+import { uploadAvatar, listUser, getUser, uploadAvatarByUrl } from "@/api/system/user";
 import useUserStore from "@/store/modules/user";
 import { getUploadToken } from "@/api/system/room"
 import axios from "axios";
@@ -62,7 +62,7 @@ const title = ref("修改头像");
 
 //图片裁剪数据
 const options = reactive({
-  img: userStore.avatar,     // 裁剪图片的地址
+  img: "",     // 裁剪图片的地址
   autoCrop: true,            // 是否默认生成截图框
   autoCropWidth: 200,        // 默认生成截图框宽度
   autoCropHeight: 200,       // 默认生成截图框高度
@@ -71,6 +71,7 @@ const options = reactive({
   filename: 'avatar',        // 文件名称
   previews: {}               //预览数据
 });
+
 
 /** 编辑头像 */
 function editCropper() {
@@ -108,12 +109,18 @@ function beforeUpload(file) {
     };
   }
 }
-
+function getList() {
+  getUser(userStore.id).then(res => {
+    options.img = res.data.avatar;
+    console.log("!!!!", res)
+  });
+};
 const uploadToken = ref(""); // 响应式变量
 onMounted(() => {
   getUploadToken().then(res => {
     uploadToken.value = res.token;
   });
+  getList();
 });
 function uploadImg() {
   proxy.$refs.cropper.getCropBlob(data => {
@@ -125,10 +132,9 @@ function uploadImg() {
       headers: { "Content-Type": "multipart/form-data" }
     }).then(res => {
       const url = res.data.urls[0];
-      // 保存到数据库
-      let avatarForm = new FormData();
-      avatarForm.append("avatarfile", data, options.filename);
-      uploadAvatar(avatarForm).then(response => {
+      // let avatarForm = new FormData();
+      // avatarForm.append("avatarfile", url);
+      uploadAvatarByUrl(url).then(response => {
         open.value = false;
         options.img = url;
         userStore.avatar = url;
