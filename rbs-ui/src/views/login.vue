@@ -11,27 +11,28 @@
             <h3 class="title">登录</h3>
           </div>
           <el-form-item prop="username">
-            <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="用户名/手机号/邮箱">
+            <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="用户名/手机号/邮箱" prefix-icon="User">
             </el-input>
           </el-form-item>
 
 
-<el-form-item prop="password">
-  <el-input 
-    v-model="loginForm.password" 
-    :type="showPassword ? 'text' : 'password'" 
-    auto-complete="off"
-    placeholder="请输入您的密码（5-20位字母加数字）" 
-    @keyup.enter="handleLogin"
-  >
-    <template #suffix>
-      <span class="password-eye" @click="togglePasswordVisibility">
-        <svg-icon icon-class="eye-open" />
-        <span class="eye-slash" :class="{ 'active': !showPassword }"></span>
-      </span>
-    </template>
-  </el-input>
-</el-form-item>
+          <el-form-item prop="password">
+            <el-input 
+              v-model="loginForm.password" 
+              :type="showPassword ? 'text' : 'password'" 
+              auto-complete="off"
+              placeholder="请输入您的密码（5-20位字母加数字）" 
+              @keyup.enter="handleLogin"
+              prefix-icon="Lock"
+            >
+              <template #suffix>
+                <span class="password-eye" @click="togglePasswordVisibility">
+                  <svg-icon icon-class="eye-open" />
+                  <span class="eye-slash" :class="{ 'active': !showPassword }"></span>
+                </span>
+              </template>
+            </el-input>
+          </el-form-item>
 
           <el-form-item prop="code" v-if="captchaEnabled">
             <el-input v-model="loginForm.code" size="large" auto-complete="off" placeholder="验证码" style="width: 63%"
@@ -74,7 +75,7 @@
         <!-- 第一步：邮箱验证 -->
         <template v-if="currentStep === 1">
           <el-form-item prop="email" class="form-item">
-            <el-input v-model="forgotForm.email" placeholder="请输入注册邮箱">
+            <el-input v-model="forgotForm.email" placeholder="请输入注册邮箱" @keyup.enter="sendResetCode">
               <template #prefix>
                 <svg-icon icon-class="email" />
               </template>
@@ -83,7 +84,7 @@
 
           <el-form-item prop="code" class="form-item">
             <div class="code-input">
-              <el-input v-model="forgotForm.code" placeholder="请输入6位验证码" maxlength="6" />
+              <el-input v-model="forgotForm.code" placeholder="请输入6位验证码" maxlength="6"  @keyup.enter="nextStep"/>
               <el-button style="margin-left: 10px; width: 50%; height: 100%;" type="primary" :disabled="codeDisabled"
                 @click="sendResetCode" class="code-button">
                 {{ codeButtonText }}
@@ -108,11 +109,11 @@
 
           <el-form-item prop="confirmPassword" class="form-item">
             <el-input v-model="forgotForm.confirmPassword" type="password" placeholder="请确认新密码"
-              :show-password="showConfirmPwd" @click:suffix="showConfirmPwd = !showConfirmPwd" />
+              :show-password="showConfirmPwd" @click:suffix="showConfirmPwd = !showConfirmPwd" @keyup.enter="submitForgotForm" />
           </el-form-item>
 
           <el-form-item class="submit-item">
-            <el-button type="primary" @click="submitForgotForm" class="step-button" :loading="submitLoading">
+            <el-button type="primary" @click="submitForgotForm" class="step-button" :loading="submitLoading" :disabled="!forgotForm.newPassword || !forgotForm.confirmPassword || submitLoading">
               确认重置
             </el-button>
             <el-button type="default" @click="onCancel" class="step-button cancel-button">
@@ -626,54 +627,6 @@ const resetForgotForm = () => {
   width: 100%;
   margin-top: 10px;
 }
-
-// .wechat-login-content {
-//   text-align: center;
-//   padding: 10px;
-// }
-
-// .qrcode-placeholder {
-//   width: 220px;
-//   height: 220px;
-//   margin: 0 auto 15px;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   justify-content: center;
-//   background: #f5f5f5;
-//   border-radius: 8px;
-//   transition: all 0.3s ease;
-
-//   .qrcode-icon {
-//     font-size: 80px;
-//     color: #07C160;
-//     margin-bottom: 15px;
-//   }
-
-//   p {
-//     color: #333;
-//     font-size: 16px;
-//   }
-
-//   &:hover {
-//     box-shadow: 0 0 10px rgba(7, 193, 96, 0.2);
-//   }
-// }
-
-// .tip {
-//   color: #888;
-//   margin-bottom: 20px;
-// }
-
-// .mobile-tip {
-//   padding: 30px 0;
-
-//   .wechat-icon {
-//     font-size: 60px;
-//     color: #07C160;
-//     margin-bottom: 15px;
-//   }
-// }
 
 .close-button {
   margin-top: 20px;

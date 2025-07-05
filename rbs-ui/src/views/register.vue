@@ -13,7 +13,7 @@
           </div>
           <!-- 账号输入 -->
           <el-form-item prop="username">
-            <el-input v-model="registerForm.username" type="text" auto-complete="off" placeholder="请输入账号">
+            <el-input v-model="registerForm.username" type="text" auto-complete="off" placeholder="请输入账号"  prefix-icon="User">
             </el-input>
           </el-form-item>
 
@@ -26,41 +26,43 @@
             </el-input>
           </el-form-item>
 
-<!-- 密码输入 -->
-<el-form-item prop="password">
-  <el-input 
-    v-model="registerForm.password" 
-    :type="showPassword ? 'text' : 'password'" 
-    auto-complete="off" 
-    placeholder="请输入密码(5-20位数字)"
-    @keyup.enter.native="handleRegister"
-  >
-    <template #suffix>
-      <span class="password-eye" @click.stop="togglePasswordVisibility">
-        <svg-icon icon-class="eye-open" />
-        <span class="eye-slash" :class="{ 'active': !showPassword }"></span>
-      </span>
-    </template>
-  </el-input>
-</el-form-item>
+          <!-- 密码输入 -->
+          <el-form-item prop="password">
+            <el-input 
+              v-model="registerForm.password" 
+              :type="showPassword ? 'text' : 'password'" 
+              auto-complete="off" 
+              placeholder="请输入密码(5-20位数字)"
+              @keyup.enter.native="handleRegister"
+              prefix-icon="Lock"
+            >
+              <template #suffix>
+                <span class="password-eye" @click.stop="togglePasswordVisibility">
+                  <svg-icon icon-class="eye-open" />
+                  <span class="eye-slash" :class="{ 'active': !showPassword }"></span>
+                </span>
+              </template>
+            </el-input>
+          </el-form-item>
 
-<!-- 确认密码输入 -->
-<el-form-item prop="confirmPassword">
-  <el-input 
-    v-model="registerForm.confirmPassword" 
-    :type="showConfirmPassword ? 'text' : 'password'" 
-    auto-complete="off" 
-    placeholder="请再次输入密码(5-20位数字)"
-    @keyup.enter.native="handleRegister"
-  >
-    <template #suffix>
-      <span class="password-eye" @click.stop="toggleConfirmPasswordVisibility">
-        <svg-icon icon-class="eye-open" />
-        <span class="eye-slash" :class="{ 'active': !showConfirmPassword }"></span>
-      </span>
-    </template>
-  </el-input>
-</el-form-item>
+          <!-- 确认密码输入 -->
+          <el-form-item prop="confirmPassword">
+            <el-input 
+              v-model="registerForm.confirmPassword" 
+              :type="showConfirmPassword ? 'text' : 'password'" 
+              auto-complete="off" 
+              placeholder="请再次输入密码(5-20位数字)"
+              @keyup.enter="handleSendCode"
+              prefix-icon="Lock"
+            >
+              <template #suffix>
+                <span class="password-eye" @click.stop="toggleConfirmPasswordVisibility">
+                  <svg-icon icon-class="eye-open" />
+                  <span class="eye-slash" :class="{ 'active': !showConfirmPassword }"></span>
+                </span>
+              </template>
+            </el-input>
+          </el-form-item>
 
           <!-- 邮箱验证码区域 -->
           <el-form-item prop="code">
