@@ -59,11 +59,11 @@
 <body>
 <div class="container">
     <div class="header">
-        <h2>账号安全验证</h2>
+        <h2>会议室预定管理系统-账号安全验证</h2>
     </div>
     <div class="content">
         <p>尊敬的用户：</p>
-        <p>您正在进行账号注册/登录操作，请在验证码有效期内完成验证：</p>
+        <p>您正在进行账号<span th:text="${actionType}"></span>操作，请在验证码有效期内完成验证：</p>
         <div class="code-box">
             <span class="code" th:text="${code}"></span>
         </div>

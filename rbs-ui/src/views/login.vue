@@ -55,19 +55,6 @@
             <div class="forgot-password">
               <span class="link-type" @click="forgotPasswordVisible = true">已有账号，忘记密码？</span>
             </div>
-
-            <!-- <div class="wechat-login-container">
-              <div class="login-divider">
-                <span class="divider-line"></span>
-                <span class="divider-text">使用其他账号登录</span>
-                <span class="divider-line"></span>
-              </div>
-              
-              <div class="wechat-login-btn" @click="wechatLoginVisible = true">
-                <svg-icon icon-class="wechat" class="wechat-icon" />
-                <span>微信登录</span>
-              </div>
-            </div> -->
           </el-form-item>
 
           <div class="goregister">

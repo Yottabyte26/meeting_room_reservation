@@ -13,6 +13,9 @@ ruoyi:
   # 验证码类型 math 数字计算 char 字符验证
   captchaType: math
 
+rbs:
+  name: 会议室预定管理系统
+
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为8080
@@ -47,6 +50,12 @@ user:
 
 # Spring配置
 spring:
+  thymeleaf:
+    prefix: classpath:/templates/  # 模板文件所在目录，与我们创建的目录对应
+    suffix: .html  # 模板文件后缀
+    encoding: UTF-8
+    mode: HTML5
+    cache: false  # 开发时关闭缓存，方便实时看到模板修改效果，生产环境可开启
   mail:
     host: smtp.qq.com  # qq邮箱SMTP服务器
     username: 3247106194@qq.com

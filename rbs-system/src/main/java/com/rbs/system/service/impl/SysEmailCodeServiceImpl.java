@@ -10,12 +10,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
+import javax.mail.internet.MimeMessage;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
@@ -34,8 +38,14 @@ public class SysEmailCodeServiceImpl implements ISysEmailCodeService {
     @Autowired
     private JavaMailSender mailSender;
 
+    @Autowired
+    private TemplateEngine templateEngine;
+
     @Value("${spring.mail.username}")
     private String fromEmail;  // 发件人邮箱
+
+    @Value("${rbs.name:会议室预定管理系统}")
+    private String systemName;  // 系统名称
 
     // 验证码有效期：5分钟
     private static final int EXPIRE_MINUTES = 5;
@@ -83,7 +93,7 @@ public class SysEmailCodeServiceImpl implements ISysEmailCodeService {
         log.info("验证码已保存到数据库，邮箱：{}，类型：{}", email, type);
 
         // 异步发送邮件
-        sendEmailAsync(email, code, type);
+        sendEmailAsync(email, code, type, newCode.getExpireTime());
 
         log.info("验证码请求处理完成，已开始异步发送邮件，邮箱：{}", email);
         return AjaxResult.success("验证码已发送至邮箱，5分钟内有效");
@@ -122,15 +132,36 @@ public class SysEmailCodeServiceImpl implements ISysEmailCodeService {
 
     // 异步发送邮件
     @Async("taskExecutor") // 指定使用异步线程池
-    public CompletableFuture<Boolean> sendEmailAsync(String to, String code, Integer type) {
+    public CompletableFuture<Boolean> sendEmailAsync(String to, String code, Integer type, Date expireTime) {
         log.info("开始异步发送邮件，收件人：{}，验证码：{}", to, code);
 
         try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom(fromEmail);
-            message.setTo(to);
-            message.setSubject(type == 1 ? "注册验证码" : "找回密码验证码");
-            message.setText("您的验证码是：" + code + "，有效期5分钟，请勿泄露给他人。");
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setFrom(fromEmail);
+            helper.setTo(to);
+
+            // 设置邮件主题，包含系统名称
+            String subject = type == 1 ? systemName + " - 注册验证码" : systemName + " - 找回密码验证码";
+            helper.setSubject(subject);
+
+            // 构建 Thymeleaf 上下文
+            Context context = new Context();
+            context.setVariable("code", code);
+
+            // 格式化时间为更友好的格式
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            context.setVariable("expireTime", dateFormat.format(expireTime));
+
+            // 添加系统名称变量
+            context.setVariable("systemName", systemName);
+
+            // 添加操作类型描述
+            context.setVariable("actionType", type == 1 ? "注册" : "找回密码");
+
+            // 渲染 HTML 模板
+            String htmlContent = templateEngine.process("email/code_email_template", context);
+            helper.setText(htmlContent, true);
 
             long startTime = System.currentTimeMillis();
             mailSender.send(message);
@@ -150,24 +181,28 @@ public class SysEmailCodeServiceImpl implements ISysEmailCodeService {
         // 直接调用现有方法，指定类型为1（注册）
         return sendCode(email, 1);
     }
+
     @Override
     @Async("taskExecutor")
     public CompletableFuture<Boolean> sendPasswordResetNotification(String email, String userName, String newPassword) {
         log.info("开始发送密码重置通知邮件，收件人：{}，用户名：{}", email, userName);
 
         try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom(fromEmail);
-            message.setTo(email);
-            message.setSubject("密码重置通知");
-            message.setText(String.format(
-                    "尊敬的 %s 用户：\n\n" +
-                            "您的密码已被管理员重置为：%s\n\n" +
-                            "请使用新密码登录系统，建议您登录后及时修改密码以确保账户安全。\n\n" +
-                            "如果这不是您本人的操作，请及时联系管理员。\n\n" +
-                            "此邮件由系统自动发送，请勿回复。",
-                    userName, newPassword
-            ));
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setFrom(fromEmail);
+            helper.setTo(email);
+            helper.setSubject(systemName + " - 密码重置通知");
+
+            // 构建 Thymeleaf 上下文
+            Context context = new Context();
+            context.setVariable("userName", userName);
+            context.setVariable("newPassword", newPassword);
+            context.setVariable("systemName", systemName);
+
+            // 渲染密码重置模板
+            String htmlContent = templateEngine.process("email/password-reset", context);
+            helper.setText(htmlContent, true);
 
             long startTime = System.currentTimeMillis();
             mailSender.send(message);
@@ -184,6 +219,8 @@ public class SysEmailCodeServiceImpl implements ISysEmailCodeService {
     /**
      * 发送密码重置通知邮件（同步版本，供Controller调用）
      */
+    @Override
+    @Async("taskExecutor")
     public void sendPasswordResetNotificationSync(String email, String userName, String newPassword) {
         try {
             CompletableFuture<Boolean> future = sendPasswordResetNotification(email, userName, newPassword);

@@ -162,7 +162,7 @@ public interface SysUserMapper
      * @return 影响行数
      */
     public int updatePasswordByEmail(
-            @Param("email") String email,
+            @Param("templates/email") String email,
             @Param("newPassword") String newPassword,
             @Param("updateBy") String updateBy
     );

@@ -285,19 +285,13 @@ public class SysUserController extends BaseController
             return AjaxResult.error("参数不能为空");
         }
 
-        // 1. 验证验证码是否正确
-//        boolean isValid = emailCodeService.validateCode(email, code, 2); // 2表示找回密码类型
-//        if (!isValid) {
-//            return AjaxResult.error("验证码错误或已过期");
-//        }
-
-        // 2. 通过邮箱查询用户
+        // 通过邮箱查询用户
         SysUser user = userService.selectUserByEmail(email);
         if (user == null) {
             return AjaxResult.error("该邮箱未注册");
         }
 
-        // 3. 更新密码（注意：需要加密存储）
+        // 更新密码（注意：需要加密存储）
         user.setPassword(SecurityUtils.encryptPassword(newPassword)); // 加密新密码
         user.setUpdateBy("system"); // 重置密码的操作人可设为system
         userService.updateUser(user);
