@@ -455,7 +455,7 @@ const resetForgotForm = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 950px;
+  width: 980px;
   margin: 0 auto;
   border-radius: 20px;
   overflow: hidden;
@@ -465,11 +465,11 @@ const resetForgotForm = () => {
 .login-image-container {
   position: relative;
   width: 500px;
-  height: 550px;
+  height: 600px;
 }
 
 .login-image-container img {
-  height: 550px;
+  height: 600px;
   width: 500px;
   object-fit: cover;
   border-top-left-radius: 20px;
@@ -478,7 +478,7 @@ const resetForgotForm = () => {
 
 .system-title {
   position: absolute;
-  top: 85px;
+  top: 83px;
   left: 50%;
   transform: translateX(-50%);
   color: #696666;
@@ -493,26 +493,27 @@ const resetForgotForm = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
-  margin-bottom: 10px;
+  margin-top: 0px;
+  margin-bottom: 30px;
 }
 
 .title {
-  margin: 0px auto 30px auto;
+  margin: 0px auto 40px auto;
   text-align: center;
   color: rgb(111, 113, 113);
   font-weight: bold;
-  margin-bottom: 25px;
+  margin-bottom: 18px;
   font-size: 25px;
 }
 
 .login-form {
-  width: 450px;
+  width: 480px;
   background: #ffffff;
-  height: 550px;
-  padding: 40px 30px;
+  height: 600px;
+  padding: 85px 30px 40px; /* 关键修改：增加顶部内边距，让内容整体下移 */
   border-top-right-radius: 20px;
-  border-bottom-right-radius: px;
+  border-bottom-right-radius: 20px; /* 补充右下角圆角，与注册页统一 */
+  box-sizing: border-box; /* 确保内边距不会增加容器总高度 */
 }
 
 .login-form .el-input {
@@ -611,7 +612,7 @@ const resetForgotForm = () => {
 }
 
 .goregister {
-  margin-top: 18px;
+  margin-top: 19px;
   font-size: 14px;
 }
 
@@ -639,53 +640,53 @@ const resetForgotForm = () => {
   margin-top: 10px;
 }
 
-.wechat-login-content {
-  text-align: center;
-  padding: 10px;
-}
+// .wechat-login-content {
+//   text-align: center;
+//   padding: 10px;
+// }
 
-.qrcode-placeholder {
-  width: 220px;
-  height: 220px;
-  margin: 0 auto 15px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: #f5f5f5;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+// .qrcode-placeholder {
+//   width: 220px;
+//   height: 220px;
+//   margin: 0 auto 15px;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   justify-content: center;
+//   background: #f5f5f5;
+//   border-radius: 8px;
+//   transition: all 0.3s ease;
 
-  .qrcode-icon {
-    font-size: 80px;
-    color: #07C160;
-    margin-bottom: 15px;
-  }
+//   .qrcode-icon {
+//     font-size: 80px;
+//     color: #07C160;
+//     margin-bottom: 15px;
+//   }
 
-  p {
-    color: #333;
-    font-size: 16px;
-  }
+//   p {
+//     color: #333;
+//     font-size: 16px;
+//   }
 
-  &:hover {
-    box-shadow: 0 0 10px rgba(7, 193, 96, 0.2);
-  }
-}
+//   &:hover {
+//     box-shadow: 0 0 10px rgba(7, 193, 96, 0.2);
+//   }
+// }
 
-.tip {
-  color: #888;
-  margin-bottom: 20px;
-}
+// .tip {
+//   color: #888;
+//   margin-bottom: 20px;
+// }
 
-.mobile-tip {
-  padding: 30px 0;
+// .mobile-tip {
+//   padding: 30px 0;
 
-  .wechat-icon {
-    font-size: 60px;
-    color: #07C160;
-    margin-bottom: 15px;
-  }
-}
+//   .wechat-icon {
+//     font-size: 60px;
+//     color: #07C160;
+//     margin-bottom: 15px;
+//   }
+// }
 
 .close-button {
   margin-top: 20px;
