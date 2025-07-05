@@ -74,8 +74,9 @@
       @pagination="getList" 
     />
 
+
  <!-- 预定弹窗-->
-    <el-dialog :title="title" v-model="open" width="600px" append-to-body>
+    <el-dialog :title="title" v-model="open" width="600px"  style="position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%);" append-to-body>
       <el-form ref="reservationRef" :model="form" :rules="rules" label-width="100px">
         <el-row>
           <el-col :span="12">
@@ -137,6 +138,9 @@
         </div>
       </template>
     </el-dialog>
+
+
+
   </div>
 </template>
 
