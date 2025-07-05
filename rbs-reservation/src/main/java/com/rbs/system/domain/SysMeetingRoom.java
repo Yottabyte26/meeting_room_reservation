@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.rbs.common.annotation.Excel;
 import com.rbs.common.core.domain.BaseEntity;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * 会议室信息对象 sys_meeting_room

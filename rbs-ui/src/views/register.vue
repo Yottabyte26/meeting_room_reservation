@@ -318,7 +318,7 @@ const handleRegister = () => {
 }
 
 .register-image-container img {
-  height: 550px;
+  height: 600px;
   width: 500px;
   object-fit: cover;
   border-top-left-radius: 20px;
@@ -403,8 +403,8 @@ const handleRegister = () => {
 
 .register-form {
   background: #ffffff;
-  width: 450px;
-  height: 550px;
+  width: 480px;
+  height: 600px;
   padding: 25px 30px;
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;

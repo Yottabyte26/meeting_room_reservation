@@ -35,10 +35,18 @@ export function updateRoom(data) {
   })
 }
 
+
 // 删除会议室信息
 export function delRoom(roomId) {
   return request({
     url: '/system/room/' + roomId,
     method: 'delete'
+  })
+}
+// 获取上传图片的token
+export function getUploadToken() {
+  return request({
+    url: '/system/room//picture/upload-token',
+    method: 'get'
   })
 }
