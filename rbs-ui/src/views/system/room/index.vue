@@ -112,8 +112,29 @@
         <el-form-item label="会议室描述" prop="description">
           <el-input v-model="form.description" type="textarea" placeholder="请输入内容" />
         </el-form-item>
-          <el-form-item label="会议室图像" prop="roomImage">
-          <image-upload v-model="form.roomImage" :limit="1" />
+        <el-form-item label="会议室图像" prop="roomImage">
+          <div class="custom-upload-wrapper" @mouseenter="hover = true" @mouseleave="hover = false">
+            <el-upload class="avatar-uploader" :show-file-list="false" :before-upload="handleUpload"
+              accept="image/png,image/jpeg" list-type="picture-card">
+              <img v-if="form.roomImage" :src="form.roomImage" class="avatar" />
+              <el-icon v-else>
+                <Plus />
+              </el-icon>
+            </el-upload>
+            <!-- 悬浮操作区 -->
+            <div v-if="form.roomImage && hover" class="upload-action-bar">
+              <el-tooltip content="更换图片" placement="top">
+                <el-icon class="action-icon" @click="triggerUpload">
+                  <Plus />
+                </el-icon>
+              </el-tooltip>
+              <el-tooltip content="删除图片" placement="top">
+                <el-icon class="action-icon" @click="removeImage">
+                  <Delete />
+                </el-icon>
+              </el-tooltip>
+            </div>
+          </div>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
@@ -130,8 +151,9 @@
 </template>
 
 <script setup name="Room">
-import { listRoom, getRoom, delRoom, addRoom, updateRoom } from "@/api/system/room"
+import { listRoom, getRoom, delRoom, addRoom, updateRoom, getUploadToken } from "@/api/system/room"
 import { listReservation } from "@/api/system/reservation"
+import axios from "axios";
 const { proxy } = getCurrentInstance()
 
 const roomList = ref([])
@@ -144,6 +166,7 @@ const multiple = ref(true)
 const total = ref(0)
 const title = ref("")
 const reservationList = ref([])
+const hover = ref(false)
 const data = reactive({
   form: {},
   roomTypeOptions: [
@@ -196,6 +219,49 @@ function getList() {
   })
 
 }
+
+const uploadToken = ref(""); // 响应式变量
+onMounted(() => {
+  getUploadToken().then(res => {
+    uploadToken.value = res.token;
+  });
+});
+// 触发上传
+function triggerUpload(e) {
+  // 阻止事件冒泡，防止触发el-upload的点击
+  e.stopPropagation()
+  // 触发el-upload的input[type=file]
+  document.querySelector('.avatar-uploader input[type=file]').click()
+}
+
+// 删除图片
+function removeImage(e) {
+  e.stopPropagation()
+  form.value.roomImage = ''
+}
+function handleUpload(file) {
+  if (!uploadToken.value) {
+    ElMessage.error("上传token获取失败，请稍后重试");
+    return false;
+  }
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("token", uploadToken.value);
+
+  return axios.post("https://api.superbed.cn/upload", formData, {
+    headers: { "Content-Type": "multipart/form-data" }
+  }).then(res => {
+    // 取出图片外链
+    const url = res.data.urls[0];
+    form.value.roomImage = url;
+    ElMessage.success("上传成功");
+    return false; // 阻止 el-upload 默认上传
+  }).catch(() => {
+    ElMessage.error("上传失败");
+    return false;
+  });
+}
+
 /** 会议室状态修改  */
 function handleStatusChange(row) {
   let text = row.status === "0" ? "启用" : "停用";
@@ -346,3 +412,49 @@ function handleExport() {
 
 getList()
 </script>
+
+<style scoped>
+.custom-upload-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.avatar-uploader .el-upload {
+  width: 148px;
+  height: 148px;
+  border-radius: 6px;
+}
+
+.avatar {
+  width: 148px;
+  height: 148px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.upload-action-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 148px;
+  height: 148px;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  z-index: 10;
+  border-radius: 6px;
+}
+
+.action-icon {
+  color: #fff;
+  font-size: 28px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.action-icon:hover {
+  color: #409EFF;
+}
+</style>

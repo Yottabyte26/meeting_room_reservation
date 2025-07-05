@@ -1,9 +1,12 @@
 package com.rbs.system.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import com.rbs.system.domain.vo.RoomReservationVo;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +36,14 @@ import com.rbs.common.core.page.TableDataInfo;
 @RequestMapping("/system/room")
 public class SysMeetingRoomController extends BaseController
 {
+
+    @GetMapping("/upload-token")
+    public Map<String, Object> getUploadToken() {
+        String token = "437b90c01c9d41739d271a55a688073b";
+        Map<String, Object> result = new HashMap<>();
+        result.put("token", token);
+        return result;
+    }
     @Autowired
     private ISysMeetingRoomService sysMeetingRoomService;
 
