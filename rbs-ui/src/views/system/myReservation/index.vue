@@ -74,10 +74,10 @@
             <el-table-column label="审核结果原因" align="center" prop="remark" />
             <el-table-column label="预定人名称" align="center" prop="applicantName" width="100" />
             <el-table-column label="预定部门名称" align="center" prop="deptName" width="110" />
-            <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="130">
+            <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="180">
                 <template #default="scope">
-                    <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)">修改</el-button>
-                    <el-button link type="danger" icon="Delete" @click="handleDelete(scope.row)">删除</el-button>
+                    <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" class="custom-approve-btn" style="margin-right: 5px;">修改</el-button>
+                    <el-button link type="danger" icon="Delete" @click="handleDelete(scope.row)" class="custom-reject-btn">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -497,5 +497,51 @@ getListByapplicantName();
     border-color: #ebeef5;
     color: #c0c4cc;
     cursor: not-allowed;
+}
+
+/* 修改按钮样式 - 蓝色 */
+.custom-approve-btn {
+  background: #e6f3ff;
+  color: #409eff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  text-decoration: none;
+  position: relative;
+}
+
+.custom-approve-btn:hover {
+  box-shadow: 0 4px 8px rgba(64, 158, 255, 0.2);
+  top: -1px;
+}
+
+.custom-approve-btn:active {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  top: 1px;
+}
+
+/* 删除按钮样式 - 红色 */
+.custom-reject-btn {
+  background: #ffe6e6;
+  color: #f56c6c;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  text-decoration: none;
+  position: relative;
+}
+
+.custom-reject-btn:hover {
+  box-shadow: 0 4px 8px rgba(245, 108, 108, 0.2);
+  top: -1px;
+}
+
+.custom-reject-btn:active {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  top: 1px;
 }
 </style>

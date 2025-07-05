@@ -71,12 +71,13 @@
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="130">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="200">
         <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:room:edit']">修改</el-button>
-          <el-button link type="danger" icon="Delete" @click="handleDelete(scope.row)"
-            v-hasPermi="['system:room:remove']">删除</el-button>
+               <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
+                  v-hasPermi="['system:dept:edit']" class="custom-edit-btn">修改</el-button>
+               <!-- <el-button link type="success" icon="Plus" @click="handleAdd(scope.row)" v-hasPermi="['system:dept:add']">新增</el-button> -->
+               <el-button link type="danger" icon="Delete" @click="handleDelete(scope.row)"
+                  v-hasPermi="['system:dept:remove']" class="custom-delete-btn">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -413,6 +414,8 @@ function handleExport() {
 getList()
 </script>
 
+
+
 <style scoped>
 .custom-upload-wrapper {
   position: relative;
@@ -456,5 +459,68 @@ getList()
 
 .action-icon:hover {
   color: #409EFF;
+}
+
+/* 添加操作按钮样式 */
+.el-button--primary.link-btn {
+  color: #409EFF;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: all 0.3s;
+}
+
+.el-button--primary.link-btn:hover {
+  background-color: rgba(64, 158, 255, 0.1);
+}
+
+.el-button--danger.link-btn {
+  color: #F56C6C;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: all 0.3s;
+}
+
+.el-button--danger.link-btn:hover {
+  background-color: rgba(245, 108, 108, 0.1);
+}
+
+.custom-edit-btn {
+  background: #e6f3ff;
+  color: #409eff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  text-decoration: none;
+  position: relative;
+}
+.custom-edit-btn:hover {
+  box-shadow: 0 4px 8px rgba(64, 158, 255, 0.2);
+  top: -1px; /* 模拟轻微抬起 */
+}
+.custom-edit-btn:active {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  top: 1px; /* 模拟按压下去 */
+}
+
+.custom-delete-btn {
+  background: #ffe6e6;
+  color: #f56c6c;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  text-decoration: none;
+  position: relative;
+}
+.custom-delete-btn:hover {
+  box-shadow: 0 4px 8px rgba(245, 108, 108, 0.2);
+  top: -1px;
+}
+.custom-delete-btn:active {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  top: 1px;
 }
 </style>

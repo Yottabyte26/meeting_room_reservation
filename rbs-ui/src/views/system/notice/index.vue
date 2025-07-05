@@ -55,8 +55,8 @@
          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
             <template #default="scope">
                <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
-                  v-hasPermi="['system:notice:edit']" v-if="scope.row.receiverType === 0">修改</el-button>
-               <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)">删除</el-button>
+                  v-hasPermi="['system:notice:edit']" v-if="scope.row.receiverType === 0" class="custom-approve-btn" style="margin-right: 5px;">修改</el-button>
+               <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" class="custom-reject-btn">删除</el-button>
             </template>
          </el-table-column>
       </el-table>
@@ -248,3 +248,51 @@ function handleDelete(row) {
 
 getList();
 </script>
+
+<style scoped>
+/* 通过按钮样式 - 蓝色 */
+.custom-approve-btn {
+  background: #e6f3ff;
+  color: #409eff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  text-decoration: none;
+  position: relative;
+}
+
+.custom-approve-btn:hover {
+  box-shadow: 0 4px 8px rgba(64, 158, 255, 0.2);
+  top: -1px;
+}
+
+.custom-approve-btn:active {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  top: 1px;
+}
+
+/* 退回按钮样式 - 红色 */
+.custom-reject-btn {
+  background: #ffe6e6;
+  color: #f56c6c;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  text-decoration: none;
+  position: relative;
+}
+
+.custom-reject-btn:hover {
+  box-shadow: 0 4px 8px rgba(245, 108, 108, 0.2);
+  top: -1px;
+}
+
+.custom-reject-btn:active {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  top: 1px;
+}
+</style>

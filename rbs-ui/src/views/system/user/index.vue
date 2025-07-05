@@ -60,7 +60,7 @@
         </template>
       </el-table-column>
       <el-table-column label="用户账号" align="center" key="userName" prop="userName" v-if="columns[1].visible"
-        :show-overflow-tooltip="true" />
+        :show-overflow-tooltip="true"  width="100" />
       <el-table-column label="用户昵称" align="center" key="nickName" prop="nickName" v-if="columns[2].visible"
         :show-overflow-tooltip="true" />
       <el-table-column label="部门" align="center" key="deptName" prop="dept.deptName" v-if="columns[3].visible"
@@ -83,7 +83,7 @@
             @change="handleStatusChange(scope.row)"></el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="200" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="280" class-name="small-padding fixed-width" >
         <template #default="scope">
           <el-button-group>
             <!-- 编辑按钮 -->
@@ -715,5 +715,79 @@ onMounted(() => {
 
 .action-icon:hover {
   color: #409EFF;
+}
+</style>
+
+<style scoped>
+/* 编辑按钮 */
+.el-button-group .el-button:nth-child(1) {
+  background: #e6f3ff;
+  color: #409eff;
+  border: none;
+  border-radius: 4px;
+  padding:10px 5px; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  text-decoration: none;
+  position: relative;
+  margin-right: 12px; 
+}
+.el-button-group .el-button:nth-child(1):hover {
+  box-shadow: 0 4px 8px rgba(64, 158, 255, 0.2);
+  top: -1px;
+}
+.el-button-group .el-button:nth-child(1):active {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  top: 1px;
+}
+
+/* 删除按钮 */
+.el-button-group .el-button:nth-child(2) {
+  background: #ffe6e6;
+  color: #f56c6c;
+  border: none;
+  border-radius: 4px;
+padding:10px 5px; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  text-decoration: none;
+  position: relative;
+  margin-right: 10px; 
+}
+.el-button-group .el-button:nth-child(2):hover {
+  box-shadow: 0 4px 8px rgba(245, 108, 108, 0.2);
+  top: -1px;
+}
+.el-button-group .el-button:nth-child(2):active {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  top: 1px;
+}
+
+/* 重置密码按钮 - 确保使用warning样式 */
+.el-button-group .el-button--warning {
+  background: #fff7e6 !important;
+  color: #e6a23c !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding:10px 5px !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.2s ease !important;
+  text-decoration: none !important;
+  position: relative !important;
+}
+.el-button-group .el-button--warning:hover {
+  box-shadow: 0 4px 8px rgba(230, 162, 60, 0.2) !important;
+  top: -1px !important;
+}
+.el-button-group .el-button--warning:active {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+  top: 1px !important;
+}
+
+/* 禁用状态 */
+.el-button-group .el-button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
 }
 </style>

@@ -55,11 +55,17 @@
       </el-table-column>
       <el-table-column label="预定人名称" align="center" prop="applicantName" />
       <el-table-column label="预定部门名称" align="center" prop="deptName" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="130">
-        <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handlePass(scope.row)">通过</el-button>
-          <el-button link type="danger" icon="Delete" @click="handleBack(scope.row)">退回</el-button>
-        </template>
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="200">
+    <template #default="scope">
+  <el-button-group>
+    <el-button link type="primary" icon="Edit" @click="handlePass(scope.row)" class="custom-approve-btn" style="margin-right: 12px;">
+      通过
+    </el-button>
+    <el-button link type="danger" icon="Delete" @click="handleBack(scope.row)" class="custom-reject-btn">
+      退回
+    </el-button>
+  </el-button-group>
+</template>
       </el-table-column>
     </el-table>
 
@@ -246,3 +252,51 @@ function handleBack(row) {
 }
 getList()
 </script>
+
+<style scoped>
+/* 通过按钮样式 - 蓝色 */
+.custom-approve-btn {
+  background: #e6f3ff;
+  color: #409eff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  text-decoration: none;
+  position: relative;
+}
+
+.custom-approve-btn:hover {
+  box-shadow: 0 4px 8px rgba(64, 158, 255, 0.2);
+  top: -1px;
+}
+
+.custom-approve-btn:active {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  top: 1px;
+}
+
+/* 退回按钮样式 - 红色 */
+.custom-reject-btn {
+  background: #ffe6e6;
+  color: #f56c6c;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  text-decoration: none;
+  position: relative;
+}
+
+.custom-reject-btn:hover {
+  box-shadow: 0 4px 8px rgba(245, 108, 108, 0.2);
+  top: -1px;
+}
+
+.custom-reject-btn:active {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  top: 1px;
+}
+</style>
