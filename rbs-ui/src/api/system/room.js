@@ -50,3 +50,15 @@ export function getUploadToken() {
     method: 'get'
   })
 }
+
+export function uploadRoomImage(formData) {
+  return request({
+    url: '/system/room/picture/upload',
+    method: 'post',
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+     timeout: 30000 
+  })
+}

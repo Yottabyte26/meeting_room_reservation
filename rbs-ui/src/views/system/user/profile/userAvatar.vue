@@ -51,7 +51,7 @@ import "vue-cropper/dist/index.css";
 import { VueCropper } from "vue-cropper";
 import { uploadAvatar, listUser, getUser, uploadAvatarByUrl } from "@/api/system/user";
 import useUserStore from "@/store/modules/user";
-import { getUploadToken } from "@/api/system/room"
+import { uploadRoomImage } from "@/api/system/room"
 import axios from "axios";
 const userStore = useUserStore();
 const { proxy } = getCurrentInstance();
@@ -117,24 +117,15 @@ function getList() {
 };
 const uploadToken = ref(""); // 响应式变量
 onMounted(() => {
-  getUploadToken().then(res => {
-    uploadToken.value = res.token;
-  });
   getList();
 });
 function uploadImg() {
   proxy.$refs.cropper.getCropBlob(data => {
     let formData = new FormData();
     formData.append("file", data, options.filename);
-    formData.append("token", uploadToken.value);
-
-    axios.post("https://api.superbed.cn/upload", formData, {
-      headers: { "Content-Type": "multipart/form-data" }
-    }).then(res => {
-      const url = res.data.urls[0];
-      // let avatarForm = new FormData();
-      // avatarForm.append("avatarfile", url);
-      uploadAvatarByUrl(url).then(response => {
+    uploadRoomImage(formData).then(res => {
+      let url = res.data.data.url;
+      uploadAvatarByUrl(url).then(res => {
         open.value = false;
         options.img = url;
         userStore.avatar = url;

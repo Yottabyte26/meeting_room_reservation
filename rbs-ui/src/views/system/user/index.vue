@@ -60,7 +60,7 @@
         </template>
       </el-table-column>
       <el-table-column label="用户账号" align="center" key="userName" prop="userName" v-if="columns[1].visible"
-        :show-overflow-tooltip="true"  width="100" />
+        :show-overflow-tooltip="true" width="100" />
       <el-table-column label="用户昵称" align="center" key="nickName" prop="nickName" v-if="columns[2].visible"
         :show-overflow-tooltip="true" />
       <el-table-column label="部门" align="center" key="deptName" prop="dept.deptName" v-if="columns[3].visible"
@@ -83,7 +83,7 @@
             @change="handleStatusChange(scope.row)"></el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="280" class-name="small-padding fixed-width" >
+      <el-table-column label="操作" align="center" width="280" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button-group>
             <!-- 编辑按钮 -->
@@ -269,7 +269,8 @@
 <script setup name="User">
 import { getToken } from "@/utils/auth";
 import { View, Hide } from '@element-plus/icons-vue';
-import { getUploadToken } from "@/api/system/room"
+import { uploadRoomImage } from "@/api/system/room"
+import { ElMessage } from 'element-plus'
 import { ref, reactive, computed, getCurrentInstance } from 'vue';
 import {
   changeUserStatus,
@@ -406,12 +407,7 @@ function resetQuery() {
   queryParams.value.deptId = undefined;
   handleQuery();
 };
-const uploadToken = ref(""); // 响应式变量
-onMounted(() => {
-  getUploadToken().then(res => {
-    uploadToken.value = res.token;
-  });
-});
+
 // 触发上传
 function triggerUpload(e) {
   // 阻止事件冒泡，防止触发el-upload的点击
@@ -426,22 +422,17 @@ function removeImage(e) {
   form.value.avatar = ''
 }
 function handleUpload(file) {
-  if (!uploadToken.value) {
-    ElMessage.error("上传token获取失败，请稍后重试");
-    return false;
-  }
   const formData = new FormData();
   formData.append("file", file);
-  formData.append("token", uploadToken.value);
-
-  return axios.post("https://api.superbed.cn/upload", formData, {
-    headers: { "Content-Type": "multipart/form-data" }
-  }).then(res => {
-    // 取出图片外链
-    const url = res.data.urls[0];
-    form.value.avatar = url;
-    ElMessage.success("上传成功");
-    return false; // 阻止 el-upload 默认上传
+  return uploadRoomImage(formData).then(res => {
+    if (res.data.code === 200) {
+      form.value.avatar = res.data.data.url;
+      ElMessage.success("上传成功");
+      return false; // 阻止 el-upload 默认上传
+    } else {
+      ElMessage.error(res.data.error || "上传失败");
+      return false;
+    }
   }).catch(() => {
     ElMessage.error("上传失败");
     return false;
@@ -725,17 +716,19 @@ onMounted(() => {
   color: #409eff;
   border: none;
   border-radius: 4px;
-  padding:10px 5px; 
+  padding: 10px 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
   text-decoration: none;
   position: relative;
-  margin-right: 12px; 
+  margin-right: 12px;
 }
+
 .el-button-group .el-button:nth-child(1):hover {
   box-shadow: 0 4px 8px rgba(64, 158, 255, 0.2);
   top: -1px;
 }
+
 .el-button-group .el-button:nth-child(1):active {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   top: 1px;
@@ -747,17 +740,19 @@ onMounted(() => {
   color: #f56c6c;
   border: none;
   border-radius: 4px;
-padding:10px 5px; 
+  padding: 10px 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
   text-decoration: none;
   position: relative;
-  margin-right: 10px; 
+  margin-right: 10px;
 }
+
 .el-button-group .el-button:nth-child(2):hover {
   box-shadow: 0 4px 8px rgba(245, 108, 108, 0.2);
   top: -1px;
 }
+
 .el-button-group .el-button:nth-child(2):active {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   top: 1px;
@@ -769,16 +764,18 @@ padding:10px 5px;
   color: #e6a23c !important;
   border: none !important;
   border-radius: 4px !important;
-  padding:10px 5px !important;
+  padding: 10px 5px !important;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
   transition: all 0.2s ease !important;
   text-decoration: none !important;
   position: relative !important;
 }
+
 .el-button-group .el-button--warning:hover {
   box-shadow: 0 4px 8px rgba(230, 162, 60, 0.2) !important;
   top: -1px !important;
 }
+
 .el-button-group .el-button--warning:active {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
   top: 1px !important;

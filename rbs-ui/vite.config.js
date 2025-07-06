@@ -30,12 +30,18 @@ export default defineConfig(({ mode, command }) => {
       open: true,
       proxy: {
         // https://cn.vitejs.dev/config/#server-proxy
-        '/dev-api': {
-          target: 'http://localhost:8090',
-          // target: 'https://api.wzs.pub/mock/13',
-          changeOrigin: true,
-          rewrite: (p) => p.replace(/^\/dev-api/, '')
-        }
+         // 本地后端接口代理
+          '/dev-api': {
+            target: 'http://localhost:8090',
+            changeOrigin: true,
+            rewrite: (p) => p.replace(/^\/dev-api/, '')
+          },
+          // 图床上传代理
+          '/upload': {
+            target: 'https://tucdn.wpon.cn',
+            changeOrigin: true,
+            rewrite: path => path.replace(/^\/upload/, '/upload')
+          }
       }
     },
     //fix:error:stdin>:7356:1: warning: "@charset" must be the first rule in the file

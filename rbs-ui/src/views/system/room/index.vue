@@ -73,11 +73,11 @@
       <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="200">
         <template #default="scope">
-               <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
-                  v-hasPermi="['system:dept:edit']" class="custom-edit-btn">修改</el-button>
-               <!-- <el-button link type="success" icon="Plus" @click="handleAdd(scope.row)" v-hasPermi="['system:dept:add']">新增</el-button> -->
-               <el-button link type="danger" icon="Delete" @click="handleDelete(scope.row)"
-                  v-hasPermi="['system:dept:remove']" class="custom-delete-btn">删除</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:dept:edit']"
+            class="custom-edit-btn">修改</el-button>
+          <!-- <el-button link type="success" icon="Plus" @click="handleAdd(scope.row)" v-hasPermi="['system:dept:add']">新增</el-button> -->
+          <el-button link type="danger" icon="Delete" @click="handleDelete(scope.row)"
+            v-hasPermi="['system:dept:remove']" class="custom-delete-btn">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -152,9 +152,10 @@
 </template>
 
 <script setup name="Room">
-import { listRoom, getRoom, delRoom, addRoom, updateRoom, getUploadToken } from "@/api/system/room"
+import { listRoom, getRoom, delRoom, addRoom, updateRoom, getUploadToken, uploadRoomImage } from "@/api/system/room"
 import { listReservation } from "@/api/system/reservation"
 import axios from "axios";
+import { ElMessage } from 'element-plus'
 const { proxy } = getCurrentInstance()
 
 const roomList = ref([])
@@ -222,11 +223,7 @@ function getList() {
 }
 
 const uploadToken = ref(""); // 响应式变量
-onMounted(() => {
-  getUploadToken().then(res => {
-    uploadToken.value = res.token;
-  });
-});
+
 // 触发上传
 function triggerUpload(e) {
   // 阻止事件冒泡，防止触发el-upload的点击
@@ -240,29 +237,24 @@ function removeImage(e) {
   e.stopPropagation()
   form.value.roomImage = ''
 }
+
 function handleUpload(file) {
-  if (!uploadToken.value) {
-    ElMessage.error("上传token获取失败，请稍后重试");
-    return false;
-  }
   const formData = new FormData();
   formData.append("file", file);
-  formData.append("token", uploadToken.value);
-
-  return axios.post("https://api.superbed.cn/upload", formData, {
-    headers: { "Content-Type": "multipart/form-data" }
-  }).then(res => {
-    // 取出图片外链
-    const url = res.data.urls[0];
-    form.value.roomImage = url;
-    ElMessage.success("上传成功");
-    return false; // 阻止 el-upload 默认上传
+  return uploadRoomImage(formData).then(res => {
+    if (res.data.code === 200) {
+      form.value.roomImage = res.data.data.url;
+      ElMessage.success("上传成功");
+      return false; // 阻止 el-upload 默认上传
+    } else {
+      ElMessage.error(res.data.error || "上传失败");
+      return false;
+    }
   }).catch(() => {
     ElMessage.error("上传失败");
     return false;
   });
 }
-
 /** 会议室状态修改  */
 function handleStatusChange(row) {
   let text = row.status === "0" ? "启用" : "停用";
@@ -495,13 +487,17 @@ getList()
   text-decoration: none;
   position: relative;
 }
+
 .custom-edit-btn:hover {
   box-shadow: 0 4px 8px rgba(64, 158, 255, 0.2);
-  top: -1px; /* 模拟轻微抬起 */
+  top: -1px;
+  /* 模拟轻微抬起 */
 }
+
 .custom-edit-btn:active {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  top: 1px; /* 模拟按压下去 */
+  top: 1px;
+  /* 模拟按压下去 */
 }
 
 .custom-delete-btn {
@@ -515,10 +511,12 @@ getList()
   text-decoration: none;
   position: relative;
 }
+
 .custom-delete-btn:hover {
   box-shadow: 0 4px 8px rgba(245, 108, 108, 0.2);
   top: -1px;
 }
+
 .custom-delete-btn:active {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   top: 1px;
