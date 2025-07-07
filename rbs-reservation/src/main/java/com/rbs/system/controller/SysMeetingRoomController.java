@@ -55,7 +55,7 @@ public class SysMeetingRoomController extends BaseController
     public AjaxResult uploadRoomImage(@RequestParam("file") MultipartFile file) {
         String uploadUrl = "https://tucdn.wpon.cn/upload/upload.html";
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            HttpPost uploadFile = new HttpPost(uploadUrl);;
+            HttpPost uploadFile = new HttpPost(uploadUrl);
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
             builder.addBinaryBody("image", file.getInputStream(), ContentType.DEFAULT_BINARY, file.getOriginalFilename());
             // builder.addTextBody("fileId", "", ContentType.TEXT_PLAIN);
@@ -67,7 +67,6 @@ public class SysMeetingRoomController extends BaseController
             uploadFile.addHeader("referer", "https://tucdn.wpon.cn/");
             uploadFile.addHeader("origin", "https://tucdn.wpon.cn/");
             uploadFile.addHeader("x-requested-with", "XMLHttpRequest");
-
             CloseableHttpResponse response = httpClient.execute(uploadFile);
             String responseString = EntityUtils.toString(response.getEntity(), "UTF-8");
 

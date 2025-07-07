@@ -117,7 +117,7 @@ function getList() {
 };
 const uploadToken = ref(""); // 响应式变量
 onMounted(() => {
-  getList();
+  options.img = userStore.avatar;
 });
 function uploadImg() {
   proxy.$refs.cropper.getCropBlob(data => {

@@ -115,6 +115,7 @@ public class SysProfileController extends BaseController
         }
         return error("修改密码异常，请联系管理员");
     }
+
     @PostMapping("/avatarByUrl")
     public AjaxResult avatarByUrl(@RequestBody Map<String, String> params) {
         String url = params.get("avatar");
