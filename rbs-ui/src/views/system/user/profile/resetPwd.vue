@@ -36,11 +36,11 @@
 
 <script setup>
 import { ref, reactive, onMounted, getCurrentInstance, computed } from "vue";
-import { updateUserPwd, getUserProfile } from "@/api/system/user";
+import { updateUserPwd, getUserProfile, checkOldPassword } from "@/api/system/user";
 import { sendResetPwdEmailCode, verifyEmailCode } from "@/api/login";
-
+import axios from "axios";
 const { proxy } = getCurrentInstance();
-
+let timer = null;
 // 状态管理
 const loading = ref(false);
 const codeDisabled = ref(false);
@@ -96,7 +96,8 @@ const rules = {
   ],
   newPassword: [
     { required: true, message: "新密码不能为空", trigger: "blur" },
-    { min: 6, message: "新密码不能少于6位", trigger: "blur" }
+    { min: 5, message: "新密码不能少于5位", trigger: "blur" },
+    { pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,20}$/, message: '密码必须包含字母和数字', trigger: 'blur' }
   ],
   code: [
     { required: true, message: "验证码不能为空", trigger: "blur" }
@@ -125,70 +126,86 @@ const canSendCode = computed(() => {
 
 // 发送邮箱验证码
 function sendResetCode() {
-  // 先验证密码表单
   proxy.$refs.pwdRef.validateField(['oldPassword', 'newPassword', 'confirmPassword'], (valid) => {
     if (!valid) {
       proxy.$modal.msgWarning("请先正确填写密码信息");
       return;
     }
-    // 邮箱格式校验
-    if (!user.email) {
-      proxy.$modal.msgWarning("请输入邮箱地址");
+    // 新旧密码不能相同
+    if (user.oldPassword === user.newPassword) {
+      proxy.$modal.msgWarning("新旧密码不能相同");
       return;
     }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(user.email)) {
-      proxy.$modal.msgWarning("请输入正确的邮箱格式");
-      return;
-    }
-
-    // 发送验证码
-    codeDisabled.value = true;
-    codeButtonText.value = "发送中...";
-    sendResetPwdEmailCode(user.email)
-      .then(() => {
-        proxy.$modal.msgSuccess("验证码已发送至您的邮箱，5分钟内有效");
-        // 倒计时逻辑
-        const timer = setInterval(() => {
-          countdown--;
-          codeButtonText.value = `${countdown}秒后重发`;
-          if (countdown <= 0) {
-            clearInterval(timer);
-            codeDisabled.value = false;
-            codeButtonText.value = "获取验证码";
-            countdown = 60; // 重置倒计时
-          }
-        }, 1000);
-      })
-      .catch(error => {
-        codeDisabled.value = false;
-        codeButtonText.value = "获取验证码";
-        proxy.$modal.msgError(error.msg || "验证码发送失败，请重试");
-      });
-  }, 1000);
-}
-
-/** 提交修改密码 */
-function submit() {
-  proxy.$refs.pwdRef.validate(valid => {
-    if (valid) {
-      // 先验证邮箱验证码
-      verifyEmailCode(user.email, user.code)
-        .then(() => updateUserPwd(user.oldPassword, user.newPassword))
+    // 校验旧密码
+    checkOldPassword({ oldPassword: user.oldPassword }).then(res => {
+      // 旧密码正确，继续后续逻辑
+      if (!user.email) {
+        proxy.$modal.msgWarning("请输入邮箱地址");
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(user.email)) {
+        proxy.$modal.msgWarning("请输入正确的邮箱格式");
+        return;
+      }
+      codeDisabled.value = true;
+      codeButtonText.value = "发送中...";
+      sendResetPwdEmailCode(user.email)
         .then(() => {
-          proxy.$modal.msgSuccess("密码修改成功");
-          resetForm();
+          proxy.$modal.msgSuccess("验证码已发送至您的邮箱，5分钟内有效");
+          timer = setInterval(() => {
+            countdown--;
+            codeButtonText.value = `${countdown}秒后重发`;
+            if (countdown <= 0) {
+              clearInterval(timer);
+              codeDisabled.value = false;
+              codeButtonText.value = "获取验证码";
+              countdown = 60;
+            }
+          }, 1000);
         })
         .catch(error => {
-          const errorMsg = error.response?.data?.msg || "操作失败，请重试";
-          proxy.$modal.msgError(errorMsg);
-        })
-        .finally(() => {
-          loading.value = false;
+          codeDisabled.value = false;
+          codeButtonText.value = "获取验证码";
+          proxy.$modal.msgError(error.msg || "验证码发送失败，请重试");
         });
-    }
+    });
   });
 }
 
+// axios拦截器弹窗
+axios.interceptors.response.use(
+  response => response,
+  error => {
+    console.log("!!!!@@@@", error)
+    proxy.$modal.msgError(error.response?.data?.msg || "操作失败，请重试");
+    return Promise.reject(error);
+  }
+);
+
+// 你的submit方法
+async function submit() {
+  if (timer) {
+    clearInterval(timer);
+    codeDisabled.value = false;
+    codeButtonText.value = "获取验证码";
+    countdown = 60;
+  }
+  proxy.$refs.pwdRef.validate(async valid => {
+    if (valid) {
+      try {
+        await verifyEmailCode(user.email, user.code);
+        await updateUserPwd(user.oldPassword, user.newPassword);
+        proxy.$modal.msgSuccess("密码修改成功");
+        resetForm();
+        getUser();
+      } catch (error) {
+        // 不再弹窗
+      } finally {
+        loading.value = false;
+      }
+    }
+  });
+}
 /** 关闭按钮 */
 function close() {
   resetForm();
