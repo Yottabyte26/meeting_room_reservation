@@ -270,6 +270,30 @@ public class SysUserController extends BaseController
         }
         return AjaxResult.success();
     }
+
+    /**
+     * 校验旧密码是否正确
+     */
+    @PostMapping("/checkOldPassword")
+    public AjaxResult checkOldPassword(@RequestBody Map<String, String> params) {
+        String oldPassword = params.get("oldPassword");
+        Long userId = getUserId(); // 当前登录用户ID
+        if (StringUtils.isBlank(oldPassword)) {
+            return AjaxResult.error("旧密码不能为空");
+        }
+        SysUser user = userService.selectUserById(userId);
+        if (user == null) {
+            return AjaxResult.error("用户不存在");
+        }
+        // 打印调试
+        System.out.println("输入的旧密码：" + oldPassword);
+        System.out.println("数据库密码：" + user.getPassword());
+        // 校验密码
+        if (!SecurityUtils.matchesPassword(oldPassword, user.getPassword())) {
+            return AjaxResult.error("旧密码不正确");
+        }
+        return AjaxResult.success("旧密码正确");
+    }
     /**
      * 通过邮箱验证码重置密码（找回密码功能）
      */

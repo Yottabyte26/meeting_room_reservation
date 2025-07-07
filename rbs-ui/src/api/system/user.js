@@ -149,3 +149,12 @@ export function sendPasswordResetNotification(data) {
     data: data
   })
 }
+
+//检验旧密码
+export function checkOldPassword(data) {
+  return request({
+    url: '/system/user/checkOldPassword',
+    method: 'post',
+    data: data
+  })
+}
