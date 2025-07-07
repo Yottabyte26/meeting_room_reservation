@@ -44,8 +44,7 @@
 
         <!-- 卡片内容 -->
         <div class="card-content">
-          <p><strong>编号：</strong>{{ item.roomCode }}</p>
-          <p><strong>位置：</strong>{{ item.location }}</p>
+            <p><strong>位置：</strong>{{ item.location }}</p>
           <p><strong>容纳人数：</strong>{{ item.capacity }}</p>
           <p><strong>类型：</strong>{{ item.roomType }}</p>
           <p><strong>描述：</strong>{{ item.description }}</p>

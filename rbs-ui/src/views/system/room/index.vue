@@ -40,7 +40,7 @@
       <el-table-column type="selection" width="40" align="center" />
       <el-table-column label="会议室ID" align="center" prop="roomId" width="80" />
       <el-table-column label="会议室名称" align="center" prop="roomName" width="110" />
-      <el-table-column label="会议室编号" align="center" prop="roomCode" width="90" />
+      <!-- <el-table-column label="会议室编号" align="center" prop="roomCode" width="90" /> -->
       <el-table-column label="会议室位置" align="center" prop="location" />
       <el-table-column label="会议室图像" align="center" prop="roomImage">
         <template #default="scope">
