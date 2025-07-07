@@ -57,13 +57,6 @@
         </template>
       </el-table-column>
       <el-table-column label="会议室描述" align="center" prop="description" />
-      <!-- <el-table-column label="是否启用" align="center" prop="isEnabled" width="80">
-        <template #default="scope">
-          <el-tag :type="scope.row.isEnabled === '1' ? 'success' : 'info'" effect="light">
-            {{ formatEnable(scope.row.isEnabled) }}
-          </el-tag>
-        </template>
-      </el-table-column> -->
       <el-table-column label="状态" align="center" key="status" width="80">
         <template #default="scope">
           <el-switch v-model="scope.row.status" active-value="0" inactive-value="1" active-color="#52c41a"
@@ -75,7 +68,6 @@
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:dept:edit']"
             class="custom-edit-btn">修改</el-button>
-          <!-- <el-button link type="success" icon="Plus" @click="handleAdd(scope.row)" v-hasPermi="['system:dept:add']">新增</el-button> -->
           <el-button link type="danger" icon="Delete" @click="handleDelete(scope.row)"
             v-hasPermi="['system:dept:remove']" class="custom-delete-btn">删除</el-button>
         </template>
@@ -521,4 +513,4 @@ getList()
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   top: 1px;
 }
-</style>
+</style>wo

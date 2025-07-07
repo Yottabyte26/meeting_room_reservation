@@ -182,3 +182,10 @@ aside {
     margin-bottom: 10px;
   }
 }
+.el-image-viewer__img {
+  width: 50vh !important;
+  height: 50vh !important;
+  max-width: 50vw !important;
+  max-height: 50vh !important;
+  object-fit: contain !important;
+}
