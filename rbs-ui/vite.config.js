@@ -35,12 +35,6 @@ export default defineConfig(({ mode, command }) => {
             target: 'http://localhost:8090',
             changeOrigin: true,
             rewrite: (p) => p.replace(/^\/dev-api/, '')
-          },
-          // 图床上传代理
-          '/upload': {
-            target: 'https://tucdn.wpon.cn',
-            changeOrigin: true,
-            rewrite: path => path.replace(/^\/upload/, '/upload')
           }
       }
     },
