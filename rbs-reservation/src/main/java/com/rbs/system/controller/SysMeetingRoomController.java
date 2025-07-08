@@ -39,9 +39,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/system/room")
 public class SysMeetingRoomController extends BaseController
 {
-
-
-
     @Autowired
     private ISysMeetingRoomService sysMeetingRoomService;
     @GetMapping("/picture/upload-token")

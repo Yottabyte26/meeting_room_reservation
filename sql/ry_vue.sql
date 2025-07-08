@@ -11,7 +11,11 @@
  Target Server Version : 80040 (8.0.40)
  File Encoding         : 65001
 
+<<<<<<< HEAD
  Date: 08/07/2025 16:02:58
+=======
+ Date: 08/07/2025 16:02:35
+>>>>>>> 6ca3747c2907c6a15b0f2d1bced6d9b94ec41985
 */
 
 SET NAMES utf8mb4;

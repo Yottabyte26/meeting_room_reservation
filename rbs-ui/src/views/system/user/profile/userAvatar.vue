@@ -109,12 +109,7 @@ function beforeUpload(file) {
     };
   }
 }
-function getList() {
-  getUser(userStore.id).then(res => {
-    options.img = res.data.avatar;
-    console.log("!!!!", res)
-  });
-};
+
 const uploadToken = ref(""); // 响应式变量
 onMounted(() => {
   getUploadToken().then(res => {
@@ -131,10 +126,7 @@ function uploadImg() {
       headers: { "Content-Type": "multipart/form-data" }
     }).then(res => {
       const url = res.data.urls[0];
-      // 保存到数据库
-      let avatarForm = new FormData();
-      avatarForm.append("avatarfile", data, options.filename);
-      uploadAvatar(avatarForm).then(response => {
+      uploadAvatarByUrl(url).then(res => {
         open.value = false;
         options.img = url;
         userStore.avatar = url;
