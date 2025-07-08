@@ -7,6 +7,7 @@ import javax.validation.Validator;
 
 import com.rbs.system.domain.vo.DeptEmployeeVo;
 import com.rbs.system.domain.vo.GenderVo;
+import com.rbs.system.mapper.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +26,10 @@ import com.rbs.common.utils.spring.SpringUtils;
 import com.rbs.system.domain.SysPost;
 import com.rbs.system.domain.SysUserPost;
 import com.rbs.system.domain.SysUserRole;
-import com.rbs.system.mapper.SysPostMapper;
-import com.rbs.system.mapper.SysRoleMapper;
-import com.rbs.system.mapper.SysUserMapper;
-import com.rbs.system.mapper.SysUserPostMapper;
-import com.rbs.system.mapper.SysUserRoleMapper;
 import com.rbs.system.service.ISysConfigService;
 import com.rbs.system.service.ISysDeptService;
 import com.rbs.system.service.ISysUserService;
+
 
 /**
  * 用户 业务层处理
@@ -58,6 +55,9 @@ public class SysUserServiceImpl implements ISysUserService
 
     @Autowired
     private SysUserPostMapper userPostMapper;
+
+    @Autowired
+    private SysMeetingReservationMapper meetingReservationMapper;
 
     @Autowired
     private ISysConfigService configService;
@@ -476,6 +476,7 @@ public class SysUserServiceImpl implements ISysUserService
     @Transactional
     public int deleteUserById(Long userId)
     {
+        meetingReservationMapper.deleteByUserId(userId);
         // 删除用户与角色关联
         userRoleMapper.deleteUserRoleByUserId(userId);
         // 删除用户与岗位表
@@ -497,6 +498,7 @@ public class SysUserServiceImpl implements ISysUserService
         {
             checkUserAllowed(new SysUser(userId));
             checkUserDataScope(userId);
+            meetingReservationMapper.deleteByUserId(userId);
         }
         // 删除用户与角色关联
         userRoleMapper.deleteUserRole(userIds);

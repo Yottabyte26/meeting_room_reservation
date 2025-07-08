@@ -71,6 +71,10 @@
             <groupId>com.rbs</groupId>
             <artifactId>rbs-reservation</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.rbs</groupId>
+            <artifactId>rbs-system</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

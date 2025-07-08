@@ -230,18 +230,45 @@ function removeImage(e) {
   form.value.roomImage = ''
 }
 
+// function handleUpload(file) {
+//   const formData = new FormData();
+//   formData.append("file", file);
+//   return uploadRoomImage(formData).then(res => {
+//     if (res.data.code === 200) {
+//       form.value.roomImage = res.data.data.url;
+//       ElMessage.success("上传成功");
+//       return false; // 阻止 el-upload 默认上传
+//     } else {
+//       ElMessage.error(res.data.error || "上传失败");
+//       return false;
+//     }
+//   }).catch(() => {
+//     ElMessage.error("上传失败");
+//     return false;
+//   });
+// }
+onMounted(() => {
+  getUploadToken().then(res => {
+    uploadToken.value = res.token;
+  });
+})
 function handleUpload(file) {
+  if (!uploadToken.value) {
+    ElMessage.error("上传token获取失败，请稍后重试");
+    return false;
+  }
   const formData = new FormData();
   formData.append("file", file);
-  return uploadRoomImage(formData).then(res => {
-    if (res.data.code === 200) {
-      form.value.roomImage = res.data.data.url;
-      ElMessage.success("上传成功");
-      return false; // 阻止 el-upload 默认上传
-    } else {
-      ElMessage.error(res.data.error || "上传失败");
-      return false;
-    }
+  formData.append("token", uploadToken.value);
+
+  return axios.post("https://api.superbed.cn/upload", formData, {
+    headers: { "Content-Type": "multipart/form-data" }
+  }).then(res => {
+    // 取出图片外链
+    const url = res.data.urls[0];
+    form.value.roomImage = url;
+    ElMessage.success("上传成功");
+    return false; // 阻止 el-upload 默认上传
   }).catch(() => {
     ElMessage.error("上传失败");
     return false;

@@ -64,7 +64,13 @@ public interface SysMeetingReservationMapper
      * @return 结果
      */
     public int deleteSysMeetingReservationByReservationId(Long reservationId);
-
+    /**
+     * 根据用户ID删除会议室预订记录
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    public int deleteByUserId(Long userId);
     /**
      * 批量删除会议室预订
      * 

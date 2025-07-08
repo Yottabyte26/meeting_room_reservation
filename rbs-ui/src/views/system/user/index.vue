@@ -270,7 +270,7 @@
 import { getToken } from "@/utils/auth";
 import { View, Hide } from '@element-plus/icons-vue';
 
-import { uploadRoomImage } from "@/api/system/room"
+import { getUploadToken } from "@/api/system/room"
 import { ElMessage } from 'element-plus'
 import { ref, reactive, computed, getCurrentInstance } from 'vue';
 import {
@@ -338,7 +338,7 @@ const columns = ref([
   { key: 7, label: `性别`, visible: true },
   { key: 8, label: `状态`, visible: true }
 ]);
-
+const uploadToken = ref("");
 const data = reactive({
   form: {},
   queryParams: {
@@ -422,18 +422,40 @@ function removeImage(e) {
   e.stopPropagation()
   form.value.avatar = ''
 }
+// function handleUpload(file) {
+//   const formData = new FormData();
+//   formData.append("file", file);
+//   return uploadRoomImage(formData).then(res => {
+//     if (res.data.code === 200) {
+//       form.value.avatar = res.data.data.url;
+//       ElMessage.success("上传成功");
+//       return false; // 阻止 el-upload 默认上传
+//     } else {
+//       ElMessage.error(res.data.error || "上传失败");
+//       return false;
+//     }
+//   }).catch(() => {
+//     ElMessage.error("上传失败");
+//     return false;
+//   });
+// }
 function handleUpload(file) {
+  if (!uploadToken.value) {
+    ElMessage.error("上传token获取失败，请稍后重试");
+    return false;
+  }
   const formData = new FormData();
   formData.append("file", file);
-  return uploadRoomImage(formData).then(res => {
-    if (res.data.code === 200) {
-      form.value.avatar = res.data.data.url;
-      ElMessage.success("上传成功");
-      return false; // 阻止 el-upload 默认上传
-    } else {
-      ElMessage.error(res.data.error || "上传失败");
-      return false;
-    }
+  formData.append("token", uploadToken.value);
+
+  return axios.post("https://api.superbed.cn/upload", formData, {
+    headers: { "Content-Type": "multipart/form-data" }
+  }).then(res => {
+    // 取出图片外链
+    const url = res.data.urls[0];
+    form.value.avatar = url;
+    ElMessage.success("上传成功");
+    return false; // 阻止 el-upload 默认上传
   }).catch(() => {
     ElMessage.error("上传失败");
     return false;
@@ -660,6 +682,9 @@ function submitForm() {
 onMounted(() => {
   getDeptList()
   getList()
+  getUploadToken().then(res => {
+    uploadToken.value = res.token;
+  });
 })
 </script>
 

@@ -53,15 +53,19 @@
             <artifactId>oshi-core</artifactId>
         </dependency>
 
-        <!-- 系统模块-->
+
         <dependency>
             <groupId>com.rbs</groupId>
-            <artifactId>rbs-system</artifactId>
+            <artifactId>rbs-common</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.rbs</groupId>
+            <artifactId>rbs-system</artifactId>
         </dependency>
 
     </dependencies>

@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rbs.system.mapper.SysMeetingReservationMapper">
-    
+
     <resultMap type="SysMeetingReservation" id="SysMeetingReservationResult">
         <result property="reservationId"    column="reservation_id"    />
         <result property="roomId"    column="room_id"    />
@@ -30,7 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectSysMeetingReservationList" parameterType="SysMeetingReservation" resultMap="SysMeetingReservationResult">
         <include refid="selectSysMeetingReservationVo"/>
-        <where>  
+        <where>
             <if test="roomId != null "> and room_id = #{roomId}</if>
             <if test="reservationTitle != null  and reservationTitle != ''"> and reservation_title like concat('%', #{reservationTitle}, '%')</if>
             <if test="startTime != null and endTime != null">
@@ -157,9 +157,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteSysMeetingReservationByReservationIds" parameterType="String">
-        delete from sys_meeting_reservation where reservation_id in 
+        delete from sys_meeting_reservation where reservation_id in
         <foreach item="reservationId" collection="array" open="(" separator="," close=")">
             #{reservationId}
         </foreach>
+    </delete>
+    <delete id="deleteByUserId" parameterType="Long">
+        DELETE FROM sys_meeting_reservation WHERE user_id = #{userId}
     </delete>
 </mapper>

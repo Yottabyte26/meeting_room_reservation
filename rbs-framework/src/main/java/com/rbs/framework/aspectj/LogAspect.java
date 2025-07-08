@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.rbs.system.domain.SysOperLog;
 import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -31,7 +33,7 @@ import com.rbs.common.utils.StringUtils;
 import com.rbs.common.utils.ip.IpUtils;
 import com.rbs.framework.manager.AsyncManager;
 import com.rbs.framework.manager.factory.AsyncFactory;
-import com.rbs.system.domain.SysOperLog;
+
 
 /**
  * 操作日志记录处理
