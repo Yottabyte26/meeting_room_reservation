@@ -11,7 +11,7 @@
       <el-form-item label="容纳人数" prop="capacity">
         <el-input v-model="queryParams.capacity" placeholder="请输入容纳人数" clearable @keyup.enter="handleQuery" />
       </el-form-item>
-      
+
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
         <el-button icon="Refresh" @click="resetQuery">重置</el-button>
@@ -20,31 +20,23 @@
 
     <!-- 卡片式列表 -->
     <div class="card-list">
-      <div 
-        v-for="(item, index) in roomList" 
-        :key="index" 
-        class="room-card"
-      >
+      <div v-for="(item, index) in roomList" :key="index" class="room-card">
         <!-- 图片预览 -->
         <div class="card-header">
-          <image-preview 
-            :src="item.roomImage" 
-            :width="100" 
-            :height="80"
-          ></image-preview>
-       <!-- 修改 card-title 结构 -->
-<div class="card-title">
-  <span>{{ item.roomName }}</span>
-  <!-- 状态标签单独一行 -->
-  <span class="status-tag" :class="item.status === '0' ? 'available' : 'unavailable'">
-    {{ item.status === '0' ? '可预定' : '不可预定' }}
-  </span>
-</div>
+          <image-preview :src="item.roomImage" :width="100" :height="80"></image-preview>
+          <!-- 修改 card-title 结构 -->
+          <div class="card-title">
+            <span>{{ item.roomName }}</span>
+            <!-- 状态标签单独一行 -->
+            <span class="status-tag" :class="item.status === '0' ? 'available' : 'unavailable'">
+              {{ item.status === '0' ? '可预定' : '不可预定' }}
+            </span>
+          </div>
         </div>
 
         <!-- 卡片内容 -->
         <div class="card-content">
-            <p><strong>位置：</strong>{{ item.location }}</p>
+          <p><strong>位置：</strong>{{ item.location }}</p>
           <p><strong>容纳人数：</strong>{{ item.capacity }}</p>
           <p><strong>类型：</strong>{{ item.roomType }}</p>
           <p><strong>描述：</strong>{{ item.description }}</p>
@@ -52,12 +44,7 @@
 
         <!-- 操作按钮 -->
         <div class="card-actions">
-          <el-button 
-            v-if="item.status === '0'" 
-            type="primary" 
-            icon="Edit" 
-            @click="handleAdd(item)"
-          >
+          <el-button v-if="item.status === '0'" type="primary" icon="Edit" @click="handleAdd(item)">
             预定
           </el-button>
         </div>
@@ -65,17 +52,13 @@
     </div>
 
     <!-- 分页 -->
-    <pagination 
-      v-show="total > 0" 
-      :total="total" 
-      v-model:page="queryParams.pageNum"
-      v-model:limit="queryParams.pageSize" 
-      @pagination="getList" 
-    />
+    <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum"
+      v-model:limit="queryParams.pageSize" @pagination="getList" />
 
 
- <!-- 预定弹窗-->
-    <el-dialog :title="title" v-model="open" width="600px"  style="position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%);" append-to-body>
+    <!-- 预定弹窗-->
+    <el-dialog :title="title" v-model="open" width="600px"
+      style="position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%);" append-to-body>
       <el-form ref="reservationRef" :model="form" :rules="rules" label-width="100px">
         <el-row>
           <el-col :span="12">
@@ -229,11 +212,11 @@ const data = reactive({
 // 计算属性：根据选中日期过滤可用时间段
 const filteredTimes = computed(() => {
   if (!data.selectedDate) return [];
-  
+
   const now = new Date();
   const selectedDate = new Date(data.selectedDate);
   const isToday = selectedDate.toDateString() === now.toDateString();
-  
+
   // 对于今天的日期，需要过滤掉已过的时间段（考虑提前1小时）
   if (isToday) {
     // 当前时间加1小时，作为最早可预约开始时间
@@ -243,12 +226,12 @@ const filteredTimes = computed(() => {
       const [hours, minutes, seconds] = startTimeStr.split(':').map(Number);
       const startTime = new Date();
       startTime.setHours(hours, minutes, seconds);
-      
+
       // 时间段开始时间必须晚于当前时间加半小时
       return startTime >= earliestStart;
     });
   }
-  
+
   // 非今天的日期，所有时间段都可用
   return times.value;
 });
@@ -259,7 +242,7 @@ const selectDate = (dateStr) => {
   if (!selectedDay || selectedDay.disabled) return
   data.selectedDate = selectedDay.date;
   // 重置时间段选择
-  data.selectedTime = null; 
+  data.selectedTime = null;
 }
 // 生成最近7天日期
 const generateSevenDays = () => {
@@ -362,8 +345,8 @@ function reset() {
     updateTime: null,
     remark: null
   }
-  data.selectedDate = null; 
-  data.selectedTime = null; 
+  data.selectedDate = null;
+  data.selectedTime = null;
   proxy.resetForm("reservationRef")
 }
 
@@ -419,47 +402,31 @@ function checkExactMatch(reservationList, form) {
 }
 /** 提交按钮 */
 function submitForm() {
-  // 修正：使用正确的响应式数据引用
   form.value.selectedDate = data.selectedDate;
   form.value.selectedTime = data.selectedTime;
-  
-  // 验证是否选择了日期和时间段
   if (!data.selectedDate || !data.selectedTime) {
     proxy.$message.error('请选择预约日期和时间段');
     return;
   }
-  
-  // 解析开始和结束时间
   const [startTimePart, endTimePart] = data.selectedTime.split('-');
   const startTime = new Date(`${data.selectedDate} ${startTimePart}`);
   const endTime = new Date(`${data.selectedDate} ${endTimePart}`);
-  
-  // 验证时间逻辑
   const now = new Date();
-  
-  // 检查是否至少提前1小时预约
   if (startTime - now < 30 * 60 * 1000) {
     proxy.$message.error('预约需至少提前1小时，请选择合适的时间');
     return;
   }
-  
-  // 检查开始时间是否早于结束时间
+
   if (startTime >= endTime) {
     proxy.$message.error('开始时间不能晚于结束时间');
     return;
   }
-  
-  // 设置表单中的时间值
   form.value.startTime = `${data.selectedDate} ${startTimePart}`;
   form.value.endTime = `${data.selectedDate} ${endTimePart}`;
-  
-  // 检查是否已被预约
   if (checkExactMatch(reservationList.value, form.value)) {
     proxy.$message.error('该会议室时间已被预约，请选择其他时间');
     return;
   }
-  
-  // 表单验证
   proxy.$refs["reservationRef"].validate(valid => {
     if (valid) {
       addReservation(form.value).then(response => {
@@ -546,7 +513,8 @@ getList()
 
 /* 单个卡片样式 */
 .room-card {
-  width: calc(25% - 24px); /* 每行4张卡片 */
+  width: calc(25% - 24px);
+  /* 每行4张卡片 */
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -591,18 +559,24 @@ getList()
   margin-left: 10px;
   color: #fff;
   margin-top: 4px;
-  width: 80px; /* 固定宽度 */
-  display: inline-block; /* 确保宽度生效 */
-  text-align: center; /* 文字居中 */
-  box-sizing: border-box; /* 包含padding */
+  width: 80px;
+  /* 固定宽度 */
+  display: inline-block;
+  /* 确保宽度生效 */
+  text-align: center;
+  /* 文字居中 */
+  box-sizing: border-box;
+  /* 包含padding */
 }
 
 .status-tag.available {
-  background-color: #67c23a; /* 可预定 */
+  background-color: #67c23a;
+  /* 可预定 */
 }
 
 .status-tag.unavailable {
-  background-color: #f56c6c; /* 不可预定 */
+  background-color: #f56c6c;
+  /* 不可预定 */
 }
 
 /* 卡片内容 */
@@ -641,5 +615,4 @@ getList()
     width: 100%;
   }
 }
-
 </style>

@@ -288,7 +288,9 @@ import axios from "axios";
 const router = useRouter();
 const { proxy } = getCurrentInstance();
 const { sys_normal_disable, sys_user_sex } = proxy.useDict("sys_normal_disable", "sys_user_sex");
-
+const filteredSexOptions = computed(() => {
+  return sys_user_sex.value.filter(option => option.label !== '未知');
+});
 // 数据定义
 const userList = ref([]);
 const open = ref(false);
