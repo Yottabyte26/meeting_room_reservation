@@ -21,9 +21,7 @@
                         <div class="user-info-item">
                            <span>用户邮箱：{{ state.user.email }}</span>
                         </div>
-                        <div class="user-info-item">
-                           <span>所属角色：{{ state.roleGroup }}</span>
-                        </div>
+
                         <div class="user-info-item">
                            <span>手机号码：{{ state.user?.phonenumber ?? '未填' }}</span>
                         </div>

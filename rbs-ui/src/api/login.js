@@ -105,8 +105,7 @@ export function resetPasswordByEmail(data) {
     data: data // data包含：email、code、newPassword
   })
 }
-// api/login.js
-// api/login.js
+
 export const verifyEmailCode = (email, code) => {
   return request({
     url: '/system/user/verifyCode', 

@@ -39,7 +39,9 @@ import { ref, reactive, onMounted, getCurrentInstance, computed } from "vue";
 import { updateUserPwd, getUserProfile, checkOldPassword } from "@/api/system/user";
 import { sendResetPwdEmailCode, verifyEmailCode } from "@/api/login";
 import axios from "axios";
+import useUserStore from "@/store/modules/user";
 const { proxy } = getCurrentInstance();
+const userStore = useUserStore();
 let timer = null;
 // 状态管理
 const loading = ref(false);
@@ -176,7 +178,6 @@ function sendResetCode() {
 axios.interceptors.response.use(
   response => response,
   error => {
-    console.log("!!!!@@@@", error)
     proxy.$modal.msgError(error.response?.data?.msg || "操作失败，请重试");
     return Promise.reject(error);
   }
@@ -196,6 +197,9 @@ async function submit() {
         await verifyEmailCode(user.email, user.code);
         await updateUserPwd(user.oldPassword, user.newPassword);
         proxy.$modal.msgSuccess("密码修改成功");
+        // 密码修改成功后，自动退出登录
+        await userStore.logOut();
+        location.href = '/index';
         resetForm();
         getUser();
       } catch (error) {
