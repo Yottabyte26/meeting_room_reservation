@@ -198,24 +198,20 @@ const registerRules = {
 // 发送邮箱验证码
 const handleSendCode = () => {
   console.log("发送验证码按钮被点击，开始执行逻辑");
-  
-  // 1. 手动验证邮箱是否为空
+  // 1手动验证邮箱是否为空
   if (!registerForm.value.email.trim()) {
     ElMessage.warning("请输入邮箱地址");
     return;
   }
-  
-  // 2. 手动验证邮箱格式
+  // 手动验证邮箱格式
   const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
   if (!emailReg.test(registerForm.value.email)) {
     ElMessage.warning("请输入有效的邮箱地址（如：xxx@example.com）");
     return;
   }
-  
-  // 3. 验证通过，执行发送逻辑
+  // 验证通过，执行发送逻辑
   isCodeDisabled.value = true;
   codeButtonText.value = "发送中...";
-  
   sendRegisterCode(registerForm.value.email)
     .then((response) => {
       // 记录验证码发送时间（时间戳）
@@ -236,7 +232,7 @@ const handleSendCode = () => {
       }, 1000);
     })
     .catch((error) => {
-      // 修改6：优化错误提示（明确标注"发送失败"）
+      // 优化错误提示（明确标注"发送失败"）
       ElMessage.error(`发送失败：${error.response?.data?.msg || "验证码发送失败，请稍后重试"}`);
       codeButtonText.value = "发送验证码";
       isCodeDisabled.value = false;

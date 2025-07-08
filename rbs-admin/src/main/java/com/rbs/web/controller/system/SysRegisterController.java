@@ -49,7 +49,6 @@ public class SysRegisterController extends BaseController {
         if (!isCodeValid) {
             return error("验证码错误或已过期");
         }
-
         // 2. 执行注册
         try {
             String msg = registerService.register(user);
@@ -70,12 +69,10 @@ public class SysRegisterController extends BaseController {
         if (StringUtils.isEmpty(email)) {
             return error("邮箱不能为空");
         }
-
         // 检查邮箱格式
         if (!email.matches("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$")) {
             return error("邮箱格式不正确");
         }
-
         // 检查邮箱是否已被注册
         SysUser user = new SysUser();
         user.setEmail(email);

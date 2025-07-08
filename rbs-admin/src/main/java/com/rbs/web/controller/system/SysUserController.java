@@ -367,18 +367,16 @@ public class SysUserController extends BaseController
     public AjaxResult sendResetPwdCode(@RequestBody Map<String, String> params) {
         String email = params.get("email");
         log.info("开始处理发送验证码请求，邮箱：{}", email);
-        // 1. 验证邮箱参数
+        // 验证邮箱参数
         if (StringUtils.isBlank(email)) {
             return error("邮箱不能为空");
         }
-
-        // 2. 验证邮箱是否已注册
+        // 验证邮箱是否已注册
         SysUser user = userService.selectUserByEmail(email);
         if (user == null) {
             return error("该邮箱未注册");
         }
-
-        // 3. 调用现有服务方法发送验证码（类型：2=找回密码）
+        // 调用现有服务方法发送验证码（类型：2=找回密码）
         return emailCodeService.sendCode(email, 2);
     }
 }

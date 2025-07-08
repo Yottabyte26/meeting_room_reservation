@@ -215,8 +215,6 @@ function handleReservationAction(row, status, actionText, maxRemarkLength) {
         }
       );
     })
-
-
     .then(({ value: reason }) => {
       form.value.status = status;
       form.value.remark = reason;
