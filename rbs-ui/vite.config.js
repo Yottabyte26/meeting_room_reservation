@@ -33,6 +33,7 @@ export default defineConfig(({ mode, command }) => {
          // 本地后端接口代理
           '/dev-api': {
             target: 'http://localhost:8090',
+            // target: 'http://43.159.60.109:8090',
             changeOrigin: true,
             rewrite: (p) => p.replace(/^\/dev-api/, '')
           }
