@@ -46,7 +46,7 @@ public class SysMeetingRoomController extends BaseController
     private ISysMeetingRoomService sysMeetingRoomService;
     @GetMapping("/picture/upload-token")
     public Map<String, Object> getUploadToken() {
-        String token = "437b90c01c9d41739d271a55a688073b";
+        String token = "beb769d5c40444d59838d3ba3366c831";
         Map<String, Object> result = new HashMap<>();
         result.put("token", token);
         return result;
