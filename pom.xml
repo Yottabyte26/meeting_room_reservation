@@ -2,8 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	
+    <modelVersion>4.0.0</modelVersion>
+
     <groupId>com.rbs</groupId>
     <artifactId>rbs</artifactId>
     <version>3.9.0</version>
@@ -11,7 +11,7 @@
     <name>rbs</name>
     <url>http://www.ruoyi.vip</url>
     <description>会议室预定系统</description>
-    
+
     <properties>
         <rbs.version>3.9.0</rbs.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -30,6 +30,12 @@
         <poi.version>4.1.2</poi.version>
         <velocity.version>2.3</velocity.version>
         <jwt.version>0.9.1</jwt.version>
+
+        <baidu.ai.version>4.16.1</baidu.ai.version>
+        <hutool.version>5.8.28</hutool.version>
+        <jaxb.version>2.3.1</jaxb.version>
+        <slf4j.version>1.7.36</slf4j.version>
+
         <!-- override dependency version -->
         <tomcat.version>9.0.105</tomcat.version>
         <logback.version>1.2.13</logback.version>
@@ -40,8 +46,58 @@
     <!-- 依赖声明 -->
     <dependencyManagement>
         <dependencies>
+            <!-- ========== 核心修复：SLF4J 依赖管理 + 排除冲突 ========== -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-simple</artifactId>
+                <version>${slf4j.version}</version>
+                <scope>provided</scope> <!-- 仅编译时提供，运行时不加载 -->
+            </dependency>
 
-            <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+            <!-- 百度AI语音识别SDK（排除slf4j-simple冲突） -->
+            <dependency>
+                <groupId>com.baidu.aip</groupId>
+                <artifactId>java-sdk</artifactId>
+                <version>${baidu.ai.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-simple</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- Hutool工具类（排除slf4j-simple冲突） -->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-simple</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- Jaxb完整依赖（解决Java8+环境缺失问题） -->
+            <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>${jaxb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.activation</groupId>
+                <artifactId>activation</artifactId>
+                <version>1.1.1</version>
+            </dependency>
+
+            <!-- Lombok -->
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
@@ -66,26 +122,43 @@
                 <scope>import</scope>
             </dependency>
 
-            <!-- SpringBoot的依赖配置-->
+            <!-- SpringBoot的依赖配置（排除slf4j-simple）-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-simple</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
-            <!-- 覆盖logback的依赖配置-->
+            <!-- 覆盖logback的依赖配置（排除slf4j-simple）-->
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-core</artifactId>
                 <version>${logback.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-simple</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
-
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>${logback.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-simple</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!-- 覆盖tomcat的依赖配置-->
@@ -94,13 +167,11 @@
                 <artifactId>tomcat-embed-core</artifactId>
                 <version>${tomcat.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.apache.tomcat.embed</groupId>
                 <artifactId>tomcat-embed-el</artifactId>
                 <version>${tomcat.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.apache.tomcat.embed</groupId>
                 <artifactId>tomcat-embed-websocket</artifactId>
@@ -112,6 +183,12 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
                 <version>${druid.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-simple</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!-- 解析客户端操作系统、浏览器等 -->
@@ -126,6 +203,12 @@
                 <groupId>com.github.pagehelper</groupId>
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>${pagehelper.boot.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-simple</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!-- 获取系统信息 -->
@@ -133,6 +216,12 @@
                 <groupId>com.github.oshi</groupId>
                 <artifactId>oshi-core</artifactId>
                 <version>${oshi.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-simple</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!-- Swagger3依赖 -->
@@ -144,6 +233,10 @@
                     <exclusion>
                         <groupId>io.swagger</groupId>
                         <artifactId>swagger-models</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-simple</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -160,6 +253,12 @@
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi-ooxml</artifactId>
                 <version>${poi.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-simple</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!-- velocity代码生成使用模板 -->
@@ -167,6 +266,12 @@
                 <groupId>org.apache.velocity</groupId>
                 <artifactId>velocity-engine-core</artifactId>
                 <version>${velocity.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-simple</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!-- 阿里JSON解析器 -->
@@ -174,6 +279,12 @@
                 <groupId>com.alibaba.fastjson2</groupId>
                 <artifactId>fastjson2</artifactId>
                 <version>${fastjson.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-simple</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!-- Token生成与解析-->
@@ -181,6 +292,12 @@
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt</artifactId>
                 <version>${jwt.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-simple</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!-- 验证码 -->
@@ -188,6 +305,12 @@
                 <groupId>pro.fessional</groupId>
                 <artifactId>kaptcha</artifactId>
                 <version>${kaptcha.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-simple</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!-- 定时任务-->
@@ -195,6 +318,12 @@
                 <groupId>com.rbs</groupId>
                 <artifactId>rbs-quartz</artifactId>
                 <version>${rbs.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-simple</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!-- 代码生成-->
@@ -202,6 +331,12 @@
                 <groupId>com.rbs</groupId>
                 <artifactId>rbs-generator</artifactId>
                 <version>${rbs.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-simple</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!-- 核心模块-->
@@ -209,6 +344,12 @@
                 <groupId>com.rbs</groupId>
                 <artifactId>rbs-framework</artifactId>
                 <version>${rbs.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-simple</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!-- 系统模块-->
@@ -216,6 +357,12 @@
                 <groupId>com.rbs</groupId>
                 <artifactId>rbs-system</artifactId>
                 <version>${rbs.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-simple</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!-- 通用工具-->
@@ -223,6 +370,12 @@
                 <groupId>com.rbs</groupId>
                 <artifactId>rbs-common</artifactId>
                 <version>${rbs.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-simple</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!-- 预定模块-->
@@ -230,6 +383,12 @@
                 <groupId>com.rbs</groupId>
                 <artifactId>rbs-reservation</artifactId>
                 <version>${rbs.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-simple</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
         </dependencies>

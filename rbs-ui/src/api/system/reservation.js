@@ -52,3 +52,36 @@ export function delReservation(reservationId) {
     method: 'delete'
   })
 }
+
+/**
+ * 语音预定会议室（上传音频文件）
+ * @param {File} file - 语音文件（wav格式）
+ * @returns {Promise}
+ */
+export function voiceBookMeetingRoom(file) {
+  const formData = new FormData()
+  formData.append('file', file) // 后端要求的参数名是file
+  return request({
+    url: '/system/voice/book',
+    method: 'post',
+    data: formData,
+    headers: {
+      repeatSubmit: false},
+    timeout: 30000 // 语音识别接口超时时间设为30秒
+  })
+}
+
+/**
+ * 解析语音指令（仅解析文本，不预定）
+ * @param {String} voiceCommand - 语音指令文本
+ * @returns {Promise}
+ */
+export function parseVoiceCommand(voiceCommand) {
+  return request({
+    url: '/system/voice/parseCommand',
+    method: 'post',
+    params: {
+      voiceCommand: voiceCommand
+    }
+  })
+}

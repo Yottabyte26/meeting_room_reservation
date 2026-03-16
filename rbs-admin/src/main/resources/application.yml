@@ -8,6 +8,10 @@ ruoyi:
   copyrightYear: 2025
   # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
   profile: D:/ruoyi/uploadPath
+  # 语音临时文件存储路径（基于原有profile路径）
+  voice:
+    tempPath: ${ruoyi.profile}/temp/voice/
+
   # 获取ip地址开关
   addressEnabled: false
   # 验证码类型 math 数字计算 char 字符验证
@@ -16,9 +20,16 @@ ruoyi:
 rbs:
   name: 会议室预定管理系统
 
+# 百度AI语音识别配置（核心新增）
+baidu:
+  voice:
+    app-id: 122372444
+    api-key: xvEUpSC2MTP9oM8lBkt4Ry3T
+    secret-key: rDAXj47boJA5a3HTyurtUD12l9IBdiHk
+
 # 开发环境配置
 server:
-  # 服务器的HTTP端口，默认为8080
+  # 服务器的HTTP端口
   port: 8090
   servlet:
     # 应用的访问路径
@@ -39,6 +50,8 @@ logging:
   level:
     com.rbs: debug
     org.springframework: warn
+  file:
+    name: ${ruoyi.profile}/logs/rbs-voice.log
 
 # 用户配置
 user:
@@ -149,7 +162,7 @@ xss:
   # 过滤开关
   enabled: true
   # 排除链接（多个用逗号分隔）
-  excludes: /system/notice
+  excludes: /system/notice,/system/voice/reservation/upload
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*
 

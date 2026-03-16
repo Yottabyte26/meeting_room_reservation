@@ -5,13 +5,10 @@ import java.util.Map;
 
 import com.rbs.system.domain.SysMeetingReservation;
 import com.rbs.system.domain.vo.RoomReservationVo;
-import io.lettuce.core.dynamic.annotation.Param;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 会议室预订Mapper接口
- * 
- * @author why
- * @date 2025-06-11
  */
 public interface SysMeetingReservationMapper 
 {

@@ -26,6 +26,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select room_id, room_name, room_code, location, capacity, room_type, status, description,room_image, is_enabled, create_by, create_time, update_by, update_time, remark from sys_meeting_room
     </sql>
 
+    <!-- 查询符合人数要求的空闲会议室 -->
+    <select id="selectAvailableMeetingRooms" parameterType="map" resultMap="SysMeetingRoomResult">
+        SELECT r.room_id, r.room_name, r.capacity, r.status, r.is_enabled, r.remark, r.create_time, r.update_time
+        FROM sys_meeting_room r
+        WHERE r.capacity >= #{peopleCount}  <!-- 和@Param("peopleCount")一致 -->
+        AND r.status = '0'  <!-- 开放状态 -->
+        AND r.is_enabled = '1'  <!-- 启用状态 -->
+        AND NOT EXISTS (
+        SELECT 1 FROM sys_meeting_reservation res
+        WHERE res.room_id = r.room_id
+        AND res.status IN ('0', '1', '4')  <!-- 待审批、已通过、进行中 -->
+        AND res.start_time &lt; #{endTime}   <!-- 和@Param("endTime")一致 -->
+        AND res.end_time &gt; #{startTime}   <!-- 和@Param("startTime")一致 -->
+        )
+        ORDER BY r.capacity ASC  <!-- 优先选择人数最接近的会议室 -->
+    </select>
+
     <!-- 会议室预定次数统计 -->
     <select id="selectRoomReservationList" resultType="com.rbs.system.domain.vo.RoomReservationVo">
         SELECT

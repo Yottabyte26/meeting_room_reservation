@@ -16,6 +16,7 @@
             <groupId>com.rbs</groupId>
             <artifactId>rbs-common</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

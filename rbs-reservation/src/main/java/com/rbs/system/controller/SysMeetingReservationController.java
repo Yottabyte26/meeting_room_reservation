@@ -24,9 +24,6 @@ import com.rbs.common.core.page.TableDataInfo;
 
 /**
  * 会议室预订Controller
- * 
- * @author why
- * @date 2025-06-11
  */
 @RestController
 @RequestMapping("/system/reservation")

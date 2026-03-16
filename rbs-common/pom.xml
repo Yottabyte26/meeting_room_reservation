@@ -17,6 +17,17 @@
 
     <dependencies>
 
+        <!-- 百度AI SDK -->
+        <dependency>
+            <groupId>com.baidu.aip</groupId>
+            <artifactId>java-sdk</artifactId>
+        </dependency>
+        <!-- Hutool工具 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+        </dependency>
+
         <!-- Spring框架基本的核心工具 -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -93,6 +104,10 @@
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
         </dependency>
 
         <!-- redis 缓存操作 -->

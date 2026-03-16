@@ -1,3 +1,4 @@
+console.log('VITE_APP_BASE_API:', import.meta.env.VITE_APP_BASE_API);
 import axios from 'axios'
 import { ElNotification , ElMessageBox, ElMessage, ElLoading } from 'element-plus'
 import { getToken } from '@/utils/auth'
@@ -22,6 +23,12 @@ const service = axios.create({
 
 // request拦截器
 service.interceptors.request.use(config => {
+  // 如果请求数据是FormData，清空Content-Type（关键修复）
+  if (config.data instanceof FormData) {
+    config.headers['Content-Type'] = undefined; // 让浏览器自动设置multipart/form-data
+    // 同时关闭axios的自动序列化（避免FormData被转成字符串）
+    config.transformRequest = [(data) => data];
+  }
   // 是否需要设置 token
   const isToken = (config.headers || {}).isToken === false
   // 是否需要防止数据重复提交

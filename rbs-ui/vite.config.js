@@ -28,6 +28,7 @@ export default defineConfig(({ mode, command }) => {
       port: 3000,
       host: true,
       open: true,
+      cors: true,
       proxy: {
         // https://cn.vitejs.dev/config/#server-proxy
          // 本地后端接口代理
@@ -35,8 +36,17 @@ export default defineConfig(({ mode, command }) => {
             target: 'http://localhost:8090',
             // target: 'http://43.159.60.109:8090',
             changeOrigin: true,
-            rewrite: (p) => p.replace(/^\/dev-api/, '')
+            rewrite: (p) => p.replace(/^\/dev-api/, ''),
+            // 核心修复：处理 form-data 上传的代理兼容
+            configure: (proxy, options) => {
+              proxy.on('proxyReq', (proxyReq, req, res) => {
+                // 移除 content-length 避免 form-data 长度计算错误
+                if (req.headers['content-type']?.includes('multipart/form-data')) {
+                proxyReq.removeHeader('content-length');
+              }
+            });
           }
+        }
       }
     },
     //fix:error:stdin>:7356:1: warning: "@charset" must be the first rule in the file

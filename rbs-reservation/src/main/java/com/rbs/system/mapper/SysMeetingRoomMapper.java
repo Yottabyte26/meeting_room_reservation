@@ -1,10 +1,12 @@
 package com.rbs.system.mapper;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.rbs.system.domain.SysMeetingReservation;
 import com.rbs.system.domain.SysMeetingRoom;
 import com.rbs.system.domain.vo.RoomReservationVo;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 会议室信息Mapper接口
@@ -66,4 +68,18 @@ public interface SysMeetingRoomMapper
      * 会议室预定次数统计
      */
     public List<RoomReservationVo> selectRoomReservationList();
+
+    /**
+     * 查询符合人数要求的空闲会议室
+     * @param peopleCount 预定人数
+     * @param startTime 开始时间
+     * @param endTime 结束时间
+     * @return 空闲会议室列表
+     */
+    List<SysMeetingRoom> selectAvailableMeetingRooms(
+            @Param("peopleCount") Integer peopleCount,
+            @Param("startTime") LocalDateTime startTime,
+            @Param("endTime") LocalDateTime endTime
+    );
+
 }

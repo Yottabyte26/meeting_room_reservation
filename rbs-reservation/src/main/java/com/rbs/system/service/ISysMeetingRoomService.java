@@ -1,5 +1,6 @@
 package com.rbs.system.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import com.rbs.system.domain.SysMeetingRoom;
 import com.rbs.system.domain.vo.RoomReservationVo;
@@ -66,4 +67,13 @@ public interface ISysMeetingRoomService
     public List<RoomReservationVo> getRoomReservationList();
     public List<RoomReservationVo> getRoomReservations();
     public Integer getTotalReservations();
+
+    /**
+     * 查询符合条件的空闲会议室
+     * @param peopleCount 预定人数
+     * @param startTime 开始时间
+     * @param endTime 结束时间
+     * @return 空闲会议室列表
+     */
+    List<SysMeetingRoom> selectAvailableMeetingRooms(Integer peopleCount, LocalDateTime startTime, LocalDateTime endTime);
 }

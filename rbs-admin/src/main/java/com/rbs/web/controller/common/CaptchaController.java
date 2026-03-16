@@ -78,6 +78,7 @@ public class CaptchaController
             String capText = captchaProducerMath.createText();
             capStr = capText.substring(0, capText.lastIndexOf("@"));
             code = capText.substring(capText.lastIndexOf("@") + 1);
+            System.out.println("登录图形验证码: " + capStr);
             image = captchaProducerMath.createImage(capStr);
         }
         else if ("char".equals(captchaType))

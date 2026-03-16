@@ -9,9 +9,6 @@ import com.rbs.common.core.domain.BaseEntity;
 
 /**
  * 会议室预订对象 sys_meeting_reservation
- * 
- * @author why
- * @date 2025-06-11
  */
 public class SysMeetingReservation extends BaseEntity
 {

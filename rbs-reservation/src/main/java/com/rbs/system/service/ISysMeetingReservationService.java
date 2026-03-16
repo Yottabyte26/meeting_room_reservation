@@ -1,15 +1,15 @@
 package com.rbs.system.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+import com.rbs.common.core.domain.AjaxResult;
 import com.rbs.system.domain.SysMeetingReservation;
+import com.rbs.system.domain.vo.RoomReservationVo;
 
 /**
  * 会议室预订Service接口
- * 
- * @author why
- * @date 2025-06-11
  */
 public interface ISysMeetingReservationService
 {
@@ -67,4 +67,38 @@ public interface ISysMeetingReservationService
      * @return 统计结果
      */
     Map<String, Integer> getUserReservationStats(Long userId);
+
+    /**
+     * 自动创建会议室预定
+     * @param roomId 会议室ID
+     * @param userId 用户ID
+     * @param startTime 开始时间
+     * @param endTime 结束时间
+     * @param peopleCount 参与人数
+     * @return 预定结果
+     */
+    AjaxResult autoCreateReservation(Long roomId, Long userId, LocalDateTime startTime, LocalDateTime endTime, Integer peopleCount);
+
+
+
+
+    /**
+     * 根据用户ID删除会议室预订
+     * @param userId 用户ID
+     * @return 结果
+     */
+    int deleteByUserId(Long userId);
+
+    /**
+     * 统计所有预订记录数
+     * @return 总数
+     */
+    Integer countAllReservations();
+
+    /**
+     * 查询所有会议室预订统计
+     * @return 统计结果
+     */
+    List<RoomReservationVo> selectAllRoomReservationStats();
+
 }

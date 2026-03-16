@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.rbs.system.domain.vo.DeptEmployeeVo;
 import com.rbs.system.domain.vo.GenderVo;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import com.rbs.common.core.domain.entity.SysUser;
 
@@ -12,6 +13,7 @@ import com.rbs.common.core.domain.entity.SysUser;
  * 
  * @author ruoyi
  */
+
 public interface SysUserMapper
 {
     /**

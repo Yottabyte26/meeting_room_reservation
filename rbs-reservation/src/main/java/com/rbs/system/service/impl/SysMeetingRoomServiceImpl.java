@@ -1,5 +1,7 @@
 package com.rbs.system.service.impl;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -132,5 +134,10 @@ public class SysMeetingRoomServiceImpl implements ISysMeetingRoomService
             vo.setReservationCount(vo.getReservationCount() != null ? vo.getReservationCount() : 0);
             return vo;
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SysMeetingRoom> selectAvailableMeetingRooms(Integer peopleCount, LocalDateTime startTime, LocalDateTime endTime) {
+        return sysMeetingRoomMapper.selectAvailableMeetingRooms(peopleCount, startTime, endTime);
     }
 }
