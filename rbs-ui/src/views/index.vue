@@ -839,13 +839,13 @@ const fetchAdminData = async () => {
         if (deptRes.data && Array.isArray(deptRes.data)) {
             departmentData.value = deptRes.data
                 .filter(item => {
-                    return item.employeeCount !== undefined && item.deptName && !['未知部门', '未命名部门'].includes(item.deptName)
+                    return item.deptName && item.deptName.trim() !== '' && !['未知部门', '未命名部门'].includes(item.deptName)
                 })
                 .map(item => ({
                     value: item.employeeCount,
                     name: item.deptName || '未命名部门' // 处理deptName为null的情况
                 }))
-            totalEmployees.value = departmentData.value.length
+            totalEmployees.value = departmentData.value.reduce((sum, dept) => sum + dept.value, 0)
             console.log('处理后的部门数据:', departmentData.value)
         }
 
