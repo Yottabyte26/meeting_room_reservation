@@ -10,7 +10,7 @@
 
     <name>rbs</name>
     <url>http://www.ruoyi.vip</url>
-    <description>会议室预定系统</description>
+    <description>会议室预约系统</description>
 
     <properties>
         <rbs.version>3.9.0</rbs.version>

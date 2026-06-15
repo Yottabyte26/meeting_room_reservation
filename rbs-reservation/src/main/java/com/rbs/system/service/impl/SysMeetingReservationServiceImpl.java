@@ -156,7 +156,7 @@ public class SysMeetingReservationServiceImpl implements ISysMeetingReservationS
             reservation.setReservationTitle("语音自动预定-" + peopleCount + "人");
             reservation.setPurpose("语音智能预定");
             reservation.setParticipants(String.valueOf(peopleCount));
-            reservation.setStatus("1");  // 已通过
+            reservation.setStatus("0");
 
             // 从当前用户获取名称/部门信息（无需查数据库/SysUserMapper）
             reservation.setCreateBy(currentUser.getUserName());

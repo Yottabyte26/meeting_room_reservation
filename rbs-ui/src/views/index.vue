@@ -12,17 +12,17 @@
                     <div class="card-value">{{ totalUsers }}</div>
                     <div class="card-label">用户总数</div>
                 </div>
-                <div class="stats-card">
+                <!-- <div class="stats-card">
                     <div class="card-value">{{ totalEmployees }}</div>
                     <div class="card-label">部门总数</div>
-                </div>
+                </div> -->
                 <div class="stats-card">
                     <div class="card-value">{{ totalRooms }}</div>
                     <div class="card-label">会议室总数</div>
                 </div>
                 <div class="stats-card">
                     <div class="card-value">{{ totalReservations }}</div>
-                    <div class="card-label">总预定次数</div>
+                    <div class="card-label">总预约次数</div>
                 </div>
             </div>
         </div>
@@ -41,9 +41,9 @@
                 <div class="echarts-pie" ref="genderPieChart" style="width: 100%; height: 450px"></div>
             </div>
 
-            <!-- 会议室预定次数条形图 -->
+            <!-- 会议室预约次数条形图 -->
             <div class="chart-container">
-                <div class="chart-title">会议室预定次数统计</div>
+                <div class="chart-title">会议室预约次数统计</div>
                 <div class="echarts-pie" ref="reservationBarChart" style="width: 100%; height: 550px"></div>
             </div>
         </div>
@@ -60,7 +60,7 @@
             <div class="stats-card-group">
                 <div class="stats-card">
                     <div class="card-value">{{ userStats.total_count || 0 }}</div>
-                    <div class="card-label">个人预定总数</div>
+                    <div class="card-label">个人预约总数</div>
                 </div>
                 <div class="stats-card">
                     <div class="card-value">{{ userStats.pending_count || 0 }}</div>
@@ -79,10 +79,10 @@
 
         <!-- 内容主体：统计图表区域 -->
         <div class="main-content">
-            <!-- 个人预定审核条形图：x轴分别是待审核、通过、退回 -->
+            <!-- 个人预约审核条形图：x轴分别是待审核、通过、退回 -->
             <div class="chart-container">
-                <div class="chart-title">会议室预定审核统计</div>
-                <div class="echarts-pie1" ref="reviewBarChart" style="width: 100%; height: 550px"></div>
+                <div class="chart-title">会议室预约审核统计</div>
+                <div class="echarts-pie1" ref="reviewBarChart" style="width: 70%; height: 450px; margin: 0 auto"></div>
             </div>
         </div>
     </div>
@@ -171,7 +171,7 @@ const handleVoiceBook = async () => {
         remainingTime = 30
         await ElMessageBox.confirm(
             `<div id="recording-countdown">
-                <p>请确保环境安静，说出指令如："预定明天下午四点十人会议室"</p>
+                <p>请确保环境安静，说出指令如："预约明天下午四点十人会议室"</p>
                 <p style="color: #f28e2b; font-size: 16px; margin-top: 10px;">剩余录音时间：<span id="countdown-number">${remainingTime}</span> 秒</p>
             </div>`,
             '语音预约',
@@ -223,7 +223,7 @@ const handleVoiceBook = async () => {
         }
     }
 }
-// 开始录音
+
 // 开始录音
 const startRecording = async () => {
     // 3. 获取麦克风权限
@@ -299,7 +299,7 @@ const startRecording = async () => {
     ElMessage.success('🎤 录音已开始，请清晰说出预约指令')
 }
 
-// 新增：音频转码函数（将浏览器录音转为标准WAV格式）
+// 音频转码函数（将浏览器录音转为标准WAV格式）
 const convertToWav = async blob => {
     return new Promise((resolve, reject) => {
         const reader = new FileReader()
@@ -370,7 +370,6 @@ const convertToWav = async blob => {
     })
 }
 
-// 显示录音中的弹窗（带倒计时和结束按钮）
 // 显示录音中的弹窗
 const showRecordingDialog = () => {
     // 初始更新倒计时显示
@@ -608,7 +607,7 @@ const initGenderChart = () => {
                 label: {
                     show: true,
                     fontSize: 16,
-                    formatter: '{b}: {c}人 ({d}%)'
+                    formatter: '{b}: {c}人'
                 },
                 emphasis: {
                     itemStyle: {
@@ -625,7 +624,7 @@ const initGenderChart = () => {
     chartInstances.gender.setOption(option)
 }
 
-// 初始化预定统计图表
+// 初始化预约统计图表
 const initReservationChart = () => {
     if (!reservationBarChart.value) return
 
@@ -637,7 +636,7 @@ const initReservationChart = () => {
 
     const option = {
         title: {
-            text: '会议室预定次数统计',
+            text: '会议室预约次数统计',
             left: 'center',
             textStyle: {
                 fontSize: 18
@@ -655,8 +654,8 @@ const initReservationChart = () => {
             data: reservationData.value.map(item => item.room_name),
             axisLabel: {
                 interval: 0,
-                rotate: 45, // 增大旋转角度
-                fontSize: 12, // 减小字体大小
+                rotate: 45,
+                fontSize: 15,
                 margin: 15,
                 width: 100,
                 overflow: 'truncate', // 截断长文本
@@ -665,18 +664,18 @@ const initReservationChart = () => {
         },
         yAxis: {
             type: 'value',
-            name: '预定次数',
+            name: '预约次数',
             nameTextStyle: {
                 fontSize: 16,
                 padding: [30, 0, 10, -40]
             },
             axisLabel: {
-                fontSize: 14
+                fontSize: 18
             }
         },
         series: [
             {
-                name: '预定次数',
+                name: '预约次数',
                 type: 'bar',
                 barWidth: '35%', // 减小柱状图宽度
                 data: reservationData.value.map(item => item.reservation_count),
@@ -690,7 +689,7 @@ const initReservationChart = () => {
                 label: {
                     show: true,
                     position: 'top',
-                    fontSize: 14,
+                    fontSize: 18,
                     distance: 5,
                     formatter: function (params) {
                         return params.value > 0 ? params.value : '' // 只显示大于0的值
@@ -703,7 +702,7 @@ const initReservationChart = () => {
     chartInstances.reservation.setOption(option)
 }
 
-// 初始化用户预定审核图表（用户）
+// 初始化用户预约审核图表（用户）
 const initUserReviewChart = () => {
     if (!reviewBarChart.value) return
 
@@ -725,7 +724,7 @@ const initUserReviewChart = () => {
 
     const option = {
         title: {
-            text: '个人预订审核状态',
+            text: '个人预约审核状态',
             left: 'center',
             textStyle: {
                 fontSize: 18
@@ -742,26 +741,31 @@ const initUserReviewChart = () => {
             type: 'category',
             data: userChartData.value.map(item => item.name),
             axisLabel: {
-                fontSize: 14,
-                interval: 0
+                interval: 0,
+                rotate: 45,
+                fontSize: 15,
+                margin: 15,
+                width: 100,
+                overflow: 'truncate', // 截断长文本
+                ellipsis: '...' // 截断后显示省略号
             }
         },
         yAxis: {
             type: 'value',
             name: '次数',
             nameTextStyle: {
-                fontSize: 16,
+                fontSize: 18,
                 padding: [30, 0, 10, -40]
             },
             axisLabel: {
-                fontSize: 14
+                fontSize: 18
             }
         },
         series: [
             {
                 type: 'bar', // 明确指定图表类型
                 name: '次数',
-                barWidth: '40%',
+                barWidth: '20%',
                 data: userChartData.value.map(item => item.value),
                 itemStyle: {
                     color: function (params) {
@@ -772,7 +776,7 @@ const initUserReviewChart = () => {
                 label: {
                     show: true,
                     position: 'top',
-                    fontSize: 14,
+                    fontSize: 18,
                     distance: 5,
                     formatter: '{c}'
                 }
@@ -809,7 +813,7 @@ const fetchUserStats = async () => {
                 await nextTick()
                 initUserReviewChart()
             } else {
-                console.log('用户无预订记录，显示空图表')
+                console.log('用户无预约记录，显示空图表')
                 await nextTick()
                 initUserReviewChart() // 即使数据为0，也初始化图表
             }
@@ -832,17 +836,18 @@ const fetchAdminData = async () => {
 
         console.log('部门数据:', deptRes.data)
         console.log('性别数据:', genderRes.data)
-        console.log('预定数据:', reservationRes.data)
+        console.log('预约数据:', reservationRes.data)
 
         // 处理部门员工数据（保留deptName为null的记录）
         departmentData.value = []
         if (deptRes.data && Array.isArray(deptRes.data)) {
             departmentData.value = deptRes.data
                 .filter(item => {
-                    return item.deptName && item.deptName.trim() !== '' && !['未知部门', '未命名部门'].includes(item.deptName)
+                    const deptName = (item.deptName || '').trim()
+                    return deptName !== '' && !deptName.includes('未知')
                 })
                 .map(item => ({
-                    value: item.employeeCount,
+                    value: item.employeeCount || 0,
                     name: item.deptName || '未命名部门' // 处理deptName为null的情况
                 }))
             totalEmployees.value = departmentData.value.reduce((sum, dept) => sum + dept.value, 0)
@@ -862,11 +867,11 @@ const fetchAdminData = async () => {
             console.log('处理后的性别数据:', genderData.value)
         }
 
-        // 处理总预订次数
+        // 处理总预约次数
         totalReservations.value = totalRes.data || 0
-        console.log('总预订次数:', totalReservations.value)
+        console.log('总预约次数:', totalReservations.value)
 
-        // 处理会议室预订数据
+        // 处理会议室预约数据
         reservationData.value = []
         if (roomRes.data && Array.isArray(roomRes.data)) {
             reservationData.value = roomRes.data.map(item => ({
@@ -883,7 +888,7 @@ const fetchAdminData = async () => {
             totalRooms.value = 0
         }
 
-        console.log('会议室预订数据:', reservationData.value)
+        console.log('会议室预约数据:', reservationData.value)
         console.log('会议室总数:', totalRooms.value)
 
         // 等待DOM渲染完成
@@ -904,7 +909,7 @@ const fetchAdminData = async () => {
 
         if (reservationData.value.length > 0) {
             initReservationChart()
-            console.log('预订图表初始化完成')
+            console.log('预约图表初始化完成')
         }
     } catch (error) {
         console.error('获取统计数据失败:', error)
@@ -981,6 +986,7 @@ onUnmounted(() => {
             background: linear-gradient(135deg, #6a85b6 0%, #bac8e0 100%);
             color: white;
             border: none;
+            margin-left: 100px;
             border-radius: 8px;
             padding: 25px 25px;
             font-size: 25px;

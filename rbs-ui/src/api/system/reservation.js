@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询会议室预订列表
+// 查询会议室预约列表
 export function listReservation(query) {
   return request({
     url: '/system/reservation/list',
@@ -9,7 +9,7 @@ export function listReservation(query) {
   })
 }
 
-// 查询会议室预订详细
+// 查询会议室预约详细
 export function getReservation(reservationId) {
   return request({
     url: '/system/reservation/' + reservationId,
@@ -27,7 +27,7 @@ export function getReservationByapplicantName(params) {
     }
   })
 }
-// 新增会议室预订
+// 新增会议室预约
 export function addReservation(data) {
   return request({
     url: '/system/reservation',
@@ -36,7 +36,7 @@ export function addReservation(data) {
   })
 }
 
-// 修改会议室预订
+// 修改会议室预约
 export function updateReservation(data) {
   return request({
     url: '/system/reservation',
@@ -45,7 +45,7 @@ export function updateReservation(data) {
   })
 }
 
-// 删除会议室预订
+// 删除会议室预约
 export function delReservation(reservationId) {
   return request({
     url: '/system/reservation/' + reservationId,
@@ -54,7 +54,7 @@ export function delReservation(reservationId) {
 }
 
 /**
- * 语音预定会议室（上传音频文件）
+ * 语音预约会议室（上传音频文件）
  * @param {File} file - 语音文件（wav格式）
  * @returns {Promise}
  */
@@ -72,7 +72,7 @@ export function voiceBookMeetingRoom(file) {
 }
 
 /**
- * 解析语音指令（仅解析文本，不预定）
+ * 解析语音指令（仅解析文本，不预约）
  * @param {String} voiceCommand - 语音指令文本
  * @returns {Promise}
  */

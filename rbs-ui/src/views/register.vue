@@ -3,7 +3,7 @@
     <div class="register-container">
       <div class="register-image-container">
         <img src="../assets/images/huiyi.jpg" alt="Login Background" class="login-image">
-        <h3 class="system-title">会议室预定系统</h3>
+        <h3 class="system-title">会议室预约系统</h3>
       </div>
 
       <div class="register-form-container">
